@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Genera — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818; --s3: #1e1e1e;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.08);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.45);
+      --green: #68D391;
+    }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; padding-top: 48px; }
+
+    .f { margin-bottom: 1rem; }
+    .f label { display: block; font-size: .62rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+    .f input, .f textarea { width: 100%; background: var(--s2); border: 1px solid var(--border2); border-radius: 10px; color: var(--white); font-family: 'Poppins', sans-serif; font-size: .88rem; padding: .72rem 1rem; outline: none; transition: border-color .22s; resize: none; }
+    .f input:focus, .f textarea:focus { border-color: var(--orange); }
+    .f select { width: 100%; background: var(--s2); border: 1px solid var(--border2); border-radius: 10px; color: var(--white); font-family: 'Poppins', sans-serif; font-size: .88rem; padding: .72rem 1rem; outline: none; transition: border-color .22s; appearance: none; cursor: pointer; }
+    .f select:focus { border-color: var(--orange); }
+    .f select option { background: var(--s2); color: var(--white); }
+
+    .btn-main { width: 100%; background: var(--orange); color: #000; font-family: 'Poppins', sans-serif; font-size: .78rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; border: none; border-radius: 10px; padding: .85rem; cursor: pointer; transition: background .22s, transform .12s; display: flex; align-items: center; justify-content: center; gap: .5rem; }
+    .btn-main:hover { background: var(--orange2); }
+    .btn-main:active { transform: scale(.98); }
+    .btn-main:disabled { opacity: .5; cursor: not-allowed; }
+
+    .adm-hdr { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem clamp(1.2rem, 4vw, 3rem); border-bottom: 1px solid var(--border); background: rgba(10,10,10,.92); backdrop-filter: blur(14px); flex-wrap: wrap; gap: .7rem; }
+    .adm-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem; letter-spacing: .1em; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hdr-left { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+    .hdr-navs { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .hdr-navs a { font-family: 'Poppins', sans-serif; font-size: .55rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; text-decoration: none; color: var(--orange); background: rgba(255,107,0,.1); border: 1px solid rgba(255,107,0,.3); padding: .26rem .75rem; border-radius: 99px; transition: background .22s; }
+    .hdr-navs a:hover { background: rgba(255,107,0,.22); }
+    .hdr-right { display: flex; align-items: center; gap: 1rem; }
+    .online-tag { font-size: .58rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); background: rgba(255,107,0,.1); border: 1px solid var(--border); padding: .28rem .75rem; border-radius: 99px; }
+    .btn-out { font-family: 'Poppins', sans-serif; font-size: .62rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); background: none; border: 1px solid var(--border2); border-radius: 8px; padding: .32rem .8rem; cursor: pointer; transition: color .22s, border-color .22s; }
+    .btn-out:hover { color: var(--white); border-color: rgba(255,255,255,.25); }
+
+    .view-bar { display: block; text-align: center; padding: .8rem 1.4rem; border-radius: 12px; background: rgba(255,107,0,.05); border: 1px solid var(--border); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--orange); text-decoration: none; transition: background .22s; margin: 1.5rem clamp(1.2rem, 4vw, 3rem) 0; }
+    .view-bar:hover { background: rgba(255,107,0,.1); }
+
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; padding: 1.5rem clamp(1.2rem, 4vw, 3rem) 4rem; max-width: 1200px; margin: 0 auto; }
+    @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .online-tag { display: none; } }
+
+    .panel { background: var(--s1); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+    .panel-hdr { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: .7rem; }
+    .p-icon { width: 30px; height: 30px; border-radius: 7px; background: rgba(255,107,0,.1); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: .85rem; flex-shrink: 0; }
+    .p-title { font-size: .7rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--white); }
+    .p-sub { font-size: .6rem; color: var(--muted); }
+    .panel-body { padding: 1.4rem 1.5rem; }
+
+    .upload-zone { border: 1.5px dashed rgba(255,107,0,.28); border-radius: 12px; padding: 1.2rem; text-align: center; cursor: pointer; background: var(--s2); position: relative; transition: border-color .22s, background .22s; }
+    .upload-zone:hover { border-color: var(--orange); background: rgba(255,107,0,.04); }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .u-icon { font-size: 1.5rem; opacity: .4; margin-bottom: .3rem; }
+    .u-text { font-size: .68rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+    .u-text strong { color: var(--orange); font-weight: 500; }
+    #img-preview { margin-top: .8rem; display: none; }
+    #img-preview img { width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; display: block; }
+    .size-info { margin-top: .5rem; font-size: .65rem; text-align: center; display: none; }
+    .size-ok { color: var(--green); } .size-warn { color: #F6AD55; }
+
+    .schedule-toggle { display: flex; align-items: center; gap: .9rem; padding: .85rem 1rem; background: var(--s2); border: 1px solid var(--border2); border-radius: 12px; cursor: pointer; margin-bottom: 1rem; transition: border-color .3s, background .3s; user-select: none; }
+    .schedule-toggle:hover { border-color: rgba(255,107,0,.4); }
+    .schedule-toggle.active { border-color: var(--orange); background: rgba(255,107,0,.06); }
+    .schedule-toggle input[type="checkbox"] { display: none; }
+    .tog-label { font-size: .78rem; font-weight: 500; color: var(--white); flex: 1; }
+    .tog-hint { font-size: .6rem; color: var(--muted); }
+    /* iOS-style switch */
+    .tog-switch {
+      position: relative; flex-shrink: 0;
+      width: 44px; height: 26px;
+      background: rgba(255,255,255,.12);
+      border-radius: 99px;
+      transition: background .3s cubic-bezier(.22,1,.36,1);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+    .tog-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,.4), 0 0 0 .5px rgba(0,0,0,.08);
+      transition: transform .28s cubic-bezier(.22,1,.36,1), background .28s;
+    }
+    .schedule-toggle.active .tog-switch {
+      background: linear-gradient(135deg, var(--orange), var(--orange2));
+      box-shadow: 0 0 12px rgba(255,107,0,.45), inset 0 0 0 1px rgba(255,255,255,.15);
+    }
+    .schedule-toggle.active .tog-switch::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .schedule-fields { display: none; background: rgba(255,107,0,.04); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
+    .schedule-fields.visible { display: block; }
+    .schedule-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-bottom: .6rem; }
+    .schedule-note { font-size: .65rem; color: var(--muted); line-height: 1.5; }
+    .schedule-note strong { color: var(--orange); }
+
+    .edit-banner { display: none; align-items: center; justify-content: space-between; gap: .8rem; background: rgba(246,224,94,.06); border: 1px solid rgba(246,224,94,.3); border-radius: 10px; padding: .7rem 1rem; margin-bottom: 1rem; }
+    .edit-banner.visible { display: flex; }
+    .edit-banner span { font-size: .72rem; color: #F6E05E; font-weight: 500; }
+    .btn-cancel-edit { font-family: 'Poppins', sans-serif; font-size: .6rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; background: none; border: 1px solid rgba(246,224,94,.4); color: #F6E05E; border-radius: 7px; padding: .3rem .8rem; cursor: pointer; white-space: nowrap; }
+    .btn-cancel-edit:hover { background: rgba(246,224,94,.1); }
+
+    .preview-card { background: var(--s2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 1rem; }
+    .preview-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .preview-placeholder { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, #150800, #240e00); display: flex; align-items: center; justify-content: center; }
+    .preview-body { padding: 1rem 1.2rem; }
+    .preview-date { font-size: .62rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); margin-bottom: .4rem; }
+    .preview-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: .04em; color: var(--white); margin-bottom: .4rem; }
+    .preview-desc { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+
+    .msg-ok    { display: none; margin-top: 1rem; text-align: center; font-size: .78rem; color: #68D391; background: rgba(104,211,145,.08); border: 1px solid rgba(104,211,145,.3); border-radius: 10px; padding: .9rem; }
+    .msg-sched { display: none; margin-top: 1rem; text-align: center; font-size: .78rem; color: #63B3ED; background: rgba(99,179,237,.08); border: 1px solid rgba(99,179,237,.3); border-radius: 10px; padding: .9rem; }
+    .msg-err   { display: none; margin-top: 1rem; text-align: center; font-size: .78rem; color: #FC8181; background: rgba(252,129,129,.08); border: 1px solid rgba(252,129,129,.3); border-radius: 10px; padding: .9rem; }
+
+    .ev-item { background: var(--s2); border: 1px solid rgba(255,107,0,.15); border-radius: 12px; padding: .9rem 1.1rem; margin-bottom: .7rem; display: flex; align-items: center; gap: 1rem; }
+    .ev-item-info { flex: 1; min-width: 0; }
+    .ev-item-name { font-size: .85rem; font-weight: 600; color: #fff; margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ev-item-meta { font-size: .62rem; color: rgba(255,255,255,.4); letter-spacing: .08em; }
+    .ev-item-actions { display: flex; gap: .5rem; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+    .btn-action { font-family: 'Poppins', sans-serif; font-size: .58rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; border-radius: 7px; padding: .3rem .7rem; cursor: pointer; transition: background .22s; border: 1px solid; }
+    .btn-edit { background: rgba(246,224,94,.1); border-color: rgba(246,224,94,.3); color: #F6E05E; }
+    .btn-edit:hover { background: rgba(246,224,94,.2); }
+    .btn-foto { background: rgba(99,179,237,.1); border-color: rgba(99,179,237,.3); color: #63B3ED; }
+    .btn-foto:hover { background: rgba(99,179,237,.2); }
+    .btn-del  { background: rgba(252,129,129,.1); border-color: rgba(252,129,129,.25); color: #FC8181; }
+    .btn-del:hover { background: rgba(252,129,129,.2); }
+    .badge-sched { font-size: .5rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; background: rgba(99,179,237,.15); border: 1px solid rgba(99,179,237,.35); color: #63B3ED; border-radius: 6px; padding: .15rem .45rem; margin-left: .4rem; vertical-align: middle; }
+    .empty-list { text-align: center; padding: 3rem; font-size: .7rem; color: rgba(255,255,255,.2); letter-spacing: .2em; text-transform: uppercase; }
+    /* ── Tab bar ── */
+    .tab-bar { display:flex; gap:.5rem; padding:1.5rem clamp(1.2rem,4vw,3rem) 0; max-width:1200px; margin:0 auto; }
+    .tab-btn { font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; background:rgba(255,107,0,.06); color:var(--muted); border:1px solid var(--border2); border-radius:10px; padding:.55rem 1.3rem; cursor:pointer; transition:background .22s,color .22s,border-color .22s; }
+    .tab-btn.active { background:rgba(255,107,0,.15); color:var(--orange); border-color:rgba(255,107,0,.4); }
+    .tab-btn:hover:not(.active) { background:rgba(255,107,0,.08); color:var(--white); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+  
+    /* ── Topbar nav ── */
+    .topbar-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,107,0,.18);}
+    .topbar-nav-links{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .topbar-nav-links a{font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;transition:background .2s;white-space:nowrap;}
+    .topbar-nav-links a:hover{background:rgba(255,107,0,.2);}
+    .topbar-nav-pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;white-space:nowrap;}
+    .topbar-nav-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:tnblink 2s ease infinite;flex-shrink:0;}
+    @keyframes tnblink{0%,100%{opacity:1}50%{opacity:.25}}
+  </style>
+</head>
+<body>
+<div class="topbar-nav">
+  <div class="topbar-nav-links"><a href="index.html">← Home</a><a href="PannelloAdmin.html">← Pannello</a></div>
+  <div class="topbar-nav-pill"><span class="topbar-nav-dot"></span>Admin</div>
+</div>
+
+
+<div class="adm-hdr">
+  <div class="hdr-left">
+    <div class="adm-logo">ASTRA ADMIN</div>
+    <div class="hdr-navs"></div>
+  </div>
+  <div class="hdr-right">
+    <span class="online-tag">● Centro di Controllo</span>
+    <button class="btn-out" onclick="doLogout()">Esci</button>
+  </div>
+</div>
+
+<div style="display:flex;gap:.8rem;padding:1.5rem clamp(1.2rem,4vw,3rem) 0;">
+  <a class="view-bar" href="eventi.html" target="_blank" style="flex:1;margin:0;">↗ &nbsp; Visualizza pagina eventi</a>
+  <a class="view-bar" href="contest.html" target="_blank" style="flex:1;margin:0;">↗ &nbsp; Visualizza pagina contest</a>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('eventi')">✦ Genera Evento</button>
+  <button class="tab-btn" onclick="switchTab('contest')">🏆 Genera Contest</button>
+</div>
+
+<div id="tab-eventi" class="tab-panel active">
+<div class="layout">
+
+  <!-- SINISTRA: FORM -->
+  <div class="panel">
+    <div class="panel-hdr">
+      <div class="p-icon">✦</div>
+      <div>
+        <div class="p-title" id="form-title">Nuovo Evento</div>
+        <div class="p-sub">Compila e pubblica direttamente</div>
+      </div>
+    </div>
+    <div class="panel-body">
+
+      <!-- Banner modifica -->
+      <div class="edit-banner" id="edit-banner">
+        <span>✏️ Stai modificando un evento</span>
+        <button class="btn-cancel-edit" onclick="cancelEdit()">✕ Annulla</button>
+      </div>
+
+      <div class="f"><label>Nome evento *</label><input type="text" id="ev-name" placeholder="Es. Astra Night Vol.5" oninput="livePreview()" /></div>
+      <div class="f"><label>Discoteca / Venue *</label><input type="text" id="ev-venue" placeholder="Es. Hacienda" oninput="livePreview()" /></div>
+      <div class="f"><label>Descrizione</label><textarea id="ev-desc" rows="3" placeholder="Descrivi l'evento, artisti, prezzi…" oninput="livePreview()"></textarea></div>
+      <div class="f"><label>Data evento *</label><input type="date" id="ev-date" oninput="livePreview()" /></div>
+
+      <div class="f">
+        <label>Stato evento</label>
+        <select id="ev-status">
+          <option value="">Automatico (dalla data)</option>
+          <option value="upcoming">🟡 Prossimamente</option>
+          <option value="today">🟢 In corso</option>
+          <option value="soldout">🔴 Sold Out</option>
+          <option value="past">🔴 Terminato</option>
+        </select>
+      </div>
+
+      <div class="f">
+        <label>Immagine copertina</label>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="ev-img" accept="image/*" onchange="handleImg(event)" />
+          <div class="u-icon" id="u-icon">🖼</div>
+          <div class="u-text" id="u-text"><strong>Seleziona immagine</strong> o trascina qui<br><span style="font-size:.58rem;color:rgba(255,255,255,.18);">Verrà caricata automaticamente su Cloudinary</span></div>
+          <div id="img-preview"><img id="prev-img" src="" alt="preview" /></div>
+        </div>
+        <div class="size-info" id="size-info"></div>
+        <div id="upload-progress" style="display:none;margin-top:.6rem;">
+          <div style="background:rgba(255,255,255,.08);border-radius:99px;height:5px;overflow:hidden;">
+            <div id="progress-bar" style="height:100%;background:var(--orange);border-radius:99px;width:0%;transition:width .3s;"></div>
+          </div>
+          <div id="progress-label" style="font-size:.62rem;color:var(--orange);margin-top:.4rem;text-align:center;">Caricamento…</div>
+        </div>
+        <div id="upload-ok" style="display:none;margin-top:.5rem;font-size:.65rem;color:var(--green);">✓ Immagine caricata — verrà usata automaticamente</div>
+        <div id="upload-err" style="display:none;margin-top:.5rem;font-size:.65rem;color:#FC8181;"></div>
+      </div>
+
+      <div class="f">
+        <label>Link foto galleria</label>
+        <input type="url" id="ev-photolink" placeholder="https://... (lascia vuoto = foto in arrivo)" />
+      </div>
+
+      <!-- Pubblicazione programmata -->
+      <div class="schedule-toggle" id="schedule-toggle-wrap" onclick="toggleSchedule()">
+        <input type="checkbox" id="schedule-check" />
+        <span class="tog-label">⏰ Pubblica in seguito</span>
+        <span class="tog-hint">Scegli data e ora</span>
+        <div class="tog-switch"></div>
+      </div>
+      <div class="schedule-fields" id="schedule-fields">
+        <div style="font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:.7rem;">Quando pubblicare</div>
+        <div class="schedule-row">
+          <div class="f" style="margin-bottom:0;"><label>Data *</label><input type="date" id="sched-date" /></div>
+          <div class="f" style="margin-bottom:0;"><label>Ora *</label><input type="time" id="sched-time" /></div>
+        </div>
+        <div class="schedule-note" style="margin-top:.7rem;">L'evento apparirà su eventi e galleria automaticamente alla data e ora scelta. <strong>Non serve fare niente.</strong></div>
+      </div>
+
+      <button class="btn-main" id="publish-btn" onclick="publishEvent()">
+        🚀 &nbsp; Pubblica evento
+      </button>
+
+      <div class="msg-ok"    id="msg-ok"></div>
+      <div class="msg-sched" id="msg-sched"></div>
+      <div class="msg-err"   id="msg-err"></div>
+
+      <!-- Anteprima -->
+      <div style="margin-top:1.4rem;">
+        <div style="font-size:.58rem;color:var(--muted);letter-spacing:.22em;text-transform:uppercase;margin-bottom:.6rem;">Anteprima card</div>
+        <div class="preview-card">
+          <div id="preview-img-wrap" class="preview-placeholder">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M18 2l2.5 8.5 8.5 2.5-8.5 2.5L18 24l-2.5-8.5L7 13l8.5-2.5z" fill="#FF6B00" opacity=".25"/></svg>
+          </div>
+          <div class="preview-body">
+            <div class="preview-date" id="prev-date">Data evento</div>
+            <div class="preview-title" id="prev-title">Nome Evento</div>
+            <div class="preview-desc" id="prev-desc">Descrizione dell'evento…</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DESTRA: LISTA EVENTI -->
+  <div class="panel">
+    <div class="panel-hdr">
+      <div class="p-icon">📋</div>
+      <div>
+        <div class="p-title">Eventi pubblicati</div>
+        <div class="p-sub">Gestisci gli eventi live</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div id="eventi-list"><div class="empty-list">Caricamento…</div></div>
+    </div>
+  </div>
+
+</div><!-- end .layout -->
+</div><!-- end #tab-eventi -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     TAB CONTEST
+══════════════════════════════════════════════════════════════ -->
+<div id="tab-contest" class="tab-panel">
+<div class="layout">
+
+  <!-- SINISTRA: FORM CONTEST -->
+  <div class="panel">
+    <div class="panel-hdr">
+      <div class="p-icon">🏆</div>
+      <div>
+        <div class="p-title" id="contest-form-title">Nuovo Contest</div>
+        <div class="p-sub">Crea e pubblica un contest</div>
+      </div>
+    </div>
+    <div class="panel-body">
+
+      <div class="edit-banner" id="contest-edit-banner">
+        <span>✏️ Stai modificando un contest</span>
+        <button class="btn-cancel-edit" onclick="cancelContestEdit()">✕ Annulla</button>
+      </div>
+
+      <div class="f"><label>Nome contest *</label><input type="text" id="ct-name" placeholder="Es. Astra Summer Contest" /></div>
+      <div class="f"><label>Tag / Piattaforma</label><input type="text" id="ct-tag" placeholder="Es. Instagram, TikTok" /></div>
+      <div class="f"><label>Descrizione</label><textarea id="ct-desc" rows="3" placeholder="Descrivi il contest…"></textarea></div>
+
+      <div class="f">
+        <label>Stato</label>
+        <select id="ct-status">
+          <option value="open">🟢 Aperto</option>
+          <option value="soon">🟡 Prossimamente</option>
+          <option value="closed">🔴 Chiuso</option>
+        </select>
+      </div>
+
+      <div class="f"><label>Scadenza (data e ora) *</label><input type="datetime-local" id="ct-deadline" /></div>
+
+      <div class="f">
+        <label>Immagine banner (URL Cloudinary o link diretto)</label>
+        <input type="url" id="ct-image" placeholder="https://... oppure nome file es. qube0103.jpeg" />
+      </div>
+
+      <div class="f">
+        <label>Premi (uno per riga, formato: emoji Testo — es. 🎟 1 Ingresso Omaggio)</label>
+        <textarea id="ct-prizes" rows="3" placeholder="🎟 1 Ingresso Omaggio&#10;🥂 1 Drink Omaggio&#10;📸 Pubblicità nelle Story"></textarea>
+      </div>
+
+      <div class="f">
+        <label>Regole (una per riga)</label>
+        <textarea id="ct-rules" rows="4" placeholder="Segui @astra.events_official su Instagram&#10;Metti like al post&#10;Tagga 3 amici nei commenti"></textarea>
+      </div>
+
+      <div class="f">
+        <label>Pulsante CTA — Testo</label>
+        <input type="text" id="ct-cta-label" placeholder="Es. Profilo Instagram →" />
+      </div>
+      <div class="f">
+        <label>Pulsante CTA — Link</label>
+        <input type="url" id="ct-cta-link" placeholder="https://instagram.com/..." />
+      </div>
+      <div class="f">
+        <label>Pulsante CTA 2 — Testo (opzionale)</label>
+        <input type="text" id="ct-cta2-label" placeholder="Es. Profilo TikTok →" />
+      </div>
+      <div class="f">
+        <label>Pulsante CTA 2 — Link (opzionale)</label>
+        <input type="url" id="ct-cta2-link" placeholder="https://tiktok.com/..." />
+      </div>
+
+      <button class="btn-main" id="contest-publish-btn" onclick="publishContest()">
+        🏆 &nbsp; Pubblica contest
+      </button>
+
+      <div class="msg-ok"  id="ct-msg-ok"></div>
+      <div class="msg-err" id="ct-msg-err"></div>
+
+    </div>
+  </div>
+
+  <!-- DESTRA: LISTA CONTEST -->
+  <div class="panel">
+    <div class="panel-hdr">
+      <div class="p-icon">📋</div>
+      <div>
+        <div class="p-title">Contest pubblicati</div>
+        <div class="p-sub">Gestisci i contest live</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div id="contest-list"><div class="empty-list">Caricamento…</div></div>
+    </div>
+  </div>
+
+</div><!-- end .layout -->
+</div><!-- end #tab-contest -->
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  // Guard spostato dopo init Firebase (verifica anche su Firestore)
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+    authDomain: "astra-events-338dd.firebaseapp.com",
+    projectId: "astra-events-338dd",
+    storageBucket: "astra-events-338dd.firebasestorage.app",
+    messagingSenderId: "166914171655",
+    appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  async function verifyAdminOnFirestore() {
+    const usr = (sessionStorage.getItem('astra_user') || localStorage.getItem('ls_astra_user'));
+    if (!usr) return false;
+    try {
+      const snap = await db.collection('utenti').doc(usr).get();
+      if (!snap.exists) return false;
+      return snap.data().role === 'admin';
+    } catch(e) { return false; }
+  }
+
+  (async () => {
+    const isAdmin = (sessionStorage.getItem('astra_admin') === '1' || localStorage.getItem('ls_astra_admin') === '1') || (sessionStorage.getItem('astra_role') || localStorage.getItem('ls_astra_role')) === 'admin';
+    if (!isAdmin) { alert('Accesso negato. Effettua il login come admin dalla homepage.'); location.href = 'index.html'; return; }
+    const verified = await verifyAdminOnFirestore();
+    if (!verified) { alert('Accesso negato.'); sessionStorage.clear(); location.href = 'index.html'; }
+  })();
+
+  /* ── Cloudinary ── */
+  const CL_CLOUD  = 'diw6pymyn';
+  const CL_PRESET = 'ulqi3cma';
+  let uploadedImageUrl = null;
+
+  // Cache eventi per modifica rapida
+  const evCache = {};
+
+  function doLogout() {
+    sessionStorage.removeItem('astra_admin');
+    location.href = 'index.html';
+  }
+
+  function toggleSchedule() {
+    const check = document.getElementById('schedule-check');
+    check.checked = !check.checked;
+    const checked = check.checked;
+    const wrap = document.getElementById('schedule-toggle-wrap');
+    wrap.classList.toggle('active', checked);
+    document.getElementById('schedule-fields').classList.toggle('visible', checked);
+    document.getElementById('publish-btn').innerHTML = checked
+      ? '⏰ &nbsp; Programma pubblicazione'
+      : (editingDocId ? '💾 &nbsp; Salva modifiche' : '🚀 &nbsp; Pubblica evento');
+  }
+
+  function handleImg(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Anteprima immediata
+    const r = new FileReader();
+    r.onload = function(ev) {
+      document.getElementById('prev-img').src = ev.target.result;
+      document.getElementById('img-preview').style.display = 'block';
+      document.getElementById('preview-img-wrap').innerHTML = '<img class="preview-img" src="' + ev.target.result + '" alt="preview">';
+    };
+    r.readAsDataURL(file);
+
+    // Info dimensione
+    const kb = (file.size / 1024).toFixed(0);
+    const si = document.getElementById('size-info');
+    si.style.display = 'block';
+    si.className = file.size > 3145728 ? 'size-info size-warn' : 'size-info size-ok';
+    si.textContent = file.size > 3145728 ? ('⚠ ' + kb + ' KB — immagine grande') : ('✓ ' + kb + ' KB');
+
+    uploadToCloudinary(file);
+  }
+
+  async function uploadToCloudinary(file) {
+    uploadedImageUrl = null;
+    document.getElementById('upload-ok').style.display  = 'none';
+    document.getElementById('upload-err').style.display = 'none';
+    document.getElementById('upload-progress').style.display = 'block';
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('publish-btn').disabled = true;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CL_PRESET);
+    formData.append('folder', 'astra_eventi');
+
+    try {
+      await new Promise(function(resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CL_CLOUD + '/image/upload');
+        xhr.upload.onprogress = function(ev) {
+          if (ev.lengthComputable) {
+            const pct = Math.round((ev.loaded / ev.total) * 100);
+            document.getElementById('progress-bar').style.width = pct + '%';
+            document.getElementById('progress-label').textContent = 'Caricamento… ' + pct + '%';
+          }
+        };
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            uploadedImageUrl = data.secure_url;
+            resolve();
+          } else { reject(new Error('HTTP ' + xhr.status)); }
+        };
+        xhr.onerror = function() { reject(new Error('Errore di rete')); };
+        xhr.send(formData);
+      });
+
+      document.getElementById('upload-progress').style.display = 'none';
+      document.getElementById('upload-ok').style.display = 'block';
+
+    } catch(err) {
+      document.getElementById('upload-progress').style.display = 'none';
+      document.getElementById('upload-err').style.display = 'block';
+      document.getElementById('upload-err').textContent = '✕ Errore upload: ' + err.message;
+    }
+
+    document.getElementById('publish-btn').disabled = false;
+  }
+
+  function fmtDate(s) {
+    if (!s) return 'Data evento';
+    return new Date(s + 'T00:00:00').toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function livePreview() {
+    const name  = document.getElementById('ev-name').value || 'Nome Evento';
+    const venue = document.getElementById('ev-venue').value;
+    document.getElementById('prev-title').textContent = venue ? (name + ' — ' + venue) : name;
+    document.getElementById('prev-desc').textContent  = document.getElementById('ev-desc').value || "Descrizione dell'evento…";
+    document.getElementById('prev-date').textContent  = fmtDate(document.getElementById('ev-date').value);
+  }
+
+  /* ── Stato modifica ─────────────────────────────────── */
+  let editingDocId = null;
+
+  function startEdit(docId) {
+    const ev = evCache[docId];
+    if (!ev) { alert('Evento non trovato.'); return; }
+
+    // Separa nome — venue
+    const parts = ev.name.split(' — ');
+    const venue = parts.pop() || '';
+    const name  = parts.join(' — ');
+
+    document.getElementById('ev-name').value    = name;
+    document.getElementById('ev-venue').value   = venue;
+    document.getElementById('ev-desc').value    = (ev.description || '').replace(/<br>/g, '\n');
+    document.getElementById('ev-date').value    = ev.date || '';
+    document.getElementById('ev-status').value  = ev.status || '';
+    document.getElementById('ev-photolink').value = ev.photoLink || '';
+
+    // Reset upload state — in modifica mantieni immagine esistente
+    uploadedImageUrl = null;
+    document.getElementById('upload-ok').style.display  = 'none';
+    document.getElementById('upload-err').style.display = 'none';
+    document.getElementById('upload-progress').style.display = 'none';
+    document.getElementById('size-info').style.display = 'none';
+    document.getElementById('ev-img').value = '';
+
+    // Mostra anteprima immagine esistente
+    const existingImg = ev.imageUrl || '';
+    if (existingImg) {
+      document.getElementById('prev-img').src = existingImg;
+      document.getElementById('img-preview').style.display = 'block';
+      document.getElementById('preview-img-wrap').innerHTML = '<img class="preview-img" src="' + existingImg + '" alt="preview">';
+      document.getElementById('upload-ok').textContent = '✓ Immagine esistente — carica una nuova per sostituirla';
+      document.getElementById('upload-ok').style.display = 'block';
+    } else {
+      document.getElementById('img-preview').style.display = 'none';
+      document.getElementById('preview-img-wrap').innerHTML = '<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M18 2l2.5 8.5 8.5 2.5-8.5 2.5L18 24l-2.5-8.5L7 13l8.5-2.5z" fill="#FF6B00" opacity=".25"/></svg>';
+    }
+
+    // Programmato?
+    const now = Date.now();
+    if (ev.publishAt && ev.publishAt > now) {
+      const d = new Date(ev.publishAt);
+      document.getElementById('schedule-check').checked = true;
+      document.getElementById('schedule-toggle-wrap').classList.add('active');
+      document.getElementById('sched-date').value = d.toISOString().slice(0, 10);
+      document.getElementById('sched-time').value = d.toTimeString().slice(0, 5);
+      document.getElementById('schedule-fields').classList.add('visible');
+    } else {
+      document.getElementById('schedule-check').checked = false;
+      document.getElementById('schedule-toggle-wrap').classList.remove('active');
+      document.getElementById('schedule-fields').classList.remove('visible');
+    }
+
+    editingDocId = docId;
+    document.getElementById('edit-banner').classList.add('visible');
+    document.getElementById('publish-btn').innerHTML = '💾 &nbsp; Salva modifiche';
+    document.getElementById('form-title').textContent = 'Modifica Evento';
+    livePreview();
+
+    // Scorri al form
+    document.querySelector('.panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function cancelEdit() {
+    editingDocId = null;
+    document.getElementById('edit-banner').classList.remove('visible');
+    document.getElementById('publish-btn').innerHTML = '🚀 &nbsp; Pubblica evento';
+    document.getElementById('form-title').textContent = 'Nuovo Evento';
+    resetForm();
+  }
+
+  function resetForm() {
+    ['ev-name','ev-venue','ev-desc','ev-date','sched-date','sched-time','ev-photolink'].forEach(function(id) {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('ev-status').value = '';
+    document.getElementById('schedule-check').checked = false;
+    document.getElementById('schedule-toggle-wrap').classList.remove('active');
+    document.getElementById('schedule-fields').classList.remove('visible');
+    document.getElementById('img-preview').style.display = 'none';
+    document.getElementById('size-info').style.display = 'none';
+    document.getElementById('upload-ok').style.display = 'none';
+    document.getElementById('upload-err').style.display = 'none';
+    document.getElementById('upload-progress').style.display = 'none';
+    document.getElementById('ev-img').value = '';
+    document.getElementById('preview-img-wrap').innerHTML = '<svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M18 2l2.5 8.5 8.5 2.5-8.5 2.5L18 24l-2.5-8.5L7 13l8.5-2.5z" fill="#FF6B00" opacity=".25"/></svg>';
+    document.getElementById('prev-title').textContent = 'Nome Evento';
+    document.getElementById('prev-desc').textContent  = "Descrizione dell'evento…";
+    document.getElementById('prev-date').textContent  = 'Data evento';
+    uploadedImageUrl = null;
+  }
+
+  /* ── Pubblica / Aggiorna ─────────────────────────────── */
+  async function publishEvent() {
+    const name   = document.getElementById('ev-name').value.trim();
+    const venue  = document.getElementById('ev-venue').value.trim();
+    const desc   = document.getElementById('ev-desc').value.trim();
+    const date   = document.getElementById('ev-date').value;
+    const status = document.getElementById('ev-status').value;
+    let photoLink = document.getElementById('ev-photolink').value.trim();
+    if (photoLink && !photoLink.match(/^https?:\/\//)) {
+      photoLink = 'https://' + photoLink;
+      document.getElementById('ev-photolink').value = photoLink;
+    }
+    const isScheduled = document.getElementById('schedule-check').checked;
+
+    if (!name)  { alert("Inserisci il nome dell'evento."); return; }
+    if (!venue) { alert('Inserisci la discoteca / venue.'); return; }
+    if (!date)  { alert("Inserisci la data dell'evento."); return; }
+
+    let publishAt = null;
+    if (isScheduled) {
+      const sd = document.getElementById('sched-date').value;
+      const st = document.getElementById('sched-time').value;
+      if (!sd || !st) { alert('Inserisci data e ora di pubblicazione.'); return; }
+      publishAt = new Date(sd + 'T' + st + ':00').getTime();
+      if (publishAt <= Date.now()) { alert('La data di pubblicazione deve essere nel futuro.'); return; }
+    }
+
+    const btn = document.getElementById('publish-btn');
+    btn.disabled = true;
+    btn.textContent = 'Salvataggio…';
+    ['msg-ok','msg-sched','msg-err'].forEach(function(id) { document.getElementById(id).style.display = 'none'; });
+
+    try {
+      // URL immagine: usa Cloudinary se appena caricata, altrimenti mantieni quella esistente in modifica
+      let imageUrl = uploadedImageUrl || '';
+      if (!imageUrl && editingDocId && evCache[editingDocId]) {
+        imageUrl = evCache[editingDocId].imageUrl || '';
+      }
+
+      const payload = {
+        name:        name + ' — ' + venue,
+        date:        date,
+        description: desc.replace(/\n+/g, '<br>'),
+        imageUrl:    imageUrl,
+        status:      status,
+        publishAt:   publishAt,
+        photoLink:   photoLink
+      };
+
+      if (editingDocId) {
+        await db.collection('eventi').doc(editingDocId).update(payload);
+        const msgEl = document.getElementById('msg-ok');
+        msgEl.textContent = '✅ Evento aggiornato con successo!';
+        msgEl.style.display = 'block';
+        setTimeout(function() { msgEl.style.display = 'none'; }, 4000);
+        cancelEdit();
+      } else {
+        payload.ts = Date.now();
+        await db.collection('eventi').add(payload);
+        resetForm();
+        if (isScheduled) {
+          const d    = new Date(publishAt);
+          const dStr = d.toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' });
+          const tStr = d.toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit' });
+          const el = document.getElementById('msg-sched');
+          el.textContent = '⏰ Evento programmato per il ' + dStr + ' alle ' + tStr;
+          el.style.display = 'block';
+          setTimeout(function() { el.style.display = 'none'; }, 5000);
+        } else {
+          const el = document.getElementById('msg-ok');
+          el.textContent = '✅ Evento pubblicato! Visibile subito su eventi e galleria.';
+          el.style.display = 'block';
+          setTimeout(function() { el.style.display = 'none'; }, 4000);
+        }
+      }
+    } catch(e) {
+      const el = document.getElementById('msg-err');
+      el.textContent = 'Errore: ' + e.message;
+      el.style.display = 'block';
+    }
+
+    btn.disabled = false;
+    if (!editingDocId) {
+      btn.innerHTML = document.getElementById('schedule-check').checked
+        ? '⏰ &nbsp; Programma pubblicazione'
+        : '🚀 &nbsp; Pubblica evento';
+    }
+  }
+
+  /* ── Lista eventi (real-time) ────────────────────────── */
+  function fmtDateShort(s) {
+    if (!s) return '';
+    return new Date(s + 'T00:00:00').toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' });
+  }
+
+  db.collection('eventi').onSnapshot(function(snap) {
+    const list = document.getElementById('eventi-list');
+    if (snap.empty) {
+      list.innerHTML = '<div class="empty-list">Nessun evento ancora</div>';
+      return;
+    }
+
+    const now  = Date.now();
+    const docs = snap.docs.slice().sort(function(a, b) {
+      return new Date(b.data().date) - new Date(a.data().date);
+    });
+
+    list.innerHTML = '';
+
+    docs.forEach(function(doc) {
+      const ev = doc.data();
+      evCache[doc.id] = ev; // salva in cache
+
+      const isScheduled = ev.publishAt && ev.publishAt > now;
+      const metaDate = isScheduled
+        ? ('📅 ' + new Date(ev.publishAt).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'}) + ' ' + new Date(ev.publishAt).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}))
+        : fmtDateShort(ev.date);
+
+      // Contenitore
+      const item = document.createElement('div');
+      item.className = 'ev-item';
+
+      // Info
+      const info = document.createElement('div');
+      info.className = 'ev-item-info';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'ev-item-name';
+      nameEl.textContent = ev.name;
+      if (isScheduled) {
+        const badge = document.createElement('span');
+        badge.className = 'badge-sched';
+        badge.textContent = '⏰ programmato';
+        nameEl.appendChild(badge);
+      }
+
+      const metaEl = document.createElement('div');
+      metaEl.className = 'ev-item-meta';
+      metaEl.textContent = metaDate + ' · ' + (ev.imageUrl ? '🖼 immagine presente' : 'nessuna immagine');
+
+      info.appendChild(nameEl);
+      info.appendChild(metaEl);
+
+      // Bottoni
+      const actions = document.createElement('div');
+      actions.className = 'ev-item-actions';
+
+      const btnEdit = document.createElement('button');
+      btnEdit.className = 'btn-action btn-edit';
+      btnEdit.textContent = '✏️ Modifica';
+      btnEdit.addEventListener('click', function() { startEdit(doc.id); });
+
+      const btnFoto = document.createElement('button');
+      btnFoto.className = 'btn-action btn-foto';
+      btnFoto.textContent = '📷 Foto';
+      btnFoto.addEventListener('click', function() {
+        const link = prompt('Link foto per "' + ev.name + '"\n(lascia vuoto = "foto in arrivo")', ev.photoLink || '');
+        if (link === null) return;
+        db.collection('eventi').doc(doc.id).update({ photoLink: link.trim() });
+      });
+
+      const btnDel = document.createElement('button');
+      btnDel.className = 'btn-action btn-del';
+      btnDel.textContent = '✕';
+      btnDel.addEventListener('click', function() {
+        if (!confirm('Eliminare "' + ev.name + '"?')) return;
+        db.collection('eventi').doc(doc.id).delete();
+      });
+
+      actions.appendChild(btnEdit);
+      actions.appendChild(btnFoto);
+      actions.appendChild(btnDel);
+
+      item.appendChild(info);
+      item.appendChild(actions);
+      list.appendChild(item);
+    });
+
+  }, function(err) {
+    console.error('Firestore error:', err);
+    document.getElementById('eventi-list').innerHTML =
+      '<div class="empty-list">Errore caricamento: ' + err.message + '</div>';
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+   * TAB SWITCHING
+   * ══════════════════════════════════════════════════════════════ */
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+   * CONTEST — CRUD
+   * ══════════════════════════════════════════════════════════════ */
+  const contestCache = {};
+  let editingContestId = null;
+
+  function parsePrizes(text) {
+    return text.split('\n').map(function(l) { l = l.trim(); if (!l) return null;
+      const m = l.match(/^(\S+)\s+(.+)$/);
+      return m ? { icon: m[1], label: m[2] } : { icon: '🎁', label: l };
+    }).filter(Boolean);
+  }
+
+  function parseRules(text) {
+    return text.split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
+  }
+
+  function prizesToText(prizes) {
+    if (!prizes || !prizes.length) return '';
+    return prizes.map(function(p) { return p.icon + ' ' + p.label; }).join('\n');
+  }
+
+  function rulesToText(rules) {
+    if (!rules || !rules.length) return '';
+    return rules.join('\n');
+  }
+
+  function resetContestForm() {
+    ['ct-name','ct-tag','ct-desc','ct-deadline','ct-image','ct-prizes','ct-rules','ct-cta-label','ct-cta-link','ct-cta2-label','ct-cta2-link'].forEach(function(id) {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('ct-status').value = 'open';
+  }
+
+  function startContestEdit(docId) {
+    const ct = contestCache[docId];
+    if (!ct) return;
+    editingContestId = docId;
+
+    document.getElementById('ct-name').value = ct.name || '';
+    document.getElementById('ct-tag').value = ct.tag || '';
+    document.getElementById('ct-desc').value = (ct.description || '').replace(/<br>/g, '\n');
+    document.getElementById('ct-status').value = ct.status || 'open';
+    document.getElementById('ct-image').value = ct.image || '';
+    document.getElementById('ct-prizes').value = prizesToText(ct.prizes);
+    document.getElementById('ct-rules').value = rulesToText(ct.rules);
+
+    // CTA
+    if (ct.cta && ct.cta.length) {
+      document.getElementById('ct-cta-label').value = ct.cta[0] ? ct.cta[0].label : '';
+      document.getElementById('ct-cta-link').value  = ct.cta[0] ? ct.cta[0].link  : '';
+      document.getElementById('ct-cta2-label').value = ct.cta[1] ? ct.cta[1].label : '';
+      document.getElementById('ct-cta2-link').value  = ct.cta[1] ? ct.cta[1].link  : '';
+    } else {
+      document.getElementById('ct-cta-label').value = ct.ctaLabel || '';
+      document.getElementById('ct-cta-link').value  = ct.ctaLink  || '';
+      document.getElementById('ct-cta2-label').value = '';
+      document.getElementById('ct-cta2-link').value  = '';
+    }
+
+    // Deadline
+    if (ct.deadline) {
+      const d = new Date(ct.deadline);
+      const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+      document.getElementById('ct-deadline').value = local;
+    }
+
+    document.getElementById('contest-edit-banner').classList.add('visible');
+    document.getElementById('contest-publish-btn').innerHTML = '💾 &nbsp; Salva modifiche';
+    document.getElementById('contest-form-title').textContent = 'Modifica Contest';
+    document.querySelector('#tab-contest .panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function cancelContestEdit() {
+    editingContestId = null;
+    document.getElementById('contest-edit-banner').classList.remove('visible');
+    document.getElementById('contest-publish-btn').innerHTML = '🏆 &nbsp; Pubblica contest';
+    document.getElementById('contest-form-title').textContent = 'Nuovo Contest';
+    resetContestForm();
+  }
+
+  async function publishContest() {
+    const name     = document.getElementById('ct-name').value.trim();
+    const tag      = document.getElementById('ct-tag').value.trim();
+    const desc     = document.getElementById('ct-desc').value.trim();
+    const status   = document.getElementById('ct-status').value;
+    const deadline = document.getElementById('ct-deadline').value;
+    const image    = document.getElementById('ct-image').value.trim();
+    const prizes   = parsePrizes(document.getElementById('ct-prizes').value);
+    const rules    = parseRules(document.getElementById('ct-rules').value);
+    const ctaLabel  = document.getElementById('ct-cta-label').value.trim();
+    const ctaLink   = document.getElementById('ct-cta-link').value.trim();
+    const cta2Label = document.getElementById('ct-cta2-label').value.trim();
+    const cta2Link  = document.getElementById('ct-cta2-link').value.trim();
+
+    if (!name)     { alert('Inserisci il nome del contest.'); return; }
+    if (!deadline) { alert('Inserisci la scadenza del contest.'); return; }
+
+    // Build CTA array
+    const cta = [];
+    if (ctaLabel && ctaLink) cta.push({ label: ctaLabel, link: ctaLink });
+    if (cta2Label && cta2Link) cta.push({ label: cta2Label, link: cta2Link });
+
+    const payload = {
+      name, tag, description: desc.replace(/\n+/g, '<br>'),
+      status, deadline: new Date(deadline).toISOString(),
+      image, prizes, rules,
+      cta,
+      ctaLabel: cta.length === 0 ? ctaLabel : '',
+      ctaLink:  cta.length === 0 ? ctaLink  : ''
+    };
+
+    const btn = document.getElementById('contest-publish-btn');
+    btn.disabled = true; btn.textContent = 'Salvataggio…';
+    document.getElementById('ct-msg-ok').style.display  = 'none';
+    document.getElementById('ct-msg-err').style.display = 'none';
+
+    try {
+      if (editingContestId) {
+        await db.collection('contests').doc(editingContestId).update(payload);
+        const el = document.getElementById('ct-msg-ok');
+        el.textContent = '✅ Contest aggiornato!'; el.style.display = 'block';
+        setTimeout(function() { el.style.display = 'none'; }, 4000);
+        cancelContestEdit();
+      } else {
+        payload.ts = Date.now();
+        await db.collection('contests').add(payload);
+        const el = document.getElementById('ct-msg-ok');
+        el.textContent = '✅ Contest pubblicato!'; el.style.display = 'block';
+        setTimeout(function() { el.style.display = 'none'; }, 4000);
+        resetContestForm();
+      }
+    } catch(e) {
+      const el = document.getElementById('ct-msg-err');
+      el.textContent = 'Errore: ' + e.message; el.style.display = 'block';
+    }
+
+    btn.disabled = false;
+    if (!editingContestId) btn.innerHTML = '🏆 &nbsp; Pubblica contest';
+  }
+
+  /* Lista contest real-time */
+  db.collection('contests').onSnapshot(function(snap) {
+    const list = document.getElementById('contest-list');
+    if (snap.empty) { list.innerHTML = '<div class="empty-list">Nessun contest ancora</div>'; return; }
+
+    const docs = snap.docs.slice().sort(function(a, b) { return b.data().ts - a.data().ts; });
+    list.innerHTML = '';
+
+    docs.forEach(function(doc) {
+      const ct = doc.data();
+      contestCache[doc.id] = ct;
+
+      const statusLabel = { open: '🟢 Aperto', soon: '🟡 Prossimamente', closed: '🔴 Chiuso' }[ct.status] || ct.status;
+      const deadlineStr = ct.deadline ? new Date(ct.deadline).toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric' }) : '—';
+
+      const item = document.createElement('div');
+      item.className = 'ev-item';
+
+      const info = document.createElement('div');
+      info.className = 'ev-item-info';
+      info.innerHTML = '<div class="ev-item-name">' + ct.name + '</div><div class="ev-item-meta">' + statusLabel + ' · Scadenza: ' + deadlineStr + '</div>';
+
+      const actions = document.createElement('div');
+      actions.className = 'ev-item-actions';
+
+      const btnEdit = document.createElement('button');
+      btnEdit.className = 'btn-action btn-edit'; btnEdit.textContent = '✏️ Modifica';
+      btnEdit.addEventListener('click', function() { startContestEdit(doc.id); });
+
+      const btnDel = document.createElement('button');
+      btnDel.className = 'btn-action btn-del'; btnDel.textContent = '✕';
+      btnDel.addEventListener('click', function() {
+        if (!confirm('Eliminare "' + ct.name + '"?')) return;
+        db.collection('contests').doc(doc.id).delete();
+      });
+
+      actions.appendChild(btnEdit);
+      actions.appendChild(btnDel);
+      item.appendChild(info);
+      item.appendChild(actions);
+      list.appendChild(item);
+    });
+  });
+
+</script>
+</body>
+</html>

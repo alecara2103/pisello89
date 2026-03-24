@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Consegna PR — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818; --s3: #222222;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.4);
+      --green: #68D391; --blue: #63B3ED; --red: #FC8181; --purple: #A78BFA; --yellow: #F6E05E;
+    }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background: radial-gradient(ellipse at 20% 10%, rgba(255,107,0,.06) 0%, transparent 55%); }
+
+    /* ── TOPBAR ── */
+    .topbar { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:.8rem 1.2rem; background:rgba(10,10,10,.9); backdrop-filter:blur(16px); border-bottom:1px solid var(--border2); }
+    .topbar-links { display:flex; gap:.45rem; flex-wrap:wrap; }
+    .topbar-links a { font-size:.55rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.25); padding:.28rem .7rem; border-radius:99px; transition:background .2s; white-space:nowrap; }
+    .topbar-links a:hover { background:rgba(255,107,0,.2); }
+    .btn-exit { font-family:'Poppins',sans-serif; font-size:.55rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid var(--border2); border-radius:8px; padding:.28rem .7rem; cursor:pointer; }
+    .btn-exit:hover { color:var(--white); }
+
+    /* ── HERO ── */
+    .hero { position:relative; z-index:1; text-align:center; padding:5.5rem 1.5rem 1.5rem; }
+    .pill { display:inline-flex; align-items:center; gap:.45rem; font-size:.58rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.28rem .9rem; border-radius:99px; margin-bottom:1rem; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.8rem,8vw,5.5rem); letter-spacing:.04em; line-height:.9; }
+    .hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── TABS ── */
+    .tabs-wrap { position:relative; z-index:1; padding:.8rem clamp(1rem,4vw,2.5rem) 0; }
+    .tabs { display:inline-flex; background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:.3rem; gap:.3rem; }
+    .tab { font-family:'Poppins',sans-serif; font-size:.7rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.55rem 1.4rem; border-radius:10px; cursor:pointer; transition:background .22s, color .22s; }
+    .tab.active { background:var(--orange); color:#000; }
+    .tab:not(.active):hover { background:rgba(255,107,0,.1); color:var(--orange); }
+
+    /* ── PAGE ── */
+    .page { position:relative; z-index:1; padding:1.5rem clamp(1rem,4vw,2.5rem) 5rem; max-width:1100px; margin:0 auto; }
+
+    /* ── EVENT FOLDERS ── */
+    .events-grid { display:flex; flex-direction:column; gap:1rem; }
+
+    .event-folder { background:var(--s1); border:1px solid var(--border2); border-radius:18px; overflow:hidden; transition:border-color .25s; }
+    .event-folder.open { border-color:rgba(255,107,0,.35); }
+
+    .folder-header {
+      display:flex; align-items:center; gap:1rem; padding:1.1rem 1.4rem;
+      cursor:pointer; user-select:none;
+      transition:background .2s;
+    }
+    .folder-header:hover { background:rgba(255,255,255,.02); }
+    .folder-icon { font-size:1.3rem; flex-shrink:0; }
+    .folder-info { flex:1; min-width:0; }
+    .folder-name { font-size:1rem; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .folder-date { font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); margin-top:.15rem; }
+    .folder-arrow { font-size:.9rem; color:var(--muted); transition:transform .25s; flex-shrink:0; }
+    .event-folder.open .folder-arrow { transform:rotate(90deg); }
+
+    /* ── PR LIST inside folder ── */
+    .pr-list { border-top:1px solid var(--border2); padding:.8rem 1rem; display:none; flex-direction:column; gap:.5rem; }
+    .event-folder.open .pr-list { display:flex; }
+
+    .pr-row { background:var(--s2); border:1px solid var(--border2); border-radius:12px; overflow:hidden; }
+
+    .pr-header {
+      display:flex; align-items:center; gap:.8rem; padding:.75rem 1rem;
+      cursor:pointer; transition:background .2s;
+    }
+    .pr-header:hover { background:rgba(255,255,255,.03); }
+    .pr-avatar { width:32px; height:32px; border-radius:50%; background:rgba(99,179,237,.1); border:1px solid rgba(99,179,237,.25); display:flex; align-items:center; justify-content:center; font-size:.85rem; flex-shrink:0; }
+    .pr-name { flex:1; font-size:.88rem; font-weight:500; color:var(--white); }
+    .pr-count { font-size:.62rem; color:var(--muted); background:var(--s3); border:1px solid var(--border2); padding:.18rem .6rem; border-radius:99px; white-space:nowrap; }
+
+    /* ── PR HEADER mobile-friendly ── */
+    .pr-header { display:flex; align-items:center; gap:.7rem; padding:.85rem 1rem; cursor:pointer; transition:background .2s; flex-wrap:wrap; }
+    .pr-header:hover { background:rgba(255,255,255,.03); }
+    .pr-header-top { display:flex; align-items:center; gap:.7rem; width:100%; min-width:0; }
+    .pr-header-badges { display:flex; gap:.3rem; flex-wrap:wrap; padding:.1rem 0 .1rem 2.8rem; }
+
+    /* BADGES */
+    .pr-badges { display:flex; gap:.3rem; align-items:center; flex-wrap:wrap; }
+    .pr-badge { display:inline-flex; align-items:center; gap:.3rem; font-size:.68rem; font-weight:700; letter-spacing:.05em; padding:.28rem .7rem; border-radius:10px; white-space:nowrap; transition:all .2s; }
+    .pr-badge strong { font-size:.82rem; letter-spacing:.02em; }
+
+    /* Colorati quando hanno valore */
+    .pr-badge-cons  { color:#63B3ED; background:rgba(99,179,237,.12);  border:1px solid rgba(99,179,237,.3);  }
+    .pr-badge-reso  { color:#FC8181; background:rgba(252,129,129,.12); border:1px solid rgba(252,129,129,.3); }
+    .pr-badge-scar  { color:#68D391; background:rgba(104,211,145,.12); border:1px solid rgba(104,211,145,.3); }
+
+    /* Grigi quando = 0 */
+    .pr-badge-zero { color:rgba(255,255,255,.2); background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); }
+
+    .pr-badge-dot  { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .pr-badge-cons:not(.pr-badge-zero) .pr-badge-dot { background:#63B3ED; box-shadow:0 0 5px rgba(99,179,237,.6); }
+    .pr-badge-reso:not(.pr-badge-zero) .pr-badge-dot { background:#FC8181; box-shadow:0 0 5px rgba(252,129,129,.6); }
+    .pr-badge-scar:not(.pr-badge-zero) .pr-badge-dot { background:#68D391; box-shadow:0 0 5px rgba(104,211,145,.6); }
+    .pr-badge-zero .pr-badge-dot { background:rgba(255,255,255,.15); }
+
+    .pr-arrow { font-size:.8rem; color:var(--muted); transition:transform .25s; flex-shrink:0; }
+    .pr-row.open .pr-arrow { transform:rotate(90deg); }
+
+    /* Mobile tabs scroll */
+    @media (max-width:600px) {
+      .tabs { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+      .tabs::-webkit-scrollbar { display:none; }
+      .tab { font-size:.6rem; padding:.48rem .9rem; flex-shrink:0; }
+      .pr-header { padding:.75rem .85rem; }
+      .pr-header-badges { padding-left:2.5rem; }
+      .pr-badge { font-size:.62rem; padding:.24rem .55rem; }
+      .pr-badge strong { font-size:.76rem; }
+      .folder-header { padding:.9rem 1rem; }
+    }
+
+    /* ── FORM PANEL ── */
+    .pr-panel { display:none; border-top:1px solid var(--border2); padding:1rem 1.1rem; background:var(--s3); }
+    .pr-row.open .pr-panel { display:block; }
+
+    /* History */
+    .history-list { display:flex; flex-direction:column; gap:.4rem; margin-bottom:1rem; }
+    .history-item { background:var(--s2); border:1px solid var(--border2); border-radius:8px; padding:.6rem .9rem; font-size:.75rem; color:var(--muted); display:flex; align-items:flex-start; justify-content:space-between; gap:.5rem; }
+    .history-item-info { flex:1; line-height:1.5; }
+    .history-item-time { font-size:.6rem; color:rgba(255,255,255,.2); white-space:nowrap; }
+    .btn-del-entry { background:none; border:none; color:rgba(252,129,129,.5); cursor:pointer; font-size:.8rem; padding:0 .2rem; transition:color .2s; flex-shrink:0; }
+    .btn-del-entry:hover { color:var(--red); }
+    .history-empty { font-size:.7rem; color:rgba(255,255,255,.2); letter-spacing:.15em; text-transform:uppercase; text-align:center; padding:.8rem; }
+
+    /* Form fields */
+    .form-section { border-top:1px solid var(--border2); padding-top:.9rem; }
+    .form-title { font-size:.6rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--orange); margin-bottom:.8rem; }
+    .f { margin-bottom:.75rem; }
+    .f label { display:block; font-size:.58rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:.35rem; }
+    .f input { width:100%; background:var(--s2); border:1px solid var(--border2); border-radius:10px; color:var(--white); font-family:'Poppins',sans-serif; font-size:.88rem; padding:.65rem .9rem; outline:none; transition:border-color .2s; }
+    .f input:focus { border-color:var(--orange); }
+    .f input::placeholder { color:rgba(255,255,255,.2); }
+
+    /* Toggle switches */
+    .toggle-row { display:flex; align-items:center; gap:.7rem; margin-bottom:.9rem; }
+    .toggle-label { font-size:.62rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+    .toggle { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; position:absolute; }
+    .toggle-slider { position:absolute; inset:0; background:rgba(255,255,255,.1); border-radius:99px; cursor:pointer; transition:.25s; border:1px solid var(--border2); }
+    .toggle-slider::before { content:''; position:absolute; width:16px; height:16px; left:2px; bottom:2px; background:rgba(255,255,255,.4); border-radius:50%; transition:.25s; }
+    .toggle input:checked + .toggle-slider { background:var(--orange); border-color:var(--orange); }
+    .toggle input:checked + .toggle-slider::before { transform:translateX(18px); background:#000; }
+
+    .form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    @media (max-width:480px) { .form-row-2 { grid-template-columns:1fr; } }
+
+    .btn-add-entry { background:var(--orange); color:#000; font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; border:none; border-radius:9px; padding:.65rem 1.4rem; cursor:pointer; transition:background .2s; margin-top:.4rem; }
+    .btn-add-entry:hover { background:var(--orange2); }
+    .btn-add-entry:disabled { opacity:.5; cursor:not-allowed; }
+
+    .msg-ok  { margin-top:.6rem; font-size:.72rem; color:var(--green); display:none; }
+    .msg-err { margin-top:.6rem; font-size:.72rem; color:var(--red); display:none; }
+
+    /* Hidden fields */
+    .hidden { display:none !important; }
+
+    .empty-state { text-align:center; padding:4rem 1.5rem; font-size:.72rem; color:rgba(255,255,255,.18); letter-spacing:.2em; text-transform:uppercase; }
+
+    footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.15); }
+    footer b { color:var(--orange); opacity:.4; font-weight:400; margin:0 .5rem; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-links">
+    <a href="index.html">← Home</a>
+    <a href="PannelloAdmin.html">← Pannello</a>
+  </div>
+  <button class="btn-exit" onclick="logout()">Esci</button>
+</div>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Solo admin</div>
+  <h1>CONSEGNA<br><em>PR</em></h1>
+</section>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('biglietti')">🎟 Consegna biglietti</button>
+    <button class="tab" onclick="switchTab('scarico')">📊 Scarico</button>
+    <button class="tab" onclick="switchTab('reso')">↩ Reso biglietti</button>
+  </div>
+</div>
+
+<div class="page">
+  <div id="tab-biglietti" class="events-grid"></div>
+  <div id="tab-scarico"   class="events-grid" style="display:none;"></div>
+  <div id="tab-reso"      class="events-grid" style="display:none;"></div>
+</div>
+
+<footer>© 2026 Astra Events <b>✦</b> Consegna PR <b>✦</b> Solo uso interno</footer>
+
+<!-- Firebase compat SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  /* ── Auth ── */
+
+  // Verifica doppia su Firestore
+  async function verifyAdminOnFirestore() {
+    const usr = sessionStorage.getItem('astra_user') || localStorage.getItem('ls_astra_user');
+    if (!usr) return false;
+    try {
+      const snap = await db.collection('utenti').doc(usr).get();
+      if (!snap.exists) return false;
+      const d = snap.data();
+      return d.role === 'admin' || (d.extraRoles || []).includes('admin');
+    } catch(e) { return true; } // se Firebase non risponde non bloccare
+  }
+
+  (async () => {
+    const role    = sessionStorage.getItem('astra_role')    || localStorage.getItem('ls_astra_role');
+    const isAdmin = sessionStorage.getItem('astra_admin') === '1' || localStorage.getItem('ls_astra_admin') === '1' || role === 'admin';
+    if (!isAdmin) { alert('Accesso negato.'); window.location.href = 'index.html'; return; }
+    const verified = await verifyAdminOnFirestore();
+    if (!verified) { alert('Accesso negato.'); window.location.href = 'index.html'; }
+  })();
+  function logout() {
+    sessionStorage.clear();
+    localStorage.removeItem('ls_astra_role');
+    localStorage.removeItem('ls_astra_user');
+    localStorage.removeItem('ls_astra_nome');
+    localStorage.removeItem('ls_astra_admin');
+    window.location.href = 'index.html';
+  }
+
+  /* ── Firebase ── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey:            "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain:        "astra-events-338dd.firebaseapp.com",
+      projectId:         "astra-events-338dd",
+      storageBucket:     "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId:             "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  /* ── State ── */
+  let currentTab = 'biglietti';
+  let events = [];   // [{id, name, date}]
+  let prs    = [];   // [{id, nome}]
+
+  /* ── Tabs ── */
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tab-biglietti').style.display = tab === 'biglietti' ? 'flex' : 'none';
+    document.getElementById('tab-scarico').style.display   = tab === 'scarico'   ? 'flex' : 'none';
+    document.getElementById('tab-reso').style.display      = tab === 'reso'      ? 'flex' : 'none';
+    document.querySelectorAll('.tab').forEach((t,i) =>
+      t.classList.toggle('active',
+        (tab==='biglietti'&&i===0)||(tab==='scarico'&&i===1)||(tab==='reso'&&i===2))
+    );
+    renderAll();
+  }
+
+  /* ── Format date ── */
+  function fmtDate(s) {
+    if (!s) return '';
+    return new Date(s + 'T00:00:00').toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' });
+  }
+  function fmtTs(ts) {
+    return new Date(ts).toLocaleString('it-IT', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+  }
+
+  /* ══════════════════════════════════════════════════════
+     RENDER MAIN
+  ══════════════════════════════════════════════════════ */
+  function renderAll() {
+    const containerId = currentTab === 'biglietti' ? 'tab-biglietti' : currentTab === 'scarico' ? 'tab-scarico' : 'tab-reso';
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    if (!events.length) {
+      container.innerHTML = '<div class="empty-state">Nessun evento trovato</div>';
+      return;
+    }
+
+    events.forEach(ev => {
+      const folder = buildEventFolder(ev, currentTab);
+      container.appendChild(folder);
+    });
+  }
+
+  /* ── Build event folder ── */
+  function buildEventFolder(ev, tabType) {
+    const folder = document.createElement('div');
+    folder.className = 'event-folder';
+    folder.id = `folder-${tabType}-${ev.id}`;
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'folder-header';
+    header.innerHTML = `
+      <div class="folder-icon">📁</div>
+      <div class="folder-info">
+        <div class="folder-name">${ev.name}</div>
+        <div class="folder-date">${fmtDate(ev.date)}</div>
+      </div>
+      <div class="folder-arrow">›</div>`;
+    header.addEventListener('click', () => {
+      folder.classList.toggle('open');
+      if (folder.classList.contains('open')) loadPRList(ev, tabType, prList);
+    });
+
+    // PR list container
+    const prList = document.createElement('div');
+    prList.className = 'pr-list';
+
+    folder.appendChild(header);
+    folder.appendChild(prList);
+    return folder;
+  }
+
+  /* ── Load PR list into a folder ── */
+  function loadPRList(ev, tabType, prListEl) {
+    prListEl.innerHTML = '<div style="padding:.5rem;font-size:.7rem;color:var(--muted);">Caricamento PR…</div>';
+    if (!prs.length) {
+      prListEl.innerHTML = '<div style="padding:.5rem;font-size:.7rem;color:var(--muted);">Nessun PR trovato</div>';
+      return;
+    }
+    prListEl.innerHTML = '';
+    prs.forEach(pr => {
+      const row = buildPRRow(ev, pr, tabType);
+      prListEl.appendChild(row);
+    });
+  }
+
+  /* ── Build PR row ── */
+  function buildPRRow(ev, pr, tabType) {
+    const row = document.createElement('div');
+    row.className = 'pr-row';
+    row.id = `pr-${tabType}-${ev.id}-${pr.id}`;
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'pr-header';
+
+    const docPath = `consegne/${ev.id}/${tabType}/${pr.id}`;
+
+    // Badge triplice: consegnate / resi / scaricate
+    const badgesWrap = document.createElement('div');
+    badgesWrap.className = 'pr-badges';
+
+    function makeBadge(cls, icon, label) {
+      const b = document.createElement('span');
+      b.className = 'pr-badge ' + cls + ' pr-badge-zero';
+      b.innerHTML = '<span class="pr-badge-dot"></span>' + icon + ' <strong>…</strong>';
+      return b;
+    }
+
+    function updateBadge(b, cls, icon, val, label) {
+      const isZero = val === 0;
+      b.className = 'pr-badge ' + cls + (isZero ? ' pr-badge-zero' : '');
+      b.innerHTML = '<span class="pr-badge-dot"></span>' + icon + ' <strong>' + val + '</strong> ' + label;
+    }
+
+    const bCons = makeBadge('pr-badge-cons', '📦', 'cons');
+    const bReso = makeBadge('pr-badge-reso', '↩',  'resi');
+    const bScar = makeBadge('pr-badge-scar', '✅', 'scar');
+    badgesWrap.appendChild(bCons);
+    badgesWrap.appendChild(bReso);
+    badgesWrap.appendChild(bScar);
+
+    // Carica tutti e 3 i contatori in parallelo
+    Promise.all([
+      db.collection('consegne').doc(ev.id).collection('biglietti').doc(pr.id).get(),
+      db.collection('consegne').doc(ev.id).collection('reso').doc(pr.id).get(),
+      db.collection('consegne').doc(ev.id).collection('scarico').doc(pr.id).get()
+    ]).then(([dCons, dReso, dScar]) => {
+      const cons = dCons.exists ? (dCons.data().entries || []).reduce((s,e) => s + (e.genere ? (e.quantitaUomo||0)+(e.quantitaDonna||0) : (e.quantita||0)), 0) : 0;
+      const reso = dReso.exists ? (dReso.data().entries || []).reduce((s,e) => s + (e.quantita||0), 0) : 0;
+      const scar = dScar.exists ? (dScar.data().entries || []).reduce((s,e) => s + (e.genere ? (e.prevUomo||0)+(e.prevDonna||0) : (e.prevTot||0)), 0) : 0;
+      updateBadge(bCons, 'pr-badge-cons', '📦', cons, 'cons');
+      updateBadge(bReso, 'pr-badge-reso', '↩',  reso, 'resi');
+      updateBadge(bScar, 'pr-badge-scar', '✅', scar, 'scar');
+    }).catch(() => {
+      updateBadge(bCons, 'pr-badge-cons', '📦', 0, 'cons');
+      updateBadge(bReso, 'pr-badge-reso', '↩',  0, 'resi');
+      updateBadge(bScar, 'pr-badge-scar', '✅', 0, 'scar');
+    });
+
+    // mantieni compatibilità con countBadge
+    const countBadge = bCons;
+
+    // Riga 1: avatar + nome + freccia
+    const topRow = document.createElement('div');
+    topRow.className = 'pr-header-top';
+    topRow.innerHTML = `<div class="pr-avatar">🎫</div><div class="pr-name">${pr.nome}</div>`;
+    const arrow = document.createElement('span');
+    arrow.className = 'pr-arrow';
+    arrow.textContent = '›';
+    topRow.appendChild(arrow);
+    header.appendChild(topRow);
+
+    // Riga 2: badge colorati sotto il nome
+    const badgesRow = document.createElement('div');
+    badgesRow.className = 'pr-header-badges';
+    badgesRow.appendChild(badgesWrap);
+    header.appendChild(badgesRow);
+
+    header.addEventListener('click', () => {
+      row.classList.toggle('open');
+      if (row.classList.contains('open')) loadPRPanel(ev, pr, tabType, panel, countBadge);
+    });
+
+    // Panel
+    const panel = document.createElement('div');
+    panel.className = 'pr-panel';
+
+    row.appendChild(header);
+    row.appendChild(panel);
+    return row;
+  }
+
+  /* ── Load PR panel content ── */
+  function loadPRPanel(ev, pr, tabType, panel, countBadge) {
+    panel.innerHTML = '<div style="font-size:.7rem;color:var(--muted);padding:.4rem 0;">Caricamento…</div>';
+
+    const docRef = db.collection('consegne').doc(ev.id).collection(tabType).doc(pr.id);
+
+    docRef.onSnapshot(snap => {
+      const entries = snap.exists ? (snap.data().entries || []) : [];
+      countBadge.textContent = entries.length + ' assegn.';
+      renderPanel(ev, pr, tabType, panel, entries, docRef);
+    });
+  }
+
+  /* ── Render panel with history + form ── */
+  function renderPanel(ev, pr, tabType, panel, entries, docRef) {
+    panel.innerHTML = '';
+
+    // ── History ──
+    const histTitle = document.createElement('div');
+    histTitle.style.cssText = 'font-size:.6rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;';
+    histTitle.textContent = 'Storico assegnazioni';
+    panel.appendChild(histTitle);
+
+    const histList = document.createElement('div');
+    histList.className = 'history-list';
+
+    if (!entries.length) {
+      histList.innerHTML = '<div class="history-empty">Nessuna assegnazione ancora</div>';
+    } else {
+      [...entries].reverse().forEach((entry, revIdx) => {
+        const realIdx = entries.length - 1 - revIdx;
+        const item = document.createElement('div');
+        item.className = 'history-item';
+
+        let infoHtml = '';
+        const numLabel = `<span style="font-size:.58rem;font-weight:700;letter-spacing:.12em;color:var(--orange);background:rgba(255,107,0,.12);border:1px solid rgba(255,107,0,.3);padding:.12rem .5rem;border-radius:6px;margin-right:.5rem;">Consegna ${entries.length - revIdx}</span>`;
+        if (tabType === 'reso') {
+          const resoNumLabel = `<span style="font-size:.58rem;font-weight:700;letter-spacing:.12em;color:var(--red);background:rgba(252,129,129,.1);border:1px solid rgba(252,129,129,.3);padding:.12rem .5rem;border-radius:6px;margin-right:.5rem;">Reso ${entries.length - revIdx}</span>`;
+          infoHtml = resoNumLabel + `↩ <strong style="color:var(--red)">${entry.quantita} prev tolte</strong>` + (entry.note ? ` &nbsp;·&nbsp; <span style="color:var(--muted)">${entry.note}</span>` : '');
+        } else if (tabType === 'biglietti') {
+          let prevStr = '';
+          if (entry.genere) {
+            prevStr = `<strong style="color:var(--blue)">${entry.quantitaUomo||0} U</strong> / <strong style="color:var(--purple)">${entry.quantitaDonna||0} D</strong> (tot: ${entry.quantita||0})`;
+          } else {
+            prevStr = `<strong style="color:var(--white)">${entry.quantita} prev</strong>`;
+          }
+          infoHtml = numLabel + prevStr + ` &nbsp;·&nbsp; matricola: <strong style="color:var(--orange)">${entry.matricola}</strong>`;
+        } else {
+          // Scarico
+          const scarNumLabel = `<span style="font-size:.58rem;font-weight:700;letter-spacing:.12em;color:var(--green);background:rgba(104,211,145,.1);border:1px solid rgba(104,211,145,.3);padding:.12rem .5rem;border-radius:6px;margin-right:.5rem;">Scarico ${entries.length - revIdx}</span>`;
+          const genereStr = entry.genere
+            ? `<strong style="color:var(--blue)">${entry.prevUomo||0} U</strong> / <strong style="color:var(--purple)">${entry.prevDonna||0} D</strong>`
+            : `<strong style="color:var(--white)">${entry.prevTot||0} prev</strong>`;
+          let tavoloStr = '';
+          if (entry.hasTavolo) tavoloStr = ` &nbsp;·&nbsp; 🍾 <strong style="color:var(--green)">${entry.persone} pers × €${entry.quota}</strong>`;
+          const euroStr = (entry.totaleEuro != null && entry.totaleEuro !== undefined)
+            ? ` &nbsp;·&nbsp; 💶 <strong style="color:#F6E05E">€${entry.totaleEuro}</strong>`
+            : '';
+          infoHtml = scarNumLabel + genereStr + tavoloStr + euroStr;
+        }
+
+        item.innerHTML = `
+          <div class="history-item-info">${infoHtml}</div>
+          <div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0;">
+            <span class="history-item-time">${fmtTs(entry.ts)}</span>
+            <button class="btn-del-entry" title="Elimina" onclick="deleteEntry(this, ${realIdx})">✕</button>
+          </div>`;
+
+        // Store ref on button for deletion
+        item.querySelector('.btn-del-entry')._docRef = docRef;
+        item.querySelector('.btn-del-entry')._entries = entries;
+
+        histList.appendChild(item);
+      });
+    }
+    panel.appendChild(histList);
+
+    // ── Form ──
+    const formSection = document.createElement('div');
+    formSection.className = 'form-section';
+
+    if (tabType === 'reso') {
+      formSection.innerHTML = `
+        <div class="form-title">↩ Nuovo reso</div>
+        <div class="f">
+          <label>Prevendite tolte *</label>
+          <input type="number" class="f-reso-qty" placeholder="Es. 5" min="1" />
+        </div>
+        <div class="f">
+          <label>Note (opzionale)</label>
+          <input type="text" class="f-reso-note" placeholder="Es. non vendute, restituite…" />
+        </div>
+        <button class="btn-add-entry" style="background:var(--red);color:#fff;">↩ Registra reso</button>
+        <div class="msg-ok">✓ Reso registrato!</div>
+        <div class="msg-err"></div>`;
+
+      formSection.querySelector('.btn-add-entry').addEventListener('click', async () => {
+        const q    = formSection.querySelector('.f-reso-qty').value.trim();
+        const note = formSection.querySelector('.f-reso-note').value.trim();
+        const ok   = formSection.querySelector('.msg-ok');
+        const err  = formSection.querySelector('.msg-err');
+        if (!q || parseInt(q) < 1) { err.textContent = 'Inserisci un numero valido.'; err.style.display='block'; return; }
+        const btn = formSection.querySelector('.btn-add-entry');
+        btn.disabled = true;
+        try {
+          const snap = await docRef.get();
+          const cur  = snap.exists ? (snap.data().entries || []) : [];
+          cur.push({ quantita: parseInt(q), note, ts: Date.now() });
+          await docRef.set({ entries: cur }, { merge: true });
+          formSection.querySelector('.f-reso-qty').value   = '';
+          formSection.querySelector('.f-reso-note').value  = '';
+          ok.style.display = 'block'; err.style.display = 'none';
+          setTimeout(() => ok.style.display = 'none', 2500);
+        } catch(e) { err.textContent = 'Errore: ' + e.message; err.style.display = 'block'; }
+        btn.disabled = false;
+      });
+
+    } else if (tabType === 'biglietti') {
+      formSection.innerHTML = `
+        <div class="form-title">➕ Nuova assegnazione</div>
+
+        <div class="toggle-row">
+          <label class="toggle"><input type="checkbox" class="tog-genere-b" /><span class="toggle-slider"></span></label>
+          <span class="toggle-label">Uomo / Donna separati</span>
+        </div>
+
+        <div class="f-prev-unica-b">
+          <div class="f">
+            <label>Prevendite consegnate *</label>
+            <input type="number" class="f-quantita" placeholder="Es. 10" min="1" />
+          </div>
+        </div>
+        <div class="f-prev-genere-b hidden">
+          <div class="form-row-2">
+            <div class="f"><label>Prev. Uomo</label><input type="number" class="f-quant-uomo" placeholder="0" min="0" /></div>
+            <div class="f"><label>Prev. Donna</label><input type="number" class="f-quant-donna" placeholder="0" min="0" /></div>
+          </div>
+        </div>
+
+        <div class="f">
+          <label>Matricola prevendite *</label>
+          <input type="text" class="f-matricola" placeholder="Es. 123-456" />
+        </div>
+        <button class="btn-add-entry">✦ Aggiungi assegnazione</button>
+        <div class="msg-ok">✓ Salvato!</div>
+        <div class="msg-err"></div>`;
+
+      // Toggle genere biglietti
+      formSection.querySelector('.tog-genere-b').addEventListener('change', function() {
+        formSection.querySelector('.f-prev-unica-b').classList.toggle('hidden', this.checked);
+        formSection.querySelector('.f-prev-genere-b').classList.toggle('hidden', !this.checked);
+      });
+
+      formSection.querySelector('.btn-add-entry').addEventListener('click', async () => {
+        const genere = formSection.querySelector('.tog-genere-b').checked;
+        const m   = formSection.querySelector('.f-matricola').value.trim();
+        const ok  = formSection.querySelector('.msg-ok');
+        const err = formSection.querySelector('.msg-err');
+        if (!m) { err.textContent = 'Inserisci la matricola.'; err.style.display='block'; return; }
+
+        let entry = { matricola: m, genere, ts: Date.now() };
+        if (genere) {
+          entry.quantitaUomo  = parseInt(formSection.querySelector('.f-quant-uomo').value)  || 0;
+          entry.quantitaDonna = parseInt(formSection.querySelector('.f-quant-donna').value) || 0;
+          entry.quantita      = entry.quantitaUomo + entry.quantitaDonna;
+        } else {
+          const q = formSection.querySelector('.f-quantita').value.trim();
+          if (!q) { err.textContent = 'Inserisci le prevendite consegnate.'; err.style.display='block'; return; }
+          entry.quantita = parseInt(q);
+        }
+
+        const btn = formSection.querySelector('.btn-add-entry');
+        btn.disabled = true;
+        try {
+          const snap = await docRef.get();
+          const cur = snap.exists ? (snap.data().entries || []) : [];
+          cur.push(entry);
+          await docRef.set({ entries: cur }, { merge: true });
+          formSection.querySelectorAll('input[type="number"], input[type="text"]').forEach(i => i.value = '');
+          formSection.querySelectorAll('input[type="checkbox"]').forEach(i => { i.checked = false; i.dispatchEvent(new Event('change')); });
+          ok.style.display = 'block'; err.style.display = 'none';
+          setTimeout(() => ok.style.display = 'none', 2500);
+        } catch(e) { err.textContent = 'Errore: ' + e.message; err.style.display = 'block'; }
+        btn.disabled = false;
+      });
+
+    } else if (tabType === 'scarico') {
+      // Scarico form
+      formSection.innerHTML = `
+        <div class="form-title">➕ Nuova assegnazione</div>
+
+        <div class="toggle-row">
+          <label class="toggle"><input type="checkbox" class="tog-genere" /><span class="toggle-slider"></span></label>
+          <span class="toggle-label">Uomo / Donna separati</span>
+        </div>
+
+        <div class="f-prev-unica">
+          <div class="f"><label>Prevendite scaricate *</label><input type="number" class="f-prevtot" placeholder="Es. 25" min="0" /></div>
+        </div>
+        <div class="f-prev-genere hidden">
+          <div class="form-row-2">
+            <div class="f"><label>Prev. Uomo</label><input type="number" class="f-prevuomo" placeholder="0" min="0" /></div>
+            <div class="f"><label>Prev. Donna</label><input type="number" class="f-prevdonna" placeholder="0" min="0" /></div>
+          </div>
+        </div>
+
+        <div class="toggle-row" style="margin-top:.5rem;">
+          <label class="toggle"><input type="checkbox" class="tog-tavolo" /><span class="toggle-slider"></span></label>
+          <span class="toggle-label">Tavoli</span>
+        </div>
+
+        <div class="f-tavolo-fields hidden">
+          <div class="form-row-2">
+            <div class="f"><label>Numero persone</label><input type="number" class="f-persone" placeholder="Es. 6" min="1" /></div>
+            <div class="f"><label>Quota a persona (€)</label><input type="number" class="f-quota" placeholder="Es. 35" min="0" /></div>
+          </div>
+        </div>
+
+        <div class="f" style="margin-top:.5rem;">
+          <label>Totale incassato (€)</label>
+          <input type="number" class="f-euro" placeholder="Es. 350" min="0" step="0.01" />
+        </div>
+
+        <button class="btn-add-entry">✦ Aggiungi assegnazione</button>
+        <div class="msg-ok">✓ Salvato!</div>
+        <div class="msg-err"></div>`;
+
+      // Toggle genere
+      formSection.querySelector('.tog-genere').addEventListener('change', function() {
+        formSection.querySelector('.f-prev-unica').classList.toggle('hidden', this.checked);
+        formSection.querySelector('.f-prev-genere').classList.toggle('hidden', !this.checked);
+      });
+      // Toggle tavolo
+      formSection.querySelector('.tog-tavolo').addEventListener('change', function() {
+        formSection.querySelector('.f-tavolo-fields').classList.toggle('hidden', !this.checked);
+      });
+
+      formSection.querySelector('.btn-add-entry').addEventListener('click', async () => {
+        const genere    = formSection.querySelector('.tog-genere').checked;
+        const hasTavolo = formSection.querySelector('.tog-tavolo').checked;
+        const ok  = formSection.querySelector('.msg-ok');
+        const err = formSection.querySelector('.msg-err');
+        const btn = formSection.querySelector('.btn-add-entry');
+
+        let entry = { ts: Date.now(), genere, hasTavolo };
+
+        if (genere) {
+          const u = parseInt(formSection.querySelector('.f-prevuomo').value)  || 0;
+          const d = parseInt(formSection.querySelector('.f-prevdonna').value) || 0;
+          entry.prevUomo = u; entry.prevDonna = d;
+        } else {
+          const t = formSection.querySelector('.f-prevtot').value.trim();
+          if (!t) { err.textContent = 'Inserisci le prevendite scaricate.'; err.style.display='block'; return; }
+          entry.prevTot = parseInt(t);
+        }
+        if (hasTavolo) {
+          entry.persone = parseInt(formSection.querySelector('.f-persone').value)   || 0;
+          entry.quota   = parseFloat(formSection.querySelector('.f-quota').value)   || 0;
+        }
+        const euroVal = formSection.querySelector('.f-euro').value.trim();
+        if (euroVal !== '') entry.totaleEuro = parseFloat(euroVal) || 0;
+
+        btn.disabled = true;
+        try {
+          const snap = await docRef.get();
+          const cur = snap.exists ? (snap.data().entries || []) : [];
+          cur.push(entry);
+          await docRef.set({ entries: cur }, { merge: true });
+          // Reset
+          formSection.querySelectorAll('input[type="number"], input[type="text"]').forEach(i => i.value = '');
+          formSection.querySelectorAll('input[type="checkbox"]').forEach(i => { i.checked = false; i.dispatchEvent(new Event('change')); });
+          ok.style.display = 'block'; err.style.display = 'none';
+          setTimeout(() => ok.style.display = 'none', 2500);
+        } catch(e) { err.textContent = 'Errore: ' + e.message; err.style.display = 'block'; }
+        btn.disabled = false;
+      });
+    }
+
+    panel.appendChild(formSection);
+  }
+
+  /* ── Delete single entry ── */
+  async function deleteEntry(btn, idx) {
+    if (!confirm('Eliminare questa assegnazione?')) return;
+    const docRef  = btn._docRef;
+    const entries = btn._entries;
+    entries.splice(idx, 1);
+    await docRef.set({ entries }, { merge: true });
+  }
+
+  /* ══════════════════════════════════════════════════════
+     LOAD DATA FROM FIREBASE
+  ══════════════════════════════════════════════════════ */
+  function init() {
+    // Load events
+    db.collection('eventi').orderBy('date', 'desc').onSnapshot(snap => {
+      events = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderAll();
+    });
+
+    // Load PRs — anyone with role=pr OR extraRoles includes 'pr', filtered by owner
+    const adminNome    = (sessionStorage.getItem('astra_nome') || localStorage.getItem('ls_astra_nome') || '').trim();
+    const isSuperAdmin = adminNome === '' || adminNome.toLowerCase() === 'admin astra' ||
+                         ((sessionStorage.getItem('astra_admin') === '1' || localStorage.getItem('ls_astra_admin') === '1') &&
+                          adminNome.toLowerCase() !== 'ale' &&
+                          adminNome.toLowerCase() !== 'jajo');
+
+    // Listen to all utenti and filter client-side (Firestore can't query array + owner together easily)
+    db.collection('utenti').onSnapshot(snap => {
+      prs = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(u => {
+          // Must have PR role (primary or extra)
+          const hasPR = u.role === 'pr' || (u.extraRoles || []).includes('pr');
+          if (!hasPR) return false;
+          // Filter by owner unless super admin
+          if (!isSuperAdmin && u.owner !== adminNome) return false;
+          return true;
+        })
+        .map(u => ({ id: u.id, nome: u.nome || u.username }))
+        .sort((a,b) => a.nome.localeCompare(b.nome));
+      renderAll();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Diventa PR — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --surface: #111111; --surface2: #181818; --surface3: #1e1e1e;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.45);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 15% 15%, rgba(255,107,0,.05) 0%, transparent 50%),
+                  radial-gradient(ellipse at 85% 85%, rgba(255,107,0,.04) 0%, transparent 50%);
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem clamp(1.5rem, 5vw, 4rem);
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,10,.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: .1em; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    header nav a { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); text-decoration: none; transition: color .3s; }
+    header nav a:hover { color: var(--white); }
+
+    .hero { position: relative; z-index: 1; text-align: center; padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3.5rem); }
+    .pill { display: inline-flex; align-items: center; gap: .5rem; font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); border: 1px solid var(--border); padding: .32rem 1rem; border-radius: 99px; margin-bottom: 1.5rem; }
+    .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 6px var(--orange); animation: blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 9vw, 8rem); letter-spacing: .05em; line-height: .92; margin-bottom: 1.2rem; }
+    .hero h1 em { font-style: normal; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: clamp(.83rem, 1.4vw, 1rem); font-weight: 300; color: var(--muted); max-width: 520px; margin: 0 auto; line-height: 1.72; }
+
+    .btn-hero-cta { display: inline-flex; align-items: center; gap: .6rem; background: var(--orange); color: #000; font-family: 'Poppins', sans-serif; font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; border-radius: 12px; padding: 1rem 2rem; text-decoration: none; margin-top: 1.8rem; transition: background .22s, transform .12s; }
+    .btn-hero-cta:hover { background: var(--orange2); transform: translateY(-2px); }
+    .btn-hero-cta:active { transform: scale(.98); }
+
+    .section-head { position: relative; z-index: 1; display: flex; align-items: center; gap: 1.2rem; padding: 0 clamp(1.5rem, 5vw, 4rem); margin-bottom: 2.5rem; }
+    .section-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-head span { font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); white-space: nowrap; }
+
+    .content { position: relative; z-index: 1; padding: 0 clamp(1.5rem, 5vw, 4rem) 6rem; }
+
+    /* Chi cerchiamo */
+    .chi-cerchiamo { display: none; }
+
+    /* Cosa offriamo */
+    .cosa-offriamo { margin-bottom: 4rem; }
+    .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1rem; }
+    .benefit-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      animation: rise .5s ease both;
+      transition: transform .3s ease;
+    }
+    .benefit-card:hover { transform: translateX(6px); }
+    .benefit-icon { font-size: 2.2rem; flex-shrink: 0; }
+    .benefit-text { text-align: left; }
+    .benefit-label { font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--orange); margin-bottom: .3rem; }
+    .benefit-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: .05em; color: var(--white); }
+
+    /* Requisiti */
+    .requisiti { margin-bottom: 4rem; background: rgba(255,107,0,.04); border: 1px solid var(--border); border-radius: 20px; padding: 2.2rem clamp(1.5rem, 4vw, 3rem); }
+    .req-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .04em; color: var(--orange); margin-bottom: 1.6rem; }
+    .req-list { display: grid; gap: 1rem; }
+    .req-item { display: flex; gap: 1rem; }
+    .req-check { width: 24px; height: 24px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: .9rem; color: #000; flex-shrink: 0; font-weight: bold; margin-top: .15rem; }
+    .req-text { font-size: .9rem; color: var(--white); line-height: 1.75; }
+
+    /* Come funziona */
+    .come-funziona { margin-bottom: 4rem; }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1.5rem; }
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 1.8rem;
+      text-align: center;
+      position: relative;
+      animation: rise .5s ease both;
+    }
+    .step-num {
+      position: absolute;
+      top: -12px; left: 50%; transform: translateX(-50%);
+      width: 48px; height: 48px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 4px 16px rgba(255,107,0,.4);
+    }
+    .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: .04em; color: var(--white); margin-top: 1.2rem; margin-bottom: .8rem; }
+    .step-desc { font-size: .78rem; color: var(--muted); line-height: 1.7; }
+    .step-sub { font-size: .7rem; color: rgba(255,107,0,.6); margin-top: .4rem; padding-top: .4rem; border-top: 1px solid rgba(255,255,255,.1); }
+
+    /* Form */
+    .form-section { margin-bottom: 4rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem clamp(1.5rem, 4vw, 3rem); animation: rise .5s ease both; }
+    .form-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: .04em; color: var(--orange); margin-bottom: 2rem; text-align: center; }
+
+    .f { margin-bottom: 1.2rem; }
+    .f label { display: block; font-size: .6rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .f input, .f textarea, .f select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; color: var(--white); font-family: 'Poppins', sans-serif; font-size: .9rem; padding: .85rem 1.1rem; outline: none; transition: border-color .22s; resize: none; }
+    .f input:focus, .f textarea:focus, .f select:focus { border-color: var(--orange); }
+    .f select option { background: var(--surface2); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+    .btn-submit { background: var(--orange); color: #000; font-family: 'Poppins', sans-serif; font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; border: none; border-radius: 12px; padding: 1rem 2.2rem; cursor: pointer; margin-top: 1rem; transition: background .22s, transform .12s; display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; }
+    .btn-submit:hover { background: var(--orange2); }
+    .btn-submit:active { transform: scale(.98); }
+
+    .success-msg { display: none; text-align: center; padding: 2rem; }
+    .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .04em; color: #68D391; margin-bottom: .8rem; }
+    .success-text { font-size: .9rem; color: var(--muted); line-height: 1.8; }
+
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-size: .62rem; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.18); }
+    footer b { color: var(--orange); opacity: .5; font-weight: 400; margin: 0 .5rem; }
+
+    @media (max-width: 580px) { }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">ASTRA</a>
+  <nav><a href="index.html">← Home</a></nav>
+</header>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Opportunità lavorativa</div>
+  <h1>DIVENTA<br><em>PR ASTRA</em></h1>
+  <p>Guadagna alti compensi, vivi gli eventi gratis con drink omaggio e accesso esclusivo. Unisciti al nostro team di promoter e diventa il volto di Astra Events.</p>
+  <a href="#form-candidatura" class="btn-hero-cta">Candidati ora →</a>
+</section>
+
+<div class="content">
+
+  <!-- COSA OFFRIAMO -->
+  <div class="cosa-offriamo">
+    <div class="section-head"><span>✦ Cosa ti offriamo</span></div>
+    <div class="benefits-grid">
+      <div class="benefit-card" style="animation-delay:.05s">
+        <div class="benefit-icon">💰</div>
+        <div class="benefit-text">
+          <div class="benefit-label">Compenso</div>
+          <div class="benefit-value">Alti guadagni</div>
+        </div>
+      </div>
+      <div class="benefit-card" style="animation-delay:.1s">
+        <div class="benefit-icon">🎟</div>
+        <div class="benefit-text">
+          <div class="benefit-label">Ingressi</div>
+          <div class="benefit-value">Omaggio</div>
+        </div>
+      </div>
+      <div class="benefit-card" style="animation-delay:.15s">
+        <div class="benefit-icon">🥂</div>
+        <div class="benefit-text">
+          <div class="benefit-label">Drink</div>
+          <div class="benefit-value">Omaggio</div>
+        </div>
+      </div>
+      <div class="benefit-card" style="animation-delay:.2s">
+        <div class="benefit-icon">⭐</div>
+        <div class="benefit-text">
+          <div class="benefit-label">Status VIP</div>
+          <div class="benefit-value">Accesso esclusivo</div>
+        </div>
+      </div>
+      <div class="benefit-card" style="animation-delay:.25s">
+        <div class="benefit-icon">🤝</div>
+        <div class="benefit-text">
+          <div class="benefit-label">Flessibilità</div>
+          <div class="benefit-value">Scegli gli eventi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REQUISITI -->
+  <div class="requisiti">
+    <div class="req-title">Requisiti minimi</div>
+    <div class="req-list">
+      <div class="req-item">
+        <div class="req-check">✓</div>
+        <div class="req-text"><strong>Minimo 14 anni</strong> — Obbligatorio per motivi legali e di sicurezza.</div>
+      </div>
+      <div class="req-item">
+        <div class="req-check">✓</div>
+        <div class="req-text"><strong>Carisma e energia</strong> — Sapere come coinvolgere la gente e creare atmosfera positiva.</div>
+      </div>
+      <div class="req-item">
+        <div class="req-check">✓</div>
+        <div class="req-text"><strong>Affidabilità</strong> — Arrivare puntuale agli appuntamenti e rispettare i patti.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COME FUNZIONA -->
+  <div class="come-funziona">
+    <div class="section-head"><span>✦ Come funziona</span></div>
+    <div class="steps-grid">
+      <div class="step-card" style="animation-delay:.05s">
+        <div class="step-num">1</div>
+        <div class="step-title">Candidati</div>
+        <div class="step-desc">Compila il form con i tuoi dati e invia la candidatura.</div>
+        <div class="step-sub">⏱ 5 minuti • Zero complicazioni</div>
+      </div>
+      <div class="step-card" style="animation-delay:.1s">
+        <div class="step-num">2</div>
+        <div class="step-title">Valutazione</div>
+        <div class="step-desc">Il nostro team ti contatta e ti spiega come funziona in chat, risponde alle tue domande.</div>
+        <div class="step-sub">📞 Ti contattiamo entro 24 ore</div>
+      </div>
+      <div class="step-card" style="animation-delay:.15s">
+        <div class="step-num">3</div>
+        <div class="step-title">Primo evento</div>
+        <div class="step-desc">Ricevi i dettagli dell'evento, le istruzioni e il supporto del team.</div>
+        <div class="step-sub">🎉 Tutto quello che serve per partire</div>
+      </div>
+      <div class="step-card" style="animation-delay:.2s">
+        <div class="step-num">4</div>
+        <div class="step-title">Guadagna</div>
+        <div class="step-desc">Fai il tuo lavoro, divertiti e ricevi il compenso.</div>
+        <div class="step-sub">💰 Pagamento entro pochi giorni</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM CANDIDATURA -->
+  <div class="form-section" id="form-candidatura">
+    <div class="form-title">Candidatura PR</div>
+
+    <div id="form-content">
+      <div class="form-row">
+        <div class="f"><label>Nome *</label><input type="text" id="nome" placeholder="Il tuo nome" required /></div>
+        <div class="f"><label>Cognome *</label><input type="text" id="cognome" placeholder="Il tuo cognome" required /></div>
+      </div>
+
+      <div class="form-row">
+        <div class="f"><label>Telefono *</label><input type="tel" id="telefono" placeholder="333 1234567" required /></div>
+        <div class="f"><label>Età *</label><input type="number" id="eta" min="14" placeholder="es. 16" required /></div>
+      </div>
+
+      <div class="f"><label>Zona dove lavori di più *</label><input type="text" id="zona" placeholder="es. Cinecittà, Centro, Prati..." required /></div>
+
+      <button class="btn-submit" onclick="submitCandidatura()">🚀 &nbsp; Invia candidatura</button>
+    </div>
+
+    <div class="success-msg" id="success-msg">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Candidatura ricevuta!</div>
+      <div class="success-text">Grazie per l'interesse! Ti contatteremo entro 48 ore per una breve valutazione.<br>Segui le nostre pagine Instagram per restare aggiornato!</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Astra Events <b>✦</b> Roma <b>✦</b> Diventa parte del team
+</footer>
+
+<script>
+  const WORKER_URL  = 'https://telegram-proxy.astraaevents.workers.dev';
+  const TG_CHAT_IDS = ['8677539389', '709651831'];
+
+  async function sendTelegram(nome, cognome, tel, eta, zona) {
+    const ora = new Date().toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const text = [
+      '🎤 *[ CANDIDATURA PR ]* 🎤',
+      '*ASTRA EVENTS*',
+      '',
+      `👤 *Nome:* ${nome} ${cognome}`,
+      `📱 *Telefono:* ${tel}`,
+      `🎂 *Età:* ${eta}`,
+      `📍 *Zona:* ${zona}`,
+      `🕒 *Data:* ${ora}`
+    ].join('\n');
+
+    try {
+      await Promise.all(TG_CHAT_IDS.map(id =>
+        fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chatId: id, message: text })
+        })
+      ));
+    } catch(e) { console.warn('Telegram:', e); }
+  }
+
+  async function submitCandidatura() {
+    const nome = document.getElementById('nome').value.trim();
+    const cognome = document.getElementById('cognome').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const eta = document.getElementById('eta').value;
+    const zona = document.getElementById('zona').value.trim();
+
+    if (!nome || !cognome || !telefono || !eta || !zona) {
+      alert('Compila tutti i campi obbligatori.');
+      return;
+    }
+
+    if (eta < 14) {
+      alert('Devi avere almeno 14 anni.');
+      return;
+    }
+
+    await sendTelegram(nome, cognome, telefono, eta, zona);
+
+    document.getElementById('form-content').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 500);
+  }
+</script>
+
+</body>
+</html>

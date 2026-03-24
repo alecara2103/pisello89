@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link rel="icon" type="image/jpeg" href="logo.jpg"/>
+  <title>Entrate Omaggio — Astra PR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --orange:#FF6B00;--orange2:#FF9A3C;
+      --black:#0A0A0A;--s1:#111111;--s2:#181818;--s3:#222;
+      --border:rgba(255,107,0,.18);--border2:rgba(255,255,255,.07);
+      --white:#fff;--muted:rgba(255,255,255,.4);--green:#68D391;
+    }
+    body{background:var(--black);color:var(--white);font-family:'Poppins',sans-serif;min-height:100vh;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 15% 15%,rgba(255,107,0,.05) 0%,transparent 50%),radial-gradient(ellipse at 85% 85%,rgba(255,107,0,.04) 0%,transparent 50%);}
+
+    .nav-back{position:fixed;top:1.2rem;left:1.2rem;z-index:100;}
+    .nav-back a{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);padding:.28rem .85rem;border-radius:99px;transition:background .22s;}
+    .nav-back a:hover{background:rgba(255,107,0,.22);}
+
+    .wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:5rem 1.5rem 4rem;}
+    .page-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.06em;color:var(--white);margin-bottom:.3rem;}
+    .page-sub{font-size:.72rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2rem;}
+
+    /* Folders */
+    .folder{background:var(--s1);border:1px solid var(--border2);border-radius:18px;overflow:hidden;margin-bottom:1rem;transition:border-color .25s;}
+    .folder.open{border-color:rgba(255,107,0,.35);}
+    .folder-hdr{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;cursor:pointer;user-select:none;transition:background .2s;}
+    .folder-hdr:hover{background:rgba(255,255,255,.02);}
+    .folder-icon{font-size:1.3rem;flex-shrink:0;}
+    .folder-info{flex:1;min-width:0;}
+    .folder-name{font-size:1rem;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .folder-date{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin-top:.15rem;}
+    .folder-arrow{font-size:.9rem;color:var(--muted);transition:transform .25s;flex-shrink:0;}
+    .folder.open .folder-arrow{transform:rotate(90deg);}
+    .folder-body{display:none;border-top:1px solid var(--border2);padding:1.4rem;}
+    .folder.open .folder-body{display:block;}
+
+    /* Compose */
+    .compose-area{display:flex;gap:.7rem;margin-bottom:1.2rem;}
+    .compose-area input{flex:1;background:var(--s2);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:.88rem;padding:.7rem 1rem;outline:none;transition:border-color .2s;}
+    .compose-area input:focus{border-color:var(--orange);}
+    .compose-area input::placeholder{color:rgba(255,255,255,.2);}
+    .btn-add{font-family:'Poppins',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:var(--orange);color:#000;border:none;border-radius:10px;padding:.7rem 1.2rem;cursor:pointer;transition:background .22s;white-space:nowrap;}
+    .btn-add:hover{background:var(--orange2);}
+    .btn-add:disabled{opacity:.5;cursor:not-allowed;}
+
+    /* List */
+    .entry-list{display:flex;flex-direction:column;gap:.5rem;}
+    .entry-item{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:.65rem 1rem;animation:rise .3s ease both;}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .entry-num{font-size:.58rem;font-weight:600;letter-spacing:.12em;color:var(--orange);margin-right:.6rem;flex-shrink:0;}
+    .entry-name{font-size:.85rem;color:var(--white);flex:1;}
+    .btn-del{background:rgba(252,129,129,.08);color:#FC8181;border:1px solid rgba(252,129,129,.2);border-radius:7px;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.22rem .55rem;cursor:pointer;transition:background .2s;font-family:'Poppins',sans-serif;}
+    .btn-del:hover{background:rgba(252,129,129,.18);}
+
+    .count-badge{font-size:.62rem;color:var(--muted);margin-top:.9rem;letter-spacing:.1em;}
+    .count-badge strong{color:var(--orange);}
+
+    .empty-msg{font-size:.72rem;color:rgba(255,255,255,.2);letter-spacing:.16em;text-transform:uppercase;text-align:center;padding:1.5rem 0;}
+  
+    /* ── Topbar nav ── */
+    .topbar-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,107,0,.18);}
+    .topbar-nav-links{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .topbar-nav-links a{font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;transition:background .2s;white-space:nowrap;}
+    .topbar-nav-links a:hover{background:rgba(255,107,0,.2);}
+    .topbar-nav-pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;white-space:nowrap;}
+    .topbar-nav-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:tnblink 2s ease infinite;flex-shrink:0;}
+    @keyframes tnblink{0%,100%{opacity:1}50%{opacity:.25}}
+  </style>
+</head>
+<body>
+<div class="topbar-nav">
+  <div class="topbar-nav-links"><a href="index.html">← Home</a><a href="DashboardPR.html">← Dashboard PR</a></div>
+  <div class="topbar-nav-pill"><span class="topbar-nav-dot"></span>Area PR</div>
+</div>
+
+<div class="wrap">
+  <div class="page-title">Entrate Omaggio</div>
+  <div class="page-sub">Aggiungi le entrate omaggio per ogni evento</div>
+  <div id="events-list"><div class="empty-msg">Caricamento eventi…</div></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  /* ── Auth ── */
+  const role    = sessionStorage.getItem('astra_role') || localStorage.getItem('ls_astra_role');
+  const prId    = sessionStorage.getItem('astra_user') || localStorage.getItem('ls_astra_user');
+  const prAlias = sessionStorage.getItem('astra_alias') || localStorage.getItem('ls_astra_alias') || '';
+  const prNome  = prAlias || sessionStorage.getItem('astra_nome') || localStorage.getItem('ls_astra_nome') || prId;
+  if (role !== 'pr' && role !== 'admin') { window.location.href = 'index.html'; }
+
+  /* ── Firebase ── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey:'AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk',
+      authDomain:'astra-events-338dd.firebaseapp.com',
+      projectId:'astra-events-338dd',
+      storageBucket:'astra-events-338dd.firebasestorage.app',
+      messagingSenderId:'166914171655',
+      appId:'1:166914171655:web:835d061dde01e5aab89ba2'
+    });
+  }
+  const db = firebase.firestore();
+
+  /* ── Load events ── */
+  db.collection('eventi').orderBy('date','desc').onSnapshot(snap => {
+    const list = document.getElementById('events-list');
+    list.innerHTML = '';
+    const evs = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    if (!evs.length) { list.innerHTML = '<div class="empty-msg">Nessun evento</div>'; return; }
+    evs.forEach(ev => list.appendChild(buildFolder(ev)));
+  });
+
+  function buildFolder(ev) {
+    const folder = document.createElement('div');
+    folder.className = 'folder';
+
+    const dateStr = ev.date ? new Date(ev.date+'T00:00:00').toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'}) : '';
+
+    folder.innerHTML = `
+      <div class="folder-hdr">
+        <div class="folder-icon">🎟</div>
+        <div class="folder-info">
+          <div class="folder-name">${ev.name}</div>
+          <div class="folder-date">${dateStr}</div>
+        </div>
+        <div class="folder-arrow">›</div>
+      </div>
+      <div class="folder-body" id="body-${ev.id}"></div>`;
+
+    let loaded = false;
+    folder.querySelector('.folder-hdr').addEventListener('click', () => {
+      folder.classList.toggle('open');
+      if (folder.classList.contains('open') && !loaded) {
+        loaded = true;
+        initFolderBody(ev.id, folder.querySelector('.folder-body'));
+      }
+    });
+    return folder;
+  }
+
+  function initFolderBody(evId, body) {
+    body.innerHTML = `
+      <div class="compose-area">
+        <input type="text" placeholder="Nome e cognome ospite…" id="inp-${evId}" maxlength="80"/>
+        <button class="btn-add" onclick="addEntry('${evId}')">Aggiungi</button>
+      </div>
+      <div class="entry-list" id="list-${evId}"></div>
+      <div class="count-badge" id="count-${evId}"></div>`;
+
+    // Enter key
+    document.getElementById(`inp-${evId}`).addEventListener('keydown', e => {
+      if (e.key === 'Enter') addEntry(evId);
+    });
+
+    // Realtime listener
+    db.collection('omaggio').doc(evId).collection('entries').doc(prId)
+      .onSnapshot(snap => renderEntries(evId, snap.exists ? (snap.data().nomi || []) : []));
+  }
+
+  function renderEntries(evId, nomi) {
+    const list  = document.getElementById('list-'+evId);
+    const count = document.getElementById('count-'+evId);
+    if (!list) return;
+    list.innerHTML = '';
+    if (!nomi.length) {
+      list.innerHTML = '<div class="empty-msg">Nessuna entrata aggiunta</div>';
+      count.innerHTML = '';
+      return;
+    }
+    nomi.forEach((n, i) => {
+      const item = document.createElement('div');
+      item.className = 'entry-item';
+      item.style.animationDelay = i*0.04+'s';
+      item.innerHTML = `
+        <span class="entry-num">${i+1}.</span>
+        <span class="entry-name">${escHtml(n)}</span>
+        <button class="btn-del" onclick="removeEntry('${evId}',${i})">✕</button>`;
+      list.appendChild(item);
+    });
+    count.innerHTML = `Totale: <strong>${nomi.length}</strong> entr${nomi.length===1?'ata':'ate'}`;
+  }
+
+  async function addEntry(evId) {
+    const inp  = document.getElementById('inp-'+evId);
+    const nome = inp.value.trim();
+    if (!nome) return;
+    const ref  = db.collection('omaggio').doc(evId).collection('entries').doc(prId);
+    const snap = await ref.get();
+    const nomi = snap.exists ? (snap.data().nomi || []) : [];
+    nomi.push(nome);
+    await ref.set({ nomi, prNome, updatedAt: Date.now() }, { merge: true });
+    inp.value = '';
+    inp.focus();
+  }
+
+  async function removeEntry(evId, idx) {
+    const ref  = db.collection('omaggio').doc(evId).collection('entries').doc(prId);
+    const snap = await ref.get();
+    if (!snap.exists) return;
+    const nomi = [...(snap.data().nomi || [])];
+    nomi.splice(idx, 1);
+    await ref.set({ nomi, prNome, updatedAt: Date.now() }, { merge: true });
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+</body>
+</html>

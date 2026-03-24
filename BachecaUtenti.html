@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Bacheca — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818; --s3: #222222;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.4);
+      --green: #68D391; --yellow: #F6E05E;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background: radial-gradient(ellipse at 15% 15%, rgba(255,107,0,.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 85%, rgba(255,107,0,.04) 0%, transparent 50%); }
+
+    header { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem clamp(1.5rem,5vw,4rem); border-bottom:1px solid var(--border); background:rgba(10,10,10,.9); backdrop-filter:blur(14px); }
+    .logo { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:.1em; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+    header nav a { font-size:.7rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); text-decoration:none; transition:color .3s; }
+    header nav a:hover { color:var(--white); }
+
+    .hero { position:relative; z-index:1; text-align:center; padding:clamp(3.5rem,8vw,6rem) clamp(1.5rem,5vw,4rem) clamp(2rem,4vw,3.5rem); }
+    .pill { display:inline-flex; align-items:center; gap:.5rem; font-size:.62rem; font-weight:500; letter-spacing:.32em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.32rem 1rem; border-radius:99px; margin-bottom:1.5rem; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,9vw,8rem); letter-spacing:.05em; line-height:.92; margin-bottom:1.2rem; }
+    .hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero p { font-size:clamp(.83rem,1.4vw,1rem); font-weight:300; color:var(--muted); max-width:460px; margin:0 auto; line-height:1.72; }
+
+    /* TABS */
+    .tabs-wrap { position:relative; z-index:1; padding:0 clamp(1rem,4vw,4rem) 1.5rem; }
+    .tabs-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:.3rem; }
+    .tabs-scroll::-webkit-scrollbar { display:none; }
+    .tabs { display:inline-flex; background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:.3rem; gap:.3rem; min-width:max-content; }
+    .tab { font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.55rem 1rem; border-radius:10px; cursor:pointer; transition:background .22s, color .22s; white-space:nowrap; }
+    .tab.active { background:var(--orange); color:#000; }
+    .tab:not(.active):hover { background:rgba(255,107,0,.1); color:var(--orange); }
+    @media (max-width:580px) {
+      .tabs-wrap { padding:0 1rem 1.5rem; }
+      .tab { font-size:.6rem; padding:.5rem .85rem; letter-spacing:.08em; }
+    }
+
+    /* WRAP */
+    .wrap { position:relative; z-index:1; padding:0 clamp(1.5rem,5vw,4rem) 6rem; }
+
+    /* COMUNICAZIONI */
+    .msg-list { display:flex; flex-direction:column; gap:.9rem; }
+    .msg-card { background:var(--s1); border:1px solid var(--border2); border-radius:18px; padding:1.3rem 1.6rem; animation:rise .5s ease both; transition:border-color .3s; }
+    .msg-card:hover { border-color:rgba(255,107,0,.25); }
+    .msg-card.pinned { border-color:rgba(246,224,94,.3); background:rgba(246,224,94,.03); }
+    @keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .msg-meta { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.7rem; }
+    .msg-author { font-size:.6rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); }
+    .msg-time { font-size:.58rem; color:rgba(255,255,255,.22); letter-spacing:.1em; }
+    .msg-pin-badge { font-size:.55rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; background:rgba(246,224,94,.1); border:1px solid rgba(246,224,94,.3); color:var(--yellow); padding:.12rem .45rem; border-radius:6px; }
+    .msg-title { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.05em; color:var(--white); margin-bottom:.5rem; }
+    .msg-body { font-size:.85rem; color:var(--muted); line-height:1.7; white-space:pre-wrap; }
+    .empty-state { text-align:center; padding:5rem 2rem; }
+    .empty-icon { font-size:2.5rem; margin-bottom:1rem; opacity:.18; }
+    .empty-state p { font-size:.72rem; color:rgba(255,255,255,.18); letter-spacing:.2em; text-transform:uppercase; }
+
+    /* DRESS CODE */
+    .events-grid { display:flex; flex-direction:column; gap:1rem; }
+    .ev-folder { background:var(--s1); border:1px solid var(--border2); border-radius:18px; overflow:hidden; transition:border-color .25s; }
+    .ev-folder.open { border-color:rgba(255,107,0,.35); }
+    .ev-folder-hdr { display:flex; align-items:center; gap:1rem; padding:1.1rem 1.4rem; cursor:pointer; user-select:none; transition:background .2s; }
+    .ev-folder-hdr:hover { background:rgba(255,255,255,.02); }
+    .ev-folder-icon { font-size:1.3rem; flex-shrink:0; }
+    .ev-folder-info { flex:1; min-width:0; }
+    .ev-folder-name { font-size:1rem; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-folder-date { font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); margin-top:.15rem; }
+    .ev-folder-arrow { font-size:.9rem; color:var(--muted); transition:transform .25s; flex-shrink:0; }
+    .ev-folder.open .ev-folder-arrow { transform:rotate(90deg); }
+    .ev-folder-body { display:none; border-top:1px solid var(--border2); padding:1.2rem 1.4rem; }
+    .ev-folder.open .ev-folder-body { display:block; }
+    .dc-img { width:auto; max-width:100%; max-height:80vh; height:auto; object-fit:contain; border-radius:12px; display:block; border:1px solid var(--border2); margin:0 auto; }
+    .dc-nota { font-size:.85rem; color:var(--muted); line-height:1.7; margin-top:.9rem; white-space:pre-wrap; }
+    .dc-empty { font-size:.7rem; color:rgba(255,255,255,.2); letter-spacing:.16em; text-transform:uppercase; text-align:center; padding:1.5rem 0; }
+
+    /* CONTEST TAB */
+    .contest-card { background:var(--s1); border:1px solid var(--border2); border-radius:20px; overflow:hidden; animation:rise .5s ease both; transition:border-color .3s, box-shadow .3s; margin-bottom:1.5rem; }
+    .contest-card:hover { border-color:rgba(255,107,0,.4); box-shadow:0 12px 48px rgba(255,107,0,.1); }
+    .card-banner { width:100%; height:clamp(130px,18vw,200px); background:linear-gradient(135deg,#1a0800,#2d1200); position:relative; overflow:hidden; }
+    .card-banner img { width:100%; height:100%; object-fit:cover; display:block; opacity:.7; }
+    .card-banner-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+    .prize-badge { position:absolute; top:1rem; right:1rem; background:var(--orange); color:#000; font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:.1em; padding:.3rem .85rem; border-radius:99px; box-shadow:0 4px 18px rgba(255,107,0,.45); }
+    .status-badge { position:absolute; top:1rem; left:1rem; font-size:.6rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; padding:.3rem .8rem; border-radius:99px; border:1px solid; }
+    .status-open   { color:#68D391; background:rgba(104,211,145,.1); border-color:rgba(104,211,145,.3); }
+    .status-closed { color:#FC8181; background:rgba(252,129,129,.1); border-color:rgba(252,129,129,.3); }
+    .status-soon   { color:var(--orange2); background:rgba(255,154,60,.1); border-color:rgba(255,154,60,.3); }
+    .card-body { padding:1.6rem clamp(1.2rem,3vw,2rem) 2rem; }
+    .card-meta { display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; margin-bottom:.6rem; }
+    .card-tag { font-size:.62rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); }
+    .card-dot-sep { width:3px; height:3px; border-radius:50%; background:rgba(255,107,0,.4); }
+    .card-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.6rem,3.5vw,2.4rem); letter-spacing:.04em; line-height:1; color:var(--white); margin-bottom:.9rem; }
+    .card-desc { font-size:.82rem; font-weight:300; color:var(--muted); line-height:1.75; margin-bottom:1.5rem; }
+    .rules { margin-bottom:1.5rem; }
+    .rules-title { font-size:.6rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:var(--orange); margin-bottom:.7rem; }
+    .rules ul { list-style:none; display:flex; flex-direction:column; gap:.45rem; }
+    .rules ul li { display:flex; align-items:flex-start; gap:.6rem; font-size:.8rem; font-weight:300; color:var(--muted); line-height:1.6; }
+    .rules ul li::before { content:'✦'; color:var(--orange); font-size:.6rem; margin-top:.22rem; flex-shrink:0; }
+    .prizes { display:flex; flex-wrap:wrap; gap:.6rem; margin-bottom:1.5rem; }
+    .prize-chip { display:flex; align-items:center; gap:.45rem; background:var(--s2); border:1px solid var(--border2); border-radius:10px; padding:.45rem .85rem; font-size:.75rem; color:var(--white); }
+    .prize-chip .icon { font-size:.95rem; }
+    .countdown-wrap { background:var(--s2); border:1px solid var(--border2); border-radius:14px; padding:1.4rem 1.2rem; margin-bottom:1.5rem; }
+    .countdown-label { font-size:.6rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem; text-align:center; }
+    .countdown-grid { display:flex; justify-content:center; gap:clamp(.5rem,2vw,1.2rem); flex-wrap:wrap; }
+    .cd-unit { display:flex; flex-direction:column; align-items:center; gap:.35rem; min-width:52px; }
+    .cd-box { width:clamp(64px,12vw,78px); height:clamp(64px,12vw,78px); display:flex; align-items:center; justify-content:center; background:var(--s3); border:1px solid var(--border); border-radius:12px; position:relative; overflow:hidden; }
+    .cd-box::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,rgba(255,107,0,.35),transparent); }
+    .cd-number { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.6rem,5vw,2.4rem); letter-spacing:.05em; line-height:1; color:var(--white); transition:transform .15s,opacity .15s; position:relative; z-index:1; }
+    .cd-number.flip { transform:scaleY(.6); opacity:.4; }
+    .cd-label { font-size:.52rem; font-weight:500; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,107,0,.7); }
+    .cd-sep { display:flex; flex-direction:column; gap:5px; align-self:center; padding-bottom:1.2rem; }
+    .cd-sep span { width:4px; height:4px; border-radius:50%; background:rgba(255,107,0,.4); }
+    .cd-ended { text-align:center; padding:1rem; }
+    .cd-ended p { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.08em; color:rgba(255,255,255,.3); }
+    .card-cta { display:inline-flex; align-items:center; background:var(--orange); color:#000; font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; border-radius:10px; padding:.72rem 1.4rem; margin-top:1.4rem; margin-right:.7rem; transition:background .22s; }
+    .card-cta:hover { background:var(--orange2); }
+    .card-cta.disabled { opacity:.45; pointer-events:none; }
+
+    @media (max-width: 480px) {
+      .card-banner { height: 170px; }
+      .prize-badge { font-size:.75rem; padding:.2rem .6rem; top:.7rem; right:.7rem; max-width:52%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .status-badge { font-size:.52rem; padding:.18rem .55rem; top:.7rem; left:.7rem; }
+      .card-body { padding:1.1rem 1rem 1.4rem; }
+      .card-title { font-size:1.5rem; }
+      .card-desc { font-size:.78rem; margin-bottom:1.2rem; }
+      .countdown-wrap { padding:1rem .8rem; }
+      .countdown-grid { gap:.5rem; }
+      .cd-unit { min-width:60px; }
+      .cd-box { width:64px; height:64px; border-radius:10px; }
+      .cd-number { font-size:1.65rem; }
+      .cd-label { font-size:.46rem; letter-spacing:.16em; }
+      .cd-sep { display:none; }
+      .prizes { gap:.4rem; }
+      .prize-chip { font-size:.68rem; padding:.35rem .65rem; }
+      .card-cta { display:block; text-align:center; margin-right:0; margin-top:.9rem; width:100%; box-sizing:border-box; }
+      .rules ul li { font-size:.75rem; }
+      .rules-title { font-size:.55rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">ASTRA</a>
+  <nav><a href="index.html">← Home</a></nav>
+</header>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Aggiornamenti</div>
+  <h1>BACHECA<br><em>ASTRA</em></h1>
+  <p>Comunicazioni ufficiali e dress code per ogni evento.</p>
+</section>
+
+<div class="tabs-wrap">
+  <div class="tabs-scroll">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('comunicazioni')">📢 Comunicazioni</button>
+      <button class="tab" onclick="switchTab('dresscode')">👔 Dress Code</button>
+      <button class="tab" onclick="switchTab('contest')">🏆 Contest</button>
+      <button class="tab" onclick="switchTab('report')">🚩 Segnala</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- TAB COMUNICAZIONI -->
+  <div id="tab-comunicazioni">
+    <div class="msg-list" id="msg-list">
+      <div class="empty-state"><div class="empty-icon">📢</div><p>Caricamento…</p></div>
+    </div>
+  </div>
+
+  <!-- TAB DRESS CODE -->
+  <div id="tab-dresscode" style="display:none;">
+    <div class="events-grid" id="dc-events-grid">
+      <div class="empty-state"><div class="empty-icon">👔</div><p>Caricamento eventi…</p></div>
+    </div>
+  </div>
+
+
+  <!-- TAB CONTEST -->
+  <div id="tab-contest" style="display:none;">
+    <div class="contest-list" id="contest-container">
+      <div class="empty-state"><div class="empty-icon">🏆</div><p>Caricamento…</p></div>
+    </div>
+  </div>
+
+  <!-- TAB REPORT -->
+  <div id="tab-report" style="display:none;">
+
+    <!-- Form invio (solo se loggato) -->
+    <div id="rep-login-warn" style="display:none;text-align:center;padding:2rem;font-size:.78rem;color:var(--muted);">
+      Devi essere loggato per inviare una segnalazione.
+    </div>
+
+    <div id="rep-send-wrap">
+      <div class="rep-form">
+        <div style="font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem;">
+          Hai un problema o un consiglio? Scrivici — lo leggeranno solo gli admin di Astra.
+        </div>
+        <label>Tipo</label>
+        <select id="rep-tipo">
+          <option value="problema">🐛 Problema tecnico</option>
+          <option value="consiglio">💡 Consiglio / Suggerimento</option>
+          <option value="altro">📝 Altro</option>
+        </select>
+        <label>Messaggio *</label>
+        <textarea id="rep-testo" rows="4" placeholder="Descrivi il problema o il tuo consiglio…"></textarea>
+        <button class="rep-submit" onclick="inviaReport()">Invia segnalazione →</button>
+        <div id="rep-ok" style="display:none;margin-top:.7rem;font-size:.72rem;color:var(--green);">✓ Segnalazione inviata! Grazie.</div>
+        <div id="rep-err" style="display:none;margin-top:.7rem;font-size:.72rem;color:#FC8181;"></div>
+      </div>
+    </div>
+
+    <!-- Le mie segnalazioni -->
+    <div id="my-rep-wrap" style="display:none;">
+      <div style="font-size:.58rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:1rem;">📋 Le mie segnalazioni</div>
+      <div id="my-rep-list"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>© 2026 Astra Events <b>✦</b> Bacheca <b>✦</b> Roma, Italia</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  /* ── Sessione ── */
+  const sessRole = sessionStorage.getItem('astra_role');
+  const sessUser = sessionStorage.getItem('astra_user');
+  const lsUser   = localStorage.getItem('astra_rewards_user');
+  const loggedUser = sessUser || lsUser || null;
+  const isStaff = sessRole === 'admin' || sessRole === 'pr';
+
+  /* ── Tabs ── */
+  let dcLoaded = false;
+  let ctLoaded = false;
+
+  function switchTab(tab) {
+    document.getElementById('tab-comunicazioni').style.display = tab === 'comunicazioni' ? 'block' : 'none';
+    document.getElementById('tab-dresscode').style.display     = tab === 'dresscode'     ? 'block' : 'none';
+    document.getElementById('tab-contest').style.display      = tab === 'contest'       ? 'block' : 'none';
+    document.getElementById('tab-report').style.display        = tab === 'report'        ? 'block' : 'none';
+    document.querySelectorAll('.tab').forEach((t, i) =>
+      t.classList.toggle('active',
+        (tab==='comunicazioni'&&i===0) ||
+        (tab==='dresscode'&&i===1) ||
+        (tab==='contest'&&i===2)||(tab==='report'&&i===3))
+    );
+    if (tab === 'dresscode' && !dcLoaded) loadDressCode();
+    if (tab === 'contest'   && !ctLoaded) initContest();
+    if (tab === 'report'    && !repLoaded) initReport();
+  }
+
+  // Apri tab da URL ?tab=contest o ?tab=dresscode
+  (function() {
+    const p = new URLSearchParams(location.search).get('tab');
+    if (p === 'contest' || p === 'dresscode') switchTab(p);
+  })();
+
+  function fmtTs(ts) {
+    return new Date(ts).toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+  function fmtDate(s) {
+    if (!s) return '';
+    return new Date(s + 'T00:00:00').toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  /* ── COMUNICAZIONI (solo dest='utenti' o 'tutti_utenti') ── */
+  db.collection('bachecaUtenti').onSnapshot(snap => {
+    const list = document.getElementById('msg-list');
+    if (snap.empty) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-icon">📢</div><p>Nessuna comunicazione ancora</p></div>';
+      return;
+    }
+    const docs = snap.docs.slice().sort((a,b) => {
+      const pa = a.data().pinned ? 1 : 0, pb = b.data().pinned ? 1 : 0;
+      if (pb !== pa) return pb - pa;
+      return (b.data().ts||0) - (a.data().ts||0);
+    });
+    list.innerHTML = '';
+    docs.forEach((d,i) => {
+      const m = d.data();
+      const card = document.createElement('div');
+      card.className = 'msg-card' + (m.pinned ? ' pinned' : '');
+      card.style.animationDelay = i*0.05 + 's';
+      card.innerHTML = `
+        <div class="msg-meta">
+          <span class="msg-author">⚙ ${m.autore || 'Astra Events'}</span>
+          ${m.pinned ? '<span class="msg-pin-badge">📌 In evidenza</span>' : ''}
+          <span class="msg-time">${fmtTs(m.ts)}</span>
+        </div>
+        <div class="msg-title">${m.titolo}</div>
+        <div class="msg-body">${m.testo}</div>`;
+      list.appendChild(card);
+    });
+  });
+
+  /* ══════════════════════════════════════════
+     CONTEST
+  ══════════════════════════════════════════ */
+  function initContest() {
+    ctLoaded = true;
+    const timers = [];
+
+    const CONTESTS = [
+      {
+        name: "ASTRA QUBE CONTEST", tag: "Instagram",
+        description: "Seguici su Instagram, metti like al post ufficiale e tagga 3 amici nei commenti. Quando il conto alla rovescia sarà terminato verrà estratto il vincitore.",
+        image: "qube0103.jpeg", deadline: "2026-04-01T21:00:00", status: "open",
+        prizes: [{ icon:"🎟", label:"1 Ingresso Omaggio" },{ icon:"🥂", label:"1 Drink Omaggio" },{ icon:"📸", label:"Pubblicità Nelle Story" }],
+        rules: ["Segui @astra.events_official e @spotted_astra.events su Instagram","Metti like al post dell'evento","Tagga 3 amici nei commenti","(Se al momento dell'estrazione anche solo un passaggio non sarà fatto la partecipazione verrà annullata)"],
+        ctaLabel: "Profilo Instagram →", ctaLink: "https://www.instagram.com/astra.events_official?igsh=MTRpcTduMjBxZng2eQ%3D%3D&utm_source=qr"
+      },
+      {
+        name: "Astra Summer Contest", tag: "TikTok & Instagram",
+        description: "La stagione estiva si sta avvicinando, sapete questo cosa significa? Si torna al Garden!<br>Seguici su TikTok e Instagram, metti like al post ufficiale e tagga 3 amici nei commenti.",
+        image: "IMG_7980.jpeg", deadline: "2025-07-15T23:59:00", status: "soon",
+        prizes: [{ icon:"👑", label:"1 Drink Omaggio" },{ icon:"🎟", label:"3 Ingressi Omaggio" },{ icon:"🎧", label:"Vivi Il Palco Con Noi" }],
+        rules: ["Segui @astra.events_official e @spotted_astra.events su Instagram","Segui @astra.events_official su TikTok","Metti like al post dell'evento","Tagga 3 amici nei commenti","(Se al momento dell'estrazione anche solo un passaggio non sarà fatto la partecipazione verrà annullata)"],
+        cta: [{ label:"Profilo TikTok →", link:"https://www.tiktok.com/@astra.events_official?_r=1&_t=ZN-94msXSIvOVS" },{ label:"Profilo Instagram →", link:"https://www.instagram.com/astra.events_official?igsh=MTRpcTduMjBxZng2eQ%3D%3D&utm_source=qr" }]
+      }
+    ];
+
+    function pad(n) { return String(n).padStart(2,'0'); }
+    function getTimeLeft(dl) {
+      const diff = new Date(dl) - new Date();
+      if (diff <= 0) return null;
+      const s = Math.floor(diff/1000);
+      return { days:Math.floor(s/86400), hours:Math.floor((s%86400)/3600), minutes:Math.floor((s%3600)/60), seconds:s%60 };
+    }
+
+    function buildCountdown(c, idx) {
+      const id = `cd-${idx}`;
+      const html = `<div class="countdown-wrap" id="wrap-${id}">
+        <div class="countdown-label">⏳ Scadenza contest</div>
+        <div class="countdown-grid" id="${id}">
+          <div class="cd-unit"><div class="cd-box"><span class="cd-number" id="${id}-d">00</span></div><div class="cd-label">Giorni</div></div>
+          <div class="cd-sep"><span></span><span></span></div>
+          <div class="cd-unit"><div class="cd-box"><span class="cd-number" id="${id}-h">00</span></div><div class="cd-label">Ore</div></div>
+          <div class="cd-sep"><span></span><span></span></div>
+          <div class="cd-unit"><div class="cd-box"><span class="cd-number" id="${id}-m">00</span></div><div class="cd-label">Minuti</div></div>
+          <div class="cd-sep"><span></span><span></span></div>
+          <div class="cd-unit"><div class="cd-box"><span class="cd-number" id="${id}-s">00</span></div><div class="cd-label">Secondi</div></div>
+        </div></div>`;
+      return { html, id };
+    }
+
+    function startTimer(id, dl) {
+      let prev = {};
+      function tick() {
+        const t = getTimeLeft(dl);
+        if (!t) { const w = document.getElementById(`wrap-${id}`); if(w) w.innerHTML=`<div class="cd-ended"><p>Contest terminato</p></div>`; return; }
+        const fields = {d:t.days,h:t.hours,m:t.minutes,s:t.seconds};
+        for (const [k,v] of Object.entries(fields)) {
+          const el = document.getElementById(`${id}-${k}`);
+          if(!el) continue;
+          const str = k==='d'?String(v):pad(v);
+          if(str!==prev[k]) { el.classList.add('flip'); setTimeout(()=>{el.textContent=str;el.classList.remove('flip');},150); prev[k]=str; }
+        }
+      }
+      tick(); timers.push(setInterval(tick,1000));
+    }
+
+    function buildCard(c, idx) {
+      const statusMap = {open:{cls:'status-open',label:'● Aperto'},closed:{cls:'status-closed',label:'● Chiuso'},soon:{cls:'status-soon',label:'● Prossimamente'}};
+      const st = statusMap[c.status]||statusMap.open;
+      const banner = c.image ? `<img src="${c.image}" alt="${c.name}">` : `<div class="card-banner-placeholder"><svg width="50" height="50" viewBox="0 0 60 60" fill="none"><path d="M30 4l4 14 14 4-14 4-4 14-4-14-14-4 14-4z" fill="#FF6B00" opacity=".25"/></svg></div>`;
+      const prizes = c.prizes?.length ? `<div class="prizes">${c.prizes.map(p=>`<div class="prize-chip"><span class="icon">${p.icon}</span>${p.label}</div>`).join('')}</div>` : '';
+      const rules  = c.rules?.length  ? `<div class="rules"><div class="rules-title">Regole del contest</div><ul>${c.rules.map(r=>`<li>${r}</li>`).join('')}</ul></div>` : '';
+      const {html:cdHTML, id:cdId} = buildCountdown(c, idx);
+      let ctaHTML = '';
+      if (c.cta?.length) ctaHTML = c.cta.map(b=>`<a class="card-cta ${c.status==='closed'?'disabled':''}" href="${b.link}" target="_blank" rel="noopener">${b.label}</a>`).join('');
+      else if (c.ctaLink!=='') ctaHTML = `<a class="card-cta ${c.status==='closed'?'disabled':''}" href="${c.ctaLink||'#'}" target="_blank" rel="noopener">${c.ctaLabel||'Partecipa ora →'}</a>`;
+      const card = document.createElement('div');
+      card.className = 'contest-card';
+      card.style.animationDelay = idx*0.1+'s';
+      card.innerHTML = `
+        <div class="card-banner">
+          ${banner}
+          <div class="status-badge ${st.cls}">${st.label}</div>
+          ${c.prizes?.[0]?`<div class="prize-badge">${c.prizes[0].icon} ${c.prizes[0].label}</div>`:''}
+        </div>
+        <div class="card-body">
+          <div class="card-meta">${c.tag?`<span class="card-tag">${c.tag}</span><div class="card-dot-sep"></div>`:''}<span class="card-tag">Contest</span></div>
+          <h2 class="card-title">${c.name}</h2>
+          ${c.description?`<p class="card-desc">${c.description}</p>`:''}
+          ${prizes}${rules}${cdHTML}${ctaHTML}
+        </div>`;
+      return { card, cdId };
+    }
+
+    const container = document.getElementById('contest-container');
+    if (!CONTESTS.length) { container.innerHTML='<div class="empty-state"><div class="empty-icon">🏆</div><p>Nessun contest attivo</p></div>'; return; }
+    container.innerHTML = '';
+    CONTESTS.forEach((c,i) => {
+      const {card,cdId} = buildCard(c,i);
+      container.appendChild(card);
+      if (c.deadline) setTimeout(()=>startTimer(cdId,c.deadline),50);
+    });
+  }
+
+  /* ── DRESS CODE — cartelle fisse per locale ── */
+  const VENUES = [
+    { id: 'qube',            name: 'Qube',            icon: '🟠' },
+    { id: 'divina',          name: 'Divina',          icon: '💜' },
+    { id: 'teatro-centrale', name: 'Teatro Centrale', icon: '🎭' },
+    { id: 'garden-club',     name: 'Garden Club',     icon: '🌿' },
+    { id: 'hacienda',        name: 'Hacienda',        icon: '🌵' },
+  ];
+
+  function loadDressCode() {
+    dcLoaded = true;
+    const grid = document.getElementById('dc-events-grid');
+    grid.innerHTML = '';
+    VENUES.forEach(v => grid.appendChild(buildFolder(v)));
+  }
+
+  function buildFolder(venue) {
+    const folder = document.createElement('div');
+    folder.className = 'ev-folder';
+    const hdr = document.createElement('div');
+    hdr.className = 'ev-folder-hdr';
+    hdr.innerHTML = `
+      <div class="ev-folder-icon">${venue.icon}</div>
+      <div class="ev-folder-info">
+        <div class="ev-folder-name">${venue.name}</div>
+        <div class="ev-folder-date">Dress code locale</div>
+      </div>
+      <div class="ev-folder-arrow">›</div>`;
+    const body = document.createElement('div');
+    body.className = 'ev-folder-body';
+    let loaded = false;
+    hdr.addEventListener('click', () => {
+      folder.classList.toggle('open');
+      if (folder.classList.contains('open') && !loaded) {
+        loaded = true;
+        body.innerHTML = '<div style="font-size:.7rem;color:var(--muted);">Caricamento…</div>';
+        db.collection('dressCode').doc(venue.id).get().then(snap => {
+          const data = snap.exists ? snap.data() : {};
+          const imgSrc = data.imageBase64 || null;
+          if (imgSrc) {
+            body.innerHTML = `<img class="dc-img" src="${imgSrc}" alt="Dress code ${venue.name}" />` +
+              (data.nota ? `<div class="dc-nota">${data.nota}</div>` : '');
+          } else {
+            body.innerHTML = `<div class="dc-empty">Nessun dress code caricato</div>` +
+              (data.nota ? `<div class="dc-nota">${data.nota}</div>` : '');
+          }
+        });
+      }
+    });
+    folder.appendChild(hdr);
+    folder.appendChild(body);
+    return folder;
+  }
+
+  /* ══════════════════════════════════════════════
+     REPORT UTENTE
+  ══════════════════════════════════════════════ */
+  let repLoaded = false;
+  const TAG_LABEL = {'in-corso':'🔵 In corso','accettato':'✅ Accettato','risolto':'🟠 Risolto','rifiutato':'❌ Rifiutato'};
+
+  function initReport() {
+    repLoaded = true;
+    if (!loggedUser) {
+      document.getElementById('rep-send-wrap').style.display = 'none';
+      document.getElementById('rep-login-warn').style.display = 'block';
+      return;
+    }
+    loadMyReports();
+  }
+
+  async function inviaReport() {
+    const testo = document.getElementById('rep-testo').value.trim();
+    const tipo  = document.getElementById('rep-tipo').value;
+    const ok    = document.getElementById('rep-ok');
+    const err   = document.getElementById('rep-err');
+    ok.style.display = 'none'; err.style.display = 'none';
+    if (!testo) { err.textContent = 'Scrivi un messaggio prima di inviare.'; err.style.display = 'block'; return; }
+    try {
+      await db.collection('report').add({
+        tipo, testo,
+        autore: loggedUser,
+        ts: Date.now(),
+        tag: null,
+        commento: ''
+      });
+      document.getElementById('rep-testo').value = '';
+      ok.style.display = 'block';
+      setTimeout(() => ok.style.display = 'none', 4000);
+      loadMyReports();
+    } catch(e) {
+      err.textContent = 'Errore: ' + e.message;
+      err.style.display = 'block';
+    }
+  }
+
+  function loadMyReports() {
+    if (!loggedUser) return;
+    const wrap = document.getElementById('my-rep-wrap');
+    const list = document.getElementById('my-rep-list');
+    wrap.style.display = 'block';
+    list.innerHTML = '<div class="empty-state" style="padding:2rem;"><p>Caricamento…</p></div>';
+    db.collection('report').where('autore', '==', loggedUser).get().then(snap => {
+      if (snap.empty) { list.innerHTML = '<div style="font-size:.75rem;color:var(--muted);padding:1rem 0;">Nessuna segnalazione inviata.</div>'; return; }
+      const docs = snap.docs.sort((a,b) => (b.data().ts||0)-(a.data().ts||0));
+      list.innerHTML = '';
+      docs.forEach(doc => {
+        const d = doc.data();
+        const tipoLabel = d.tipo==='problema' ? '🐛 Problema' : d.tipo==='consiglio' ? '💡 Consiglio' : '📝 Altro';
+        const tagHtml = d.tag ? `<div class="my-rep-tag ${d.tag}">${TAG_LABEL[d.tag]}</div>` : '';
+        const commentoHtml = d.commento ? `<div class="my-rep-comment-lbl">Risposta di Astra:</div><div class="my-rep-comment">${d.commento}</div>` : '';
+        const card = document.createElement('div');
+        card.className = 'my-rep-card';
+        card.innerHTML = `
+          <div class="my-rep-header">
+            <span class="my-rep-tipo">${tipoLabel}</span>
+            <span class="my-rep-time">${fmtTs(d.ts)}</span>
+          </div>
+          <div class="my-rep-text">${d.testo}</div>
+          ${tagHtml}
+          ${commentoHtml}
+        `;
+        list.appendChild(card);
+      });
+    }).catch(() => {
+      list.innerHTML = '<div style="font-size:.75rem;color:#FC8181;">Errore caricamento.</div>';
+    });
+  }
+
+</script>
+</body>
+</html>

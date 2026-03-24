@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Statistiche — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+<div class="topbar-nav">
+  <div class="topbar-nav-links"><a href="index.html">← Home</a><a href="PannelloAdmin.html">← Pannello</a></div>
+  <div class="topbar-nav-pill"><span class="topbar-nav-dot"></span>Admin</div>
+</div>
+
+
+  <!-- Nav -->
+  <!-- Hero -->
+  <section class="hero">
+    <div class="pill"><span class="pill-dot"></span>Solo uso interno</div>
+    <h1>STATISTICHE<br><em>ASTRA</em></h1>
+    <div class="last-update">Aggiornato: <span id="last-update">—</span></div>
+  </section>
+
+  <!-- Tabs -->
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('stats')">📊 Statistiche</button>
+      <button class="tab" onclick="switchTab('bookings')">📋 Prenotazioni</button>
+      <button class="tab" onclick="switchTab('confirmed')">✅ Confermate</button>
+    </div>
+  </div>
+
+  <!-- ══════════════ TAB 1: STATISTICHE ══════════════ -->
+  <div id="tab-stats" class="tab-content wrap">
+
+    <div>
+      <div class="sec-head"><span>✦ Riga 1 — Prenotazioni ricevute</span></div>
+      <div class="counter-grid">
+        <div class="counter-card" style="animation-delay:.05s">
+          <div class="cc-icon cc-orange">🎟</div>
+          <div class="cc-info"><div class="cc-label">Prenotazioni prevendite</div><div class="cc-value cv-orange" id="r1-prev">0</div><div class="cc-sub">richieste ricevute</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.1s">
+          <div class="cc-icon cc-blue">🍾</div>
+          <div class="cc-info"><div class="cc-label">Prenotazioni tavoli</div><div class="cc-value cv-blue" id="r1-tav">0</div><div class="cc-sub">richieste ricevute</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.15s">
+          <div class="cc-icon cc-green">📋</div>
+          <div class="cc-info"><div class="cc-label">Totale prenotazioni</div><div class="cc-value cv-green" id="r1-tot">0</div><div class="cc-sub">totale combinato</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head"><span>✦ Riga 2 — Quantità effettive</span></div>
+      <div class="counter-grid">
+        <div class="counter-card" style="animation-delay:.05s">
+          <div class="cc-icon cc-orange">🎫</div>
+          <div class="cc-info"><div class="cc-label">Prevendite totali</div><div class="cc-value cv-orange" id="r2-prev">0</div><div class="cc-sub">biglietti richiesti</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.1s">
+          <div class="cc-icon cc-purple">👥</div>
+          <div class="cc-info"><div class="cc-label">Persone tavoli</div><div class="cc-value cv-purple" id="r2-pers">0</div><div class="cc-sub">persone totali</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.15s">
+          <div class="cc-icon cc-green">🌟</div>
+          <div class="cc-info"><div class="cc-label">Totale persone</div><div class="cc-value cv-green" id="r2-tot">0</div><div class="cc-sub">biglietti + persone</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head"><span>✦ Grafici — Tutte le prenotazioni</span></div>
+      <div class="charts-grid">
+        <div class="chart-box"><div class="chart-title">Prenotazioni ricevute</div><div class="chart-wrap"><canvas id="c1"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Prevendite totali (0–1000)</div><div class="chart-wrap"><canvas id="c2"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Persone tavoli (0–300)</div><div class="chart-wrap"><canvas id="c3"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Prevendite nel tempo</div><div class="chart-wrap"><canvas id="c4"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Tavoli nel tempo</div><div class="chart-wrap"><canvas id="c5"></canvas></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ TAB 2: PRENOTAZIONI ══════════════ -->
+  <div id="tab-bookings" class="tab-content wrap" style="display:none;">
+
+    <div>
+      <div class="sec-head"><span>✦ Prenotazioni prevendite</span></div>
+      <div class="booking-list" id="list-prev"></div>
+    </div>
+
+    <div>
+      <div class="sec-head"><span>✦ Prenotazioni tavoli</span></div>
+      <div class="booking-list" id="list-tav"></div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ TAB 3: CONFERMATE ══════════════ -->
+  <div id="tab-confirmed" class="tab-content wrap" style="display:none;">
+
+    <div>
+      <div class="sec-head"><span>✦ Prenotazioni confermate</span></div>
+      <div class="counter-grid">
+        <div class="counter-card" style="animation-delay:.05s">
+          <div class="cc-icon cc-green">🎟</div>
+          <div class="cc-info"><div class="cc-label">Prevendite confermate</div><div class="cc-value cv-green" id="cc-r1-prev">0</div><div class="cc-sub">prenotazioni confermate</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.1s">
+          <div class="cc-icon cc-green">🍾</div>
+          <div class="cc-info"><div class="cc-label">Tavoli confermati</div><div class="cc-value cv-green" id="cc-r1-tav">0</div><div class="cc-sub">prenotazioni confermate</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.15s">
+          <div class="cc-icon cc-green">📋</div>
+          <div class="cc-info"><div class="cc-label">Totale confermate</div><div class="cc-value cv-green" id="cc-r1-tot">0</div><div class="cc-sub">totale combinato</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.2s">
+          <div class="cc-icon cc-orange">🎫</div>
+          <div class="cc-info"><div class="cc-label">Biglietti confermati</div><div class="cc-value cv-orange" id="cc-r2-prev">0</div><div class="cc-sub">quantità effettiva</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.25s">
+          <div class="cc-icon cc-purple">👥</div>
+          <div class="cc-info"><div class="cc-label">Persone confermate</div><div class="cc-value cv-purple" id="cc-r2-pers">0</div><div class="cc-sub">quantità effettiva</div></div>
+        </div>
+        <div class="counter-card" style="animation-delay:.3s">
+          <div class="cc-icon cc-green">🌟</div>
+          <div class="cc-info"><div class="cc-label">Totale persone</div><div class="cc-value cv-green" id="cc-r2-tot">0</div><div class="cc-sub">biglietti + persone</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head"><span>✦ Grafici — Solo prenotazioni confermate</span></div>
+      <div class="charts-grid">
+        <div class="chart-box"><div class="chart-title">Prenotazioni confermate</div><div class="chart-wrap"><canvas id="cc1"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Prevendite confermate (0–1000)</div><div class="chart-wrap"><canvas id="cc2"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Persone tavoli confermate (0–300)</div><div class="chart-wrap"><canvas id="cc3"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Prevendite confermate nel tempo</div><div class="chart-wrap"><canvas id="cc4"></canvas></div></div>
+        <div class="chart-box"><div class="chart-title">Tavoli confermati nel tempo</div><div class="chart-wrap"><canvas id="cc5"></canvas></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>© 2026 Astra Events <b>✦</b> Uso interno <b>✦</b> Statistiche</footer>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange:#FF6B00; --orange2:#FF9A3C;
+      --black:#0A0A0A; --s1:#111111; --s2:#181818; --s3:#1e1e1e;
+      --border:rgba(255,107,0,.18); --border2:rgba(255,255,255,.08);
+      --white:#fff; --muted:rgba(255,255,255,.45);
+      --green:#68D391; --blue:#63B3ED; --purple:#B794F4; --red:#FC8181;
+    }
+    html { scroll-behavior:smooth; }
+    body { background:var(--black); color:var(--white); font-family:'Poppins',sans-serif; min-height:100vh; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 15% 15%,rgba(255,107,0,.05) 0%,transparent 50%),radial-gradient(ellipse at 85% 85%,rgba(255,107,0,.04) 0%,transparent 50%); }
+
+    /* ── Nav ── */
+    .nav-back {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      display:flex; gap:.6rem; flex-wrap:wrap;
+      padding:.75rem 1rem;
+      background:rgba(10,10,10,.85); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border2);
+    }
+    .nav-back a { font-family:'Poppins',sans-serif; font-size:.58rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase; text-decoration:none; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.3); padding:.3rem .8rem; border-radius:99px; transition:background .22s; white-space:nowrap; }
+    .nav-back a:hover { background:rgba(255,107,0,.22); }
+
+    /* ── Hero ── */
+    .hero { position:relative; z-index:1; text-align:center; padding:5rem clamp(1rem,5vw,4rem) clamp(1rem,2vw,1.5rem); }
+    .pill { display:inline-flex; align-items:center; gap:.5rem; font-size:.62rem; font-weight:500; letter-spacing:.32em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.32rem 1rem; border-radius:99px; margin-bottom:1.2rem; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.8rem,7vw,6rem); letter-spacing:.05em; line-height:.92; margin-bottom:.8rem; }
+    .hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .last-update { font-size:.58rem; color:rgba(255,255,255,.25); letter-spacing:.2em; text-transform:uppercase; }
+
+    /* ── Tabs ── */
+    .tabs-wrap { position:relative; z-index:1; padding:0 clamp(1rem,4vw,4rem); margin-bottom:2rem; }
+    .tabs { display:grid; grid-template-columns:repeat(3,1fr); width:100%; background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:.3rem; gap:.3rem; }
+    .tab { font-family:'Poppins',sans-serif; font-size:clamp(.55rem,.9vw,.7rem); font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.6rem .4rem; border-radius:10px; cursor:pointer; transition:background .22s, color .22s; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tab.active { background:var(--orange); color:#000; }
+    .tab:not(.active):hover { background:rgba(255,107,0,.1); color:var(--orange); }
+
+    /* ── Content wrap ── */
+    .wrap { position:relative; z-index:1; padding:0 clamp(1rem,4vw,4rem) 5rem; display:flex; flex-direction:column; gap:2rem; }
+
+    .sec-head { display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem; overflow:hidden; }
+    .sec-head::after { content:''; flex:1; height:1px; background:var(--border); min-width:20px; }
+    .sec-head span { font-size:.58rem; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--orange); white-space:nowrap; }
+
+    /* ── Counter cards ── */
+    .counter-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr)); gap:.8rem; }
+    .counter-card { background:var(--s1); border:1px solid var(--border); border-radius:16px; padding:1rem 1.1rem; display:flex; align-items:center; gap:.9rem; animation:rise .5s ease both; }
+    @keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .cc-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; border:1px solid var(--border2); }
+    .cc-orange{background:rgba(255,107,0,.1);} .cc-green{background:rgba(104,211,145,.1);} .cc-blue{background:rgba(99,179,237,.1);} .cc-purple{background:rgba(183,148,244,.1);}
+    .cc-info { flex:1; min-width:0; }
+    .cc-label { font-size:.52rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:.15rem; }
+    .cc-value { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:.05em; line-height:1; }
+    .cv-orange{color:var(--orange);} .cv-green{color:var(--green);} .cv-blue{color:var(--blue);} .cv-purple{color:var(--purple);}
+    .cc-sub { font-size:.55rem; color:var(--muted); margin-top:.15rem; }
+
+    /* ── Charts ── */
+    .charts-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr)); gap:1rem; }
+    .chart-box { background:var(--s1); border:1px solid var(--border); border-radius:16px; padding:1.1rem; }
+    .chart-title { font-size:.6rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:.9rem; }
+    .chart-wrap { position:relative; height:200px; }
+
+    /* ── Booking cards ── */
+    .booking-list { display:flex; flex-direction:column; gap:.8rem; }
+    .booking-card {
+      background:var(--s1); border:1px solid var(--border2); border-radius:14px;
+      padding:1rem 1.1rem; display:flex; flex-direction:column; gap:.75rem;
+      animation:rise .4s ease both; transition:border-color .25s;
+    }
+    .booking-card.confirmed { border-color:rgba(104,211,145,.35); background:rgba(104,211,145,.04); }
+    .booking-card:hover { border-color:var(--border); }
+
+    /* top row: icon + info */
+    .bk-top { display:flex; align-items:flex-start; gap:.8rem; }
+    .bk-icon { font-size:1.5rem; flex-shrink:0; margin-top:.1rem; }
+    .bk-info { flex:1; min-width:0; }
+    .bk-name { font-size:.9rem; font-weight:600; color:var(--white); margin-bottom:.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .bk-details { font-size:.68rem; color:var(--muted); line-height:1.65; word-break:break-word; }
+    .bk-details span { color:var(--orange); font-weight:500; }
+
+    /* bottom row: status + actions */
+    .bk-bottom { display:flex; align-items:center; justify-content:space-between; gap:.6rem; flex-wrap:wrap; }
+    .bk-status { display:inline-flex; align-items:center; gap:.35rem; font-size:.58rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; padding:.24rem .7rem; border-radius:99px; border:1px solid; flex-shrink:0; }
+    .bk-status.attesa   { color:#F6E05E; background:rgba(246,224,94,.08); border-color:rgba(246,224,94,.3); }
+    .bk-status.confermata { color:var(--green); background:rgba(104,211,145,.08); border-color:rgba(104,211,145,.3); }
+    .bk-actions { display:flex; gap:.5rem; flex-shrink:0; }
+    .btn-confirm { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; border:none; border-radius:8px; padding:.38rem .9rem; cursor:pointer; transition:background .22s; }
+    .btn-confirm.do { background:var(--green); color:#000; }
+    .btn-confirm.do:hover { background:#48BB78; }
+    .btn-confirm.undo { background:rgba(255,255,255,.08); color:var(--muted); border:1px solid var(--border2); }
+    .btn-confirm.undo:hover { background:rgba(255,255,255,.14); }
+    .btn-del-bk { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:rgba(252,129,129,.1); border:1px solid rgba(252,129,129,.25); color:var(--red); border-radius:8px; padding:.35rem .75rem; cursor:pointer; transition:background .22s; }
+    .btn-del-bk:hover { background:rgba(252,129,129,.22); }
+    .empty-bk { text-align:center; padding:3rem; font-size:.7rem; color:rgba(255,255,255,.2); letter-spacing:.2em; text-transform:uppercase; }
+
+    footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.18); }
+    footer b { color:var(--orange); opacity:.5; font-weight:400; margin:0 .5rem; }
+
+    /* ── Mobile tweaks ── */
+    @media (max-width:480px) {
+      .counter-grid { grid-template-columns: 1fr 1fr; }
+      .charts-grid  { grid-template-columns: 1fr; }
+      .chart-wrap   { height:180px; }
+      .cc-value     { font-size:2rem; }
+      .tab          { font-size:.5rem; padding:.55rem .2rem; }
+    }
+  
+    /* ── Topbar nav ── */
+    .topbar-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,107,0,.18);}
+    .topbar-nav-links{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .topbar-nav-links a{font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;transition:background .2s;white-space:nowrap;}
+    .topbar-nav-links a:hover{background:rgba(255,107,0,.2);}
+    .topbar-nav-pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;white-space:nowrap;}
+    .topbar-nav-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:tnblink 2s ease infinite;flex-shrink:0;}
+    @keyframes tnblink{0%,100%{opacity:1}50%{opacity:.25}}
+  </style>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    if (sessionStorage.getItem('astra_admin') !== '1' && localStorage.getItem('ls_astra_admin') !== '1') {
+      alert('Accesso negato. Effettua il login come admin dalla homepage.');
+      window.location.href = 'index.html';
+    }
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let _prev = [];
+    let _tav  = [];
+
+    function switchTab(tab) {
+      document.getElementById('tab-stats').style.display     = tab === 'stats'     ? 'flex' : 'none';
+      document.getElementById('tab-bookings').style.display  = tab === 'bookings'  ? 'flex' : 'none';
+      document.getElementById('tab-confirmed').style.display = tab === 'confirmed' ? 'flex' : 'none';
+      document.querySelectorAll('.tab').forEach((t,i) => {
+        t.classList.toggle('active',
+          (tab==='stats'&&i===0)||(tab==='bookings'&&i===1)||(tab==='confirmed'&&i===2));
+      });
+    }
+
+    /* ── Calcola punti in base al tipo di prenotazione ─────────
+     *  Prevendita  1-10 bigl  → 10 pts
+     *  Prevendita  >10  bigl  → 20 pts
+     *  Tavolo Base 1-5  pers  → 10 pts
+     *  Tavolo Base >5   pers  → 20 pts
+     *  Tavolo VIP  >5   pers  → 40 pts
+     * ─────────────────────────────────────────────────────── */
+    function calcPoints(booking, type) {
+      if (type === 'prev') {
+        return (parseInt(booking.prevendite) || 0) > 10 ? 20 : 10;
+      }
+      const persone = parseInt(booking.persone) || 0;
+      const isVIP   = (booking.tipo || '').toLowerCase().includes('vip');
+      if (isVIP && persone > 5) return 40;
+      return persone > 5 ? 20 : 10;
+    }
+
+    /* ── Toast di notifica ────────────────────────────────── */
+    function showToast(msg, color) {
+      let t = document.getElementById('pts-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'pts-toast';
+        t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:9999;font-family:Poppins,sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.1em;padding:.65rem 1.4rem;border-radius:99px;box-shadow:0 6px 28px rgba(0,0,0,.5);transition:opacity .4s;white-space:nowrap;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.background = color || 'var(--green)';
+      t.style.color = color === 'var(--red)' ? '#fff' : '#000';
+      t.style.opacity = '1';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.style.opacity = '0', 3200);
+    }
+
+    /* ── Assegna o revoca punti su utentiAstra ────────────── */
+    async function handlePoints(booking, col, docId, confirming) {
+      // 1. Cerca prima per astraUsername (collegamento diretto dal form)
+      // 2. Fallback: cerca per numero di telefono
+      let userDoc = null;
+
+      if (booking.astraUsername) {
+        const snap = await db.collection('utentiAstra').doc(booking.astraUsername).get();
+        if (snap.exists) userDoc = snap;
+      }
+
+      if (!userDoc) {
+        const rawTel = (booking.telefono || '').replace(/\s/g, '');
+        if (!rawTel) {
+          if (confirming) showToast('⚠ Utente non trovato nel sistema ricompense', 'rgba(246,173,85,0.95)');
+          return;
+        }
+        const snap = await db.collection('utentiAstra').where('tel', '==', rawTel).limit(1).get();
+        if (!snap.empty) userDoc = snap.docs[0];
+      }
+
+      if (!userDoc) {
+        if (confirming) showToast('⚠ Utente non trovato nel sistema ricompense', 'rgba(246,173,85,0.95)');
+        return;
+      }
+
+      const userData = userDoc.data();
+      const type     = col === 'prevendite' ? 'prev' : 'tav';
+
+      if (confirming) {
+        const pts  = calcPoints(booking, type);
+        const desc = col === 'prevendite'
+          ? `🎟 Prevendita confermata — ${booking.evento} (${booking.prevendite} bigl.)`
+          : `🍾 Tavolo confermato — ${booking.evento} (${booking.persone} pers.)`;
+        const entry   = { tipo:'prenotazione', desc, punti: pts, ts: Date.now(), bookingId: docId };
+        const storico = [...(userData.storico || []), entry];
+        await userDoc.ref.update({ punti: (userData.punti || 0) + pts, storico });
+        showToast(`⭐ +${pts} punti assegnati a ${userData.nome || booking.astraUsername || booking.telefono}`);
+      } else {
+        // Trova e annulla l'entry originale per questo booking
+        const storico = [...(userData.storico || [])];
+        let idx = -1;
+        for (let i = storico.length - 1; i >= 0; i--) {
+          if (storico[i].bookingId === docId && storico[i].punti > 0) { idx = i; break; }
+        }
+        if (idx === -1) return;
+        const originalPts = storico[idx].punti;
+        const reverseEntry = { tipo:'storno', desc:`↩ Conferma annullata — ${booking.evento}`, punti: -originalPts, ts: Date.now(), bookingId: docId };
+        storico.push(reverseEntry);
+        await userDoc.ref.update({ punti: Math.max(0, (userData.punti || 0) - originalPts), storico });
+        showToast(`↩ -${originalPts} punti rimossi da ${userData.nome || booking.astraUsername || booking.telefono}`, '#FC8181');
+      }
+    }
+
+    async function toggleConfirm(col, docId) {
+      const arr = col === 'prevendite' ? _prev : _tav;
+      const b   = arr.find(x => x._docId === docId);
+      if (!b) return;
+      const confirming = !b.confirmed;
+      await db.collection(col).doc(docId).update({ confirmed: confirming });
+      await handlePoints(b, col, docId, confirming);
+    }
+
+    async function deleteBooking(col, docId) {
+      if (!confirm('Eliminare questa prenotazione?')) return;
+      await db.collection(col).doc(docId).delete();
+    }
+
+    function fmtTs(ts) {
+      return new Date(ts).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    }
+
+    function renderList(elId, arr, type, col) {
+      const el = document.getElementById(elId);
+      const sorted = [...arr].sort((a,b) => b.ts - a.ts);
+      el.innerHTML = '';
+      if (!sorted.length) { el.innerHTML = '<div class="empty-bk">Nessuna prenotazione ancora</div>'; return; }
+      sorted.forEach((b,i) => {
+        const isPrev = type === 'prev';
+        const icon   = isPrev ? '🎟' : '🍾';
+        const qty    = isPrev
+          ? `<span>${b.prevendite}</span> bigliett${b.prevendite==1?'o':'i'}`
+          : `<span>${b.persone}</span> person${b.persone==1?'a':'e'}`;
+
+        // Badge punti — visibile solo quando confermata
+        const ptsValue = calcPoints(b, type);
+        const ptsBadge = b.confirmed
+          ? `<span style="font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,107,0,.12);border:1px solid rgba(255,107,0,.3);color:var(--orange);padding:.18rem .55rem;border-radius:6px;">⭐ +${ptsValue} pts</span>`
+          : '';
+
+        const d = document.createElement('div');
+        d.className = `booking-card${b.confirmed?' confirmed':''}`;
+        d.style.animationDelay = `${i*.04}s`;
+        d.innerHTML = `
+          <div class="bk-top">
+            <div class="bk-icon">${icon}</div>
+            <div class="bk-info">
+              <div class="bk-name" style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">${b.nome} ${b.cognome} ${ptsBadge}${b.astraUsername ? `<span style="font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:rgba(104,211,145,.12);border:1px solid rgba(104,211,145,.3);color:#68D391;padding:.18rem .55rem;border-radius:6px;">🔗 @${b.astraUsername}</span>` : ''}</div>
+              <div class="bk-details">
+                📱 ${b.telefono} &nbsp;·&nbsp; 🎉 ${b.evento}<br>
+                ${qty} &nbsp;·&nbsp; 🕒 ${fmtTs(b.ts)}
+              </div>
+            </div>
+          </div>
+          <div class="bk-bottom">
+            <span class="bk-status ${b.confirmed?'confermata':'attesa'}">${b.confirmed?'● Confermata':'● In attesa'}</span>
+            <div class="bk-actions">
+              <button class="btn-confirm ${b.confirmed?'undo':'do'}" onclick="toggleConfirm('${col}','${b._docId}')">
+                ${b.confirmed?'Annulla':'Conferma'}
+              </button>
+              <button class="btn-del-bk" onclick="deleteBooking('${col}','${b._docId}')">✕</button>
+            </div>
+          </div>`;
+        el.appendChild(d);
+      });
+    }
+
+    function renderBookings() {
+      renderList('list-prev', _prev, 'prev', 'prevendite');
+      renderList('list-tav',  _tav,  'tav',  'tavoli');
+    }
+
+    const CHARTS = {};
+    const AX = {
+      x:{ ticks:{color:'rgba(255,255,255,.35)',font:{family:'Poppins',size:10}}, grid:{color:'rgba(255,255,255,.06)'} },
+      y:{ ticks:{color:'rgba(255,255,255,.35)',font:{family:'Poppins',size:10}}, grid:{color:'rgba(255,255,255,.06)'}, beginAtZero:true }
+    };
+    const LEG = { labels:{ color:'rgba(255,255,255,.45)', font:{family:'Poppins',size:11}, boxWidth:12 } };
+
+    function mk(id, cfg) {
+      if (CHARTS[id]) CHARTS[id].destroy();
+      const el = document.getElementById(id);
+      if (!el) return;
+      CHARTS[id] = new Chart(el, cfg);
+    }
+
+    function timeSeries(arr) {
+      const map={};
+      arr.forEach(b => { const d=new Date(b.ts).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'}); map[d]=(map[d]||0)+1; });
+      return Object.entries(map).map(([l,v])=>({l,v}));
+    }
+
+    function doughnut(id, labels, data, colors) {
+      if (data.every(v=>v===0)) {
+        mk(id,{type:'doughnut',data:{labels:['Nessun dato'],datasets:[{data:[1],backgroundColor:['rgba(255,255,255,.08)'],borderColor:['rgba(255,255,255,.08)'],borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'rgba(255,255,255,.3)',font:{family:'Poppins',size:11}}}}}});
+      } else {
+        mk(id,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors.map(c=>c+'bf'),borderColor:colors,borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:LEG.labels}}}});
+      }
+    }
+
+    function bar(id, label, value, color, max, step) {
+      mk(id,{type:'bar',data:{labels:[label],datasets:[{label,data:[value],backgroundColor:color+'bf',borderColor:color,borderWidth:1,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:LEG.labels}},scales:{x:AX.x,y:{...AX.y,min:0,max,ticks:{...AX.y.ticks,stepSize:step}}}}});
+    }
+
+    function line(id, pts, color) {
+      mk(id,{type:'line',data:{labels:pts.length?pts.map(p=>p.l):['—'],datasets:[{label:'Prenotazioni/giorno',data:pts.length?pts.map(p=>p.v):[0],borderColor:color,backgroundColor:color+'15',borderWidth:2,pointBackgroundColor:color,pointRadius:5,tension:0.35,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:LEG.labels}},scales:{x:AX.x,y:{...AX.y,ticks:{...AX.y.ticks,stepSize:1}}}}});
+    }
+
+    function refreshStats() {
+      const prev  = _prev;
+      const tav   = _tav;
+      const cprev = prev.filter(b=>b.confirmed);
+      const ctav  = tav.filter(b=>b.confirmed);
+
+      const r1p=prev.length, r1t=tav.length;
+      const r2p=prev.reduce((s,b)=>s+(parseInt(b.prevendite)||0),0);
+      const r2pe=tav.reduce((s,b)=>s+(parseInt(b.persone)||0),0);
+
+      document.getElementById('r1-prev').textContent = r1p;
+      document.getElementById('r1-tav').textContent  = r1t;
+      document.getElementById('r1-tot').textContent  = r1p+r1t;
+      document.getElementById('r2-prev').textContent = r2p;
+      document.getElementById('r2-pers').textContent = r2pe;
+      document.getElementById('r2-tot').textContent  = r2p+r2pe;
+      document.getElementById('last-update').textContent =
+        new Date().toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+
+      doughnut('c1',['Prevendite','Tavoli'],[r1p,r1t],['#FF6B00','#63B3ED']);
+      bar('c2','Biglietti prevendita',r2p,'#FF6B00',1000,200);
+      bar('c3','Persone tavoli',r2pe,'#B794F4',300,50);
+      line('c4',timeSeries(prev),'#FF6B00');
+      line('c5',timeSeries(tav),'#63B3ED');
+
+      const cr1p=cprev.length, cr1t=ctav.length;
+      const cr2p=cprev.reduce((s,b)=>s+(parseInt(b.prevendite)||0),0);
+      const cr2pe=ctav.reduce((s,b)=>s+(parseInt(b.persone)||0),0);
+      const e1=document.getElementById('cc-r1-prev');  if(e1) e1.textContent=cr1p;
+      const e2=document.getElementById('cc-r1-tav');   if(e2) e2.textContent=cr1t;
+      const e3=document.getElementById('cc-r1-tot');   if(e3) e3.textContent=cr1p+cr1t;
+      const e4=document.getElementById('cc-r2-prev');  if(e4) e4.textContent=cr2p;
+      const e5=document.getElementById('cc-r2-pers');  if(e5) e5.textContent=cr2pe;
+      const e6=document.getElementById('cc-r2-tot');   if(e6) e6.textContent=cr2p+cr2pe;
+
+      doughnut('cc1',['Prevendite','Tavoli'],[cr1p,cr1t],['#68D391','#F6E05E']);
+      bar('cc2','Biglietti confermati',cr2p,'#68D391',1000,200);
+      bar('cc3','Persone confermate',cr2pe,'#F6E05E',300,50);
+      line('cc4',timeSeries(cprev),'#68D391');
+      line('cc5',timeSeries(ctav),'#F6E05E');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      db.collection('prevendite').onSnapshot(snap => {
+        _prev = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        refreshStats();
+        renderBookings();
+      });
+      db.collection('tavoli').onSnapshot(snap => {
+        _tav = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        refreshStats();
+        renderBookings();
+      });
+    });
+  </script>
+
+</body>
+</html>

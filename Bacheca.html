@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Bacheca — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818; --s3: #222222;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.4);
+      --green: #68D391; --blue: #63B3ED; --red: #FC8181; --yellow: #F6E05E;
+    }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background: radial-gradient(ellipse at 20% 10%, rgba(255,107,0,.06) 0%, transparent 55%); }
+
+    /* TOPBAR */
+    .topbar { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:.8rem 1.2rem; background:rgba(10,10,10,.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border2); }
+    .topbar-links { display:flex; gap:.45rem; flex-wrap:wrap; }
+    .topbar-links a { font-size:.55rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.25); padding:.28rem .7rem; border-radius:99px; transition:background .2s; white-space:nowrap; }
+    .topbar-links a:hover { background:rgba(255,107,0,.2); }
+    .btn-exit { font-family:'Poppins',sans-serif; font-size:.55rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid var(--border2); border-radius:8px; padding:.28rem .7rem; cursor:pointer; }
+    .btn-exit:hover { color:var(--white); }
+
+    /* HERO */
+    .hero { position:relative; z-index:1; text-align:center; padding:5.5rem 1.5rem 1.5rem; }
+    .pill { display:inline-flex; align-items:center; gap:.45rem; font-size:.58rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.28rem .9rem; border-radius:99px; margin-bottom:1rem; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.8rem,8vw,5.5rem); letter-spacing:.04em; line-height:.9; }
+    .hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* TABS */
+    .tabs-wrap { position:relative; z-index:1; padding:.8rem clamp(1rem,4vw,2.5rem) 0; }
+    .tabs { display:inline-flex; background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:.3rem; gap:.3rem; }
+    .tab { font-family:'Poppins',sans-serif; font-size:.7rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.55rem 1.4rem; border-radius:10px; cursor:pointer; transition:background .22s, color .22s; }
+    .tab.active { background:var(--orange); color:#000; }
+    .tab:not(.active):hover { background:rgba(255,107,0,.1); color:var(--orange); }
+
+    /* PAGE */
+    .page { position:relative; z-index:1; padding:1.5rem clamp(1rem,4vw,2.5rem) 5rem; max-width:900px; margin:0 auto; }
+
+    /* ── COMUNICAZIONI ── */
+    .add-msg-form { background:var(--s1); border:1px solid var(--border); border-radius:18px; padding:1.3rem 1.5rem; margin-bottom:1.5rem; display:none; }
+    .add-msg-form.visible { display:block; }
+    .f { margin-bottom:.8rem; }
+    .f label { display:block; font-size:.58rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:.35rem; }
+    .f input, .f textarea, .f select { width:100%; background:var(--s2); border:1px solid var(--border2); border-radius:10px; color:var(--white); font-family:'Poppins',sans-serif; font-size:.88rem; padding:.65rem .9rem; outline:none; transition:border-color .2s; resize:vertical; }
+    .f input:focus, .f textarea:focus, .f select:focus { border-color:var(--orange); }
+    .f input::placeholder, .f textarea::placeholder { color:rgba(255,255,255,.2); }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    @media(max-width:480px){ .form-row { grid-template-columns:1fr; } }
+
+    .btn-primary { font-family:'Poppins',sans-serif; font-size:.7rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:9px; padding:.65rem 1.4rem; cursor:pointer; transition:background .22s; }
+    .btn-primary:hover { background:var(--orange2); }
+    .btn-secondary { font-family:'Poppins',sans-serif; font-size:.68rem; font-weight:500; letter-spacing:.13em; text-transform:uppercase; background:rgba(255,255,255,.06); color:var(--muted); border:1px solid var(--border2); border-radius:9px; padding:.6rem 1.2rem; cursor:pointer; transition:background .22s; }
+    .btn-secondary:hover { background:rgba(255,255,255,.1); color:var(--white); }
+
+    .add-btn-wrap { margin-bottom:1.2rem; }
+
+    /* Message cards */
+    .msg-list { display:flex; flex-direction:column; gap:.8rem; }
+    .msg-card { background:var(--s1); border:1px solid var(--border2); border-radius:16px; padding:1.1rem 1.3rem; animation:rise .4s ease both; transition:border-color .25s; }
+    .msg-card:hover { border-color:rgba(255,107,0,.2); }
+    @keyframes rise { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .msg-header { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:.7rem; }
+    .msg-meta { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+    .msg-author { font-size:.62rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); }
+    .msg-time { font-size:.58rem; color:rgba(255,255,255,.25); letter-spacing:.1em; }
+    .msg-pin { font-size:.58rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; background:rgba(246,224,94,.1); border:1px solid rgba(246,224,94,.3); color:var(--yellow); padding:.15rem .5rem; border-radius:6px; }
+    .msg-title { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:.05em; color:var(--white); margin-bottom:.4rem; }
+    .msg-body { font-size:.82rem; color:var(--muted); line-height:1.65; white-space:pre-wrap; }
+    .msg-actions { display:flex; gap:.4rem; flex-shrink:0; }
+    .btn-del-msg { font-family:'Poppins',sans-serif; font-size:.58rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:rgba(252,129,129,.08); border:1px solid rgba(252,129,129,.2); color:var(--red); border-radius:7px; padding:.28rem .65rem; cursor:pointer; transition:background .22s; }
+    .btn-del-msg:hover { background:rgba(252,129,129,.18); }
+    .btn-pin-msg { font-family:'Poppins',sans-serif; font-size:.58rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:rgba(246,224,94,.08); border:1px solid rgba(246,224,94,.2); color:var(--yellow); border-radius:7px; padding:.28rem .65rem; cursor:pointer; transition:background .22s; }
+    .btn-pin-msg:hover { background:rgba(246,224,94,.18); }
+
+    /* ── DRESS CODE ── */
+    .events-grid { display:flex; flex-direction:column; gap:1rem; }
+    .ev-folder { background:var(--s1); border:1px solid var(--border2); border-radius:18px; overflow:hidden; transition:border-color .25s; }
+    .ev-folder.open { border-color:rgba(255,107,0,.35); }
+    .ev-folder-hdr { display:flex; align-items:center; gap:1rem; padding:1.1rem 1.4rem; cursor:pointer; user-select:none; transition:background .2s; }
+    .ev-folder-hdr:hover { background:rgba(255,255,255,.02); }
+    .ev-folder-icon { font-size:1.3rem; flex-shrink:0; }
+    .ev-folder-info { flex:1; min-width:0; }
+    .ev-folder-name { font-size:1rem; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-folder-date { font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); margin-top:.15rem; }
+    .ev-folder-arrow { font-size:.9rem; color:var(--muted); transition:transform .25s; flex-shrink:0; }
+    .ev-folder.open .ev-folder-arrow { transform:rotate(90deg); }
+    .ev-folder-body { display:none; border-top:1px solid var(--border2); padding:1rem 1.2rem; }
+    .ev-folder.open .ev-folder-body { display:block; }
+
+    /* Dress code image */
+    .dc-image-wrap { margin-bottom:1rem; }
+    .dc-img { width:auto; max-width:100%; max-height:80vh; height:auto; object-fit:contain; border-radius:12px; display:block; border:1px solid var(--border2); margin:0 auto; }
+    .dc-img-placeholder { width:100%; aspect-ratio:16/9; background:linear-gradient(135deg,#150800,#240e00); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:2rem; opacity:.3; border:1px solid var(--border2); }
+    .dc-nota { font-size:.82rem; color:var(--muted); line-height:1.65; margin-top:.8rem; white-space:pre-wrap; }
+
+    .dc-admin-form { background:var(--s2); border:1px solid var(--border2); border-radius:12px; padding:1rem 1.1rem; margin-top:1rem; display:none; }
+    .dc-admin-form.visible { display:block; }
+    .dc-admin-btns { display:flex; gap:.5rem; margin-top:.8rem; flex-wrap:wrap; }
+
+    .empty-state { text-align:center; padding:4rem 1.5rem; font-size:.72rem; color:rgba(255,255,255,.18); letter-spacing:.2em; text-transform:uppercase; }
+
+    /* Template dropdown */
+    .tpl-wrap{margin-bottom:1rem;position:relative}
+    .tpl-lbl{font-size:.52rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+    .tpl-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.6rem;background:var(--s2);border:1px solid rgba(255,107,0,.35);border-radius:12px;padding:.7rem 1rem;cursor:pointer;user-select:none;transition:all .2s}
+    .tpl-btn:hover,.tpl-btn.open{border-color:var(--orange);background:rgba(255,107,0,.06)}
+    .tpl-btn.open{border-radius:12px 12px 0 0}
+    .tpl-btxt{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);font-family:'Poppins',sans-serif}
+    .tpl-bsub{font-size:.58rem;color:var(--muted);margin-top:.05rem}
+    .tpl-barr{font-size:.8rem;color:var(--orange);transition:transform .25s;flex-shrink:0}
+    .tpl-btn.open .tpl-barr{transform:rotate(180deg)}
+    .tpl-dd{display:none;position:absolute;top:100%;left:0;right:0;z-index:50;background:#161616;border:1px solid var(--orange);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.7)}
+    .tpl-dd.open{display:block}
+    .tpl-item{display:flex;align-items:center;gap:.8rem;padding:.78rem 1rem;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+    .tpl-item:last-child{border-bottom:none}
+    .tpl-item:hover{background:rgba(255,107,0,.08)}
+    .tpl-ico{font-size:1rem;width:1.3rem;text-align:center;flex-shrink:0}
+    .tpl-iname{font-size:.75rem;font-weight:600;color:var(--white)}
+    .tpl-idesc{font-size:.58rem;color:var(--muted);margin-top:.04rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    /* Conferma lettura */
+    .msg-locked .msg-body{filter:blur(4px);user-select:none;pointer-events:none}
+    .read-bar{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;background:rgba(255,107,0,.07);border:1px solid rgba(255,107,0,.22);border-radius:10px;padding:.7rem 1rem;margin-top:.7rem}
+    .read-bar-txt{font-size:.72rem;color:rgba(255,255,255,.75);line-height:1.5;flex:1}
+    .read-bar-txt strong{color:var(--orange)}
+    .btn-holetto{font-family:'Poppins',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--orange);color:#000;border:none;border-radius:8px;padding:.48rem 1rem;cursor:pointer;flex-shrink:0;transition:background .2s}
+    .btn-holetto:hover{background:var(--orange2)}
+    .letture-panel{margin-top:.8rem;background:var(--s2);border:1px solid var(--border2);border-radius:10px;overflow:hidden}
+    .letture-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem .9rem;cursor:pointer;user-select:none}
+    .letture-header-txt{font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .letture-header-cnt{font-size:.58rem;font-weight:700;color:var(--green);background:rgba(104,211,145,.1);border:1px solid rgba(104,211,145,.25);border-radius:99px;padding:.1rem .55rem}
+    .letture-body{display:none;border-top:1px solid var(--border2)}
+    .letture-body.open{display:block}
+    .lettura-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .9rem;border-bottom:1px solid rgba(255,255,255,.03);font-size:.72rem}
+    .lettura-row:last-child{border-bottom:none}
+    .lettura-check{font-size:.85rem;flex-shrink:0}
+    .lettura-nome{flex:1;color:var(--white)}
+    .lettura-time{font-size:.58rem;color:var(--muted);white-space:nowrap}
+    .letture-empty{padding:.6rem .9rem;font-size:.68rem;color:var(--muted);font-style:italic}
+    .badge-letto{display:inline-flex;align-items:center;gap:.3rem;font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green);background:rgba(104,211,145,.08);border:1px solid rgba(104,211,145,.22);border-radius:7px;padding:.2rem .6rem;margin-top:.5rem}
+
+
+    /* REPORT ADMIN */
+    .rep-card { background:var(--s1); border:1px solid var(--border2); border-radius:16px; padding:1.2rem 1.4rem; margin-bottom:.8rem; }
+    .rep-meta { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.6rem; }
+    .rep-author { font-size:.6rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); }
+    .rep-time { font-size:.58rem; color:rgba(255,255,255,.22); }
+    .rep-tipo-badge { font-size:.55rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:.12rem .5rem; border-radius:6px; }
+    .rep-body { font-size:.82rem; color:var(--muted); line-height:1.65; white-space:pre-wrap; margin-bottom:1rem; }
+    .rep-tag-row { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.8rem; }
+    .rep-tag { font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; border:1px solid; border-radius:99px; padding:.18rem .6rem; cursor:pointer; transition:all .2s; opacity:.45; }
+    .rep-tag.attivo { opacity:1; }
+    .rep-tag.in-corso { color:#63B3ED; border-color:#63B3ED; background:rgba(99,179,237,.1); }
+    .rep-tag.accettato { color:var(--green); border-color:var(--green); background:rgba(104,211,145,.1); }
+    .rep-tag.risolto { color:var(--orange); border-color:var(--orange); background:rgba(255,107,0,.1); }
+    .rep-tag.rifiutato { color:var(--red); border-color:var(--red); background:rgba(252,129,129,.1); }
+    .rep-comment-wrap { display:flex; gap:.5rem; align-items:flex-start; margin-top:.4rem; }
+    .rep-comment-input { flex:1; background:var(--s2); border:1px solid var(--border2); border-radius:9px; color:var(--white); font-family:'Poppins',sans-serif; font-size:.8rem; padding:.5rem .8rem; outline:none; resize:none; transition:border-color .2s; }
+    .rep-comment-input:focus { border-color:var(--orange); }
+    .rep-save-btn { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:8px; padding:.5rem .9rem; cursor:pointer; white-space:nowrap; transition:background .2s; }
+    .rep-save-btn:hover { background:var(--orange2); }
+    footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.15); }
+    footer b { color:var(--orange); opacity:.4; font-weight:400; margin:0 .5rem; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-links" id="topbar-links">
+    <a href="index.html">← Home</a>
+  </div>
+  <button class="btn-exit" onclick="logout()">Esci</button>
+</div>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Area PR</div>
+  <h1>BACHECA<br><em>ASTRA</em></h1>
+</section>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('comunicazioni')">📢 Comunicazioni</button>
+    <button class="tab" onclick="switchTab('dresscode')">👔 Dress Code</button>
+    <button class="tab" onclick="switchTab('report')">🚩 Report</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- TAB COMUNICAZIONI -->
+  <div id="tab-comunicazioni">
+
+    <!-- Form admin (solo admin) -->
+    <div class="add-btn-wrap" id="add-btn-wrap" style="display:none;">
+      <button class="btn-primary" onclick="toggleAddForm()">✦ Nuova comunicazione</button>
+    </div>
+
+    <div class="add-msg-form" id="add-msg-form">
+      <!-- Template dropdown -->
+      <div class="tpl-wrap">
+        <div class="tpl-lbl">&#9889; Template rapidi</div>
+        <div class="tpl-btn" id="tpl-btn" onclick="tplToggle()">
+          <div><div class="tpl-btxt" id="tpl-btxt">Scegli un template</div><div class="tpl-bsub" id="tpl-bsub">Compila il form in automatico</div></div>
+          <div class="tpl-barr">&#9660;</div>
+        </div>
+        <div class="tpl-dd" id="tpl-dd"></div>
+      </div>
+      <div class="f"><label>Titolo *</label><input type="text" id="msg-titolo" placeholder="Es. Regole evento del 5 aprile" /></div>
+      <div class="f"><label>Messaggio *</label><textarea id="msg-testo" rows="4" placeholder="Scrivi il messaggio per i PR…"></textarea></div>
+      <div class="form-row">
+        <div class="f">
+          <label>Destinatari</label>
+          <select id="msg-dest">
+            <option value="tutti">Tutti i PR</option>
+            <option value="Ale">PR di Ale</option>
+            <option value="Jajo">PR di Jajo</option>
+            <option value="utenti">📣 Utenti (bacheca pubblica)</option>
+          </select>
+        </div>
+        <div class="f" style="display:flex;flex-direction:column;gap:.55rem;justify-content:flex-end;">
+          <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.75rem;color:var(--muted);margin-bottom:0;">
+            <input type="checkbox" id="msg-pin" style="accent-color:var(--orange);width:15px;height:15px;" />
+            &#128204; Fissa in cima
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.75rem;color:var(--muted);margin-bottom:0;">
+            <input type="checkbox" id="msg-lettura" style="accent-color:var(--orange);width:15px;height:15px;" />
+            &#9995; Richiedi conferma lettura
+          </label>
+        </div>
+      </div>
+      <div style="display:flex;gap:.6rem;margin-top:.4rem;">
+        <button class="btn-primary" onclick="pubblicaMsg()">Pubblica</button>
+        <button class="btn-secondary" onclick="toggleAddForm()">Annulla</button>
+      </div>
+      <div id="msg-ok" style="display:none;margin-top:.6rem;font-size:.72rem;color:var(--green);">✓ Comunicazione pubblicata!</div>
+    </div>
+
+    <div class="msg-list" id="msg-list">
+      <div class="empty-state">Caricamento…</div>
+    </div>
+  </div>
+
+  <!-- TAB DRESS CODE -->
+  <div id="tab-dresscode" style="display:none;">
+    <div class="events-grid" id="dc-events-grid">
+      <div class="empty-state">Caricamento eventi…</div>
+    </div>
+  </div>
+
+  <!-- TAB REPORT (solo admin) -->
+  <div id="tab-report" style="display:none;">
+    <div id="rep-list-wrap">
+      <div class="msg-list" id="rep-list">
+        <div class="empty-state">Caricamento…</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 Astra Events</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-storage-compat.js"></script>
+<script>
+  /* ── Auth ── */
+  const role  = sessionStorage.getItem('astra_role');
+  const user  = sessionStorage.getItem('astra_user');
+  const aliasDisp = sessionStorage.getItem('astra_alias') || localStorage.getItem('ls_astra_alias') || '';
+  const nome  = aliasDisp || sessionStorage.getItem('astra_nome') || user || '';
+  const owner = sessionStorage.getItem('astra_owner') || '';
+
+  if (!role || !user) { window.location.href = 'index.html'; }
+
+  const isAdmin = role === 'admin' || sessionStorage.getItem('astra_admin') === '1';
+
+  // Topbar back link
+  const backLink = isAdmin ? 'PannelloAdmin.html' : 'DashboardPR.html';
+  document.getElementById('topbar-links').innerHTML = `<a href="index.html">← Home</a><a href="${backLink}">← ${isAdmin ? 'Pannello' : 'Dashboard'}</a>`;
+
+  if (isAdmin) document.getElementById('add-btn-wrap').style.display = 'block';
+
+  function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+
+  /* ── Firebase ── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db      = firebase.firestore();
+
+  /* ── Tabs ── */
+  let currentTab = 'comunicazioni';
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tab-comunicazioni').style.display = tab === 'comunicazioni' ? 'block' : 'none';
+    document.getElementById('tab-dresscode').style.display     = tab === 'dresscode'     ? 'block' : 'none';
+    document.getElementById('tab-report').style.display        = tab === 'report'        ? 'block' : 'none';
+    document.querySelectorAll('.tab').forEach((t,i) =>
+      t.classList.toggle('active', (tab==='comunicazioni'&&i===0)||(tab==='dresscode'&&i===1)||(tab==='report'&&i===2))
+    );
+    if (tab === 'dresscode' && !dcLoaded) loadDressCode();
+    if (tab === 'report' && !repLoaded) loadReports();
+  }
+
+  /* ══════════════════════════════════════════════
+     COMUNICAZIONI
+  ══════════════════════════════════════════════ */
+  function toggleAddForm() {
+    document.getElementById('add-msg-form').classList.toggle('visible');
+  }
+
+  async function pubblicaMsg() {
+    const titolo = document.getElementById('msg-titolo').value.trim();
+    const testo  = document.getElementById('msg-testo').value.trim();
+    const dest   = document.getElementById('msg-dest').value;
+    const pinned = document.getElementById('msg-pin').checked;
+    if (!titolo || !testo) { alert('Compila titolo e messaggio.'); return; }
+
+    const richiedeLettura = (dest !== 'utenti') && document.getElementById('msg-lettura').checked;
+    const collection = dest === 'utenti' ? 'bachecaUtenti' : 'bacheca';
+    await db.collection(collection).add({
+      titolo, testo, dest, pinned, richiedeLettura,
+      autore: nome,
+      ts: Date.now()
+    });
+
+    document.getElementById('msg-titolo').value = '';
+    document.getElementById('msg-testo').value  = '';
+    document.getElementById('msg-pin').checked    = false;
+    document.getElementById('msg-lettura').checked = false;
+    document.getElementById('msg-ok').style.display = 'block';
+    setTimeout(() => document.getElementById('msg-ok').style.display = 'none', 3000);
+    document.getElementById('add-msg-form').classList.remove('visible');
+  }
+
+  function fmtTs(ts) {
+    return new Date(ts).toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+
+  // Load comunicazioni realtime — da entrambe le collections
+  let _snapPR = [], _snapUtenti = [];
+
+  function renderMsgs() {
+    const list = document.getElementById('msg-list');
+    const all = [
+      ..._snapPR.map(d => ({ d, src: 'pr' })),
+      ..._snapUtenti.map(d => ({ d, src: 'utenti' }))
+    ];
+    if (!all.length) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-icon">📢</div><p>Nessuna comunicazione ancora</p></div>';
+      return;
+    }
+    all.sort((a,b) => {
+      const pa = a.d.data().pinned ? 1 : 0, pb = b.d.data().pinned ? 1 : 0;
+      if (pb !== pa) return pb - pa;
+      return (b.d.data().ts||0) - (a.d.data().ts||0);
+    });
+    const docs = all.filter(({ d }) => {
+      const dest = d.data().dest || 'tutti';
+      if (isAdmin) return true;
+      return dest === 'tutti' || dest === owner;
+    });
+    if (!docs.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📢</div><p>Nessuna comunicazione per te</p></div>'; return; }
+    list.innerHTML = '';
+    docs.forEach(({ d, src }, i) => {
+      const m = d.data();
+      const card = document.createElement('div');
+      card.className = 'msg-card';
+      card.style.animationDelay = i * 0.04 + 's';
+      const destLabel = m.dest === 'tutti' ? ''
+        : m.dest === 'utenti'
+          ? `<span style="font-size:.55rem;background:rgba(104,211,145,.1);border:1px solid rgba(104,211,145,.25);color:#68D391;padding:.12rem .45rem;border-radius:6px;letter-spacing:.1em;text-transform:uppercase;">📣 Utenti</span>`
+          : `<span style="font-size:.55rem;background:rgba(99,179,237,.1);border:1px solid rgba(99,179,237,.25);color:#63B3ED;padding:.12rem .45rem;border-radius:6px;letter-spacing:.1em;text-transform:uppercase;">→ ${m.dest}</span>`;
+      card.innerHTML = `
+        <div class="msg-header">
+          <div class="msg-meta">
+            <span class="msg-author">⚙ ${m.autore}</span>
+            ${m.pinned ? '<span class="msg-pin">📌 In evidenza</span>' : ''}
+            ${destLabel}
+            <span class="msg-time">${fmtTs(m.ts)}</span>
+          </div>
+          ${isAdmin ? `<div class="msg-actions">
+            <button class="btn-pin-msg" onclick="togglePin('${d.id}', ${!m.pinned}, '${src}')">${m.pinned ? '📌 Rimuovi' : '📌 Fissa'}</button>
+            <button class="btn-del-msg" onclick="deleteMsg('${d.id}', '${src}')">✕</button>
+          </div>` : ''}
+        </div>
+        <div class="msg-title">${m.titolo}</div>
+        <div class="msg-body">${m.testo}</div>`;
+
+      if (!isAdmin && src === 'pr' && m.richiedeLettura === true) {
+        if (!_letture[d.id]) {
+          card.classList.add('msg-locked');
+          const bar = document.createElement('div');
+          bar.className = 'read-bar';
+          bar.innerHTML = '<div class="read-bar-txt">&#128203; <strong>Conferma di aver letto</strong> per sbloccare il messaggio.</div>'
+            + '<button class="btn-holetto" onclick="confermaLettura(\'' + d.id + '\', this)">&#10003; Ho letto</button>';
+          card.appendChild(bar);
+        } else {
+          const badge = document.createElement('div');
+          badge.className = 'badge-letto';
+          badge.textContent = '\u2713 Hai confermato la lettura';
+          card.appendChild(badge);
+        }
+      } else if (isAdmin && src === 'pr' && m.richiedeLettura === true) {
+        // Tag viola nel meta
+        const tag = document.createElement('span');
+        tag.style.cssText = 'display:inline-block;font-size:.55rem;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:#A78BFA;padding:.12rem .45rem;border-radius:6px;letter-spacing:.1em;text-transform:uppercase;margin-left:.4rem';
+        tag.textContent = '\u270b Conf. lettura';
+        card.querySelector('.msg-meta').appendChild(tag);
+        // Pannello letture espandibile
+        const panel = document.createElement('div');
+        panel.className = 'letture-panel';
+        panel.dataset.msgId = d.id;
+        panel.innerHTML = '<div class="letture-header" onclick="toggleLetture(this)">'
+          + '<span class="letture-header-txt">&#128203; Chi ha letto</span>'
+          + '<span class="letture-header-cnt" id="cnt-' + d.id + '">&#8230;</span>'
+          + '</div>'
+          + '<div class="letture-body" id="body-' + d.id + '">'
+          + '<div class="letture-empty">Clicca per caricare...</div>'
+          + '</div>';
+        card.appendChild(panel);
+        // Carica contatore subito
+        caricaContatoreLetture(d.id);
+      }
+
+      list.appendChild(card);
+    });
+  }
+
+  let _lettureCaricate = false;
+  db.collection('bacheca').onSnapshot(snap => {
+    _snapPR = snap.docs;
+    if (!isAdmin && !_lettureCaricate) {
+      _lettureCaricate = true;
+      caricaLetture(snap.docs); // chiama renderMsgs al termine
+    } else {
+      renderMsgs();
+    }
+  });
+  db.collection('bachecaUtenti').onSnapshot(snap => { _snapUtenti = snap.docs; renderMsgs(); });
+
+  async function togglePin(id, val, src) {
+    const col = src === 'utenti' ? 'bachecaUtenti' : 'bacheca';
+    await db.collection(col).doc(id).update({ pinned: val });
+  }
+  async function deleteMsg(id, src) {
+    if (!confirm('Eliminare questa comunicazione?')) return;
+    const col = src === 'utenti' ? 'bachecaUtenti' : 'bacheca';
+    await db.collection(col).doc(id).delete();
+  }
+
+  /* ══════════════════════════════════════════════
+     DRESS CODE — cartelle fisse per locale
+  ══════════════════════════════════════════════ */
+  let dcLoaded = false;
+
+  const VENUES = [
+    { id: 'qube',            name: 'Qube',            icon: '🟠' },
+    { id: 'divina',          name: 'Divina',          icon: '💜' },
+    { id: 'teatro-centrale', name: 'Teatro Centrale', icon: '🎭' },
+    { id: 'garden-club',     name: 'Garden Club',     icon: '🌿' },
+    { id: 'hacienda',        name: 'Hacienda',        icon: '🌵' },
+  ];
+
+  function loadDressCode() {
+    dcLoaded = true;
+    const grid = document.getElementById('dc-events-grid');
+    grid.innerHTML = '';
+    VENUES.forEach(v => grid.appendChild(buildDCFolder(v)));
+  }
+
+  function buildDCFolder(venue) {
+    const folder = document.createElement('div');
+    folder.className = 'ev-folder';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'ev-folder-hdr';
+    hdr.innerHTML = `
+      <div class="ev-folder-icon">${venue.icon}</div>
+      <div class="ev-folder-info">
+        <div class="ev-folder-name">${venue.name}</div>
+        <div class="ev-folder-date">Dress code locale</div>
+      </div>
+      <div class="ev-folder-arrow">›</div>`;
+
+    const body = document.createElement('div');
+    body.className = 'ev-folder-body';
+
+    let bodyLoaded = false;
+    hdr.addEventListener('click', () => {
+      folder.classList.toggle('open');
+      if (folder.classList.contains('open') && !bodyLoaded) {
+        bodyLoaded = true;
+        loadDCBody(venue.id, body);
+      }
+    });
+
+    folder.appendChild(hdr);
+    folder.appendChild(body);
+    return folder;
+  }
+
+  function loadDCBody(venueId, bodyEl) {
+    bodyEl.innerHTML = '<div style="font-size:.7rem;color:var(--muted);padding:.4rem 0;">Caricamento…</div>';
+    db.collection('dressCode').doc(venueId).onSnapshot(snap => {
+      const data = snap.exists ? snap.data() : {};
+      renderDCBody(venueId, bodyEl, data);
+    });
+  }
+
+  function renderDCBody(venueId, bodyEl, data) {
+    bodyEl.innerHTML = '';
+
+    // Image
+    const imgSrc = data.imageBase64 || null;
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'dc-image-wrap';
+    imgWrap.innerHTML = imgSrc
+      ? `<img class="dc-img" src="${imgSrc}" alt="Dress code" />`
+      : `<div class="dc-img-placeholder">👔</div>`;
+    bodyEl.appendChild(imgWrap);
+
+    // Nota
+    if (data.nota) {
+      const nota = document.createElement('div');
+      nota.className = 'dc-nota';
+      nota.textContent = data.nota;
+      bodyEl.appendChild(nota);
+    }
+
+    if (!imgSrc && !data.nota) {
+      const empty = document.createElement('div');
+      empty.style.cssText = 'font-size:.72rem;color:rgba(255,255,255,.2);letter-spacing:.15em;text-transform:uppercase;text-align:center;padding:.8rem 0;';
+      empty.textContent = 'Nessun dress code caricato';
+      bodyEl.appendChild(empty);
+    }
+
+    // Admin form
+    if (isAdmin) {
+      const form = document.createElement('div');
+      form.className = 'dc-admin-form';
+      form.id = 'dc-form-' + venueId;
+      form.innerHTML = `
+        <div class="f"><label>Immagine dress code</label><input type="file" id="dc-file-${venueId}" accept="image/*" onchange="previewDC('${venueId}')" /></div>
+        <div id="dc-preview-${venueId}" style="margin:.5rem 0;display:none;"><img id="dc-preview-img-${venueId}" style="width:100%;max-width:320px;height:auto;object-fit:contain;border-radius:10px;border:1px solid var(--border2);display:block;margin:0 auto;" /></div>
+        <div class="f"><label>Nota (opzionale)</label><textarea id="dc-nota-${venueId}" rows="2" placeholder="Es. Elegante, no sneakers…">${data.nota || ''}</textarea></div>
+        <div class="dc-admin-btns">
+          <button class="btn-primary" onclick="saveDC('${venueId}')">✦ Salva</button>
+          ${imgSrc || data.nota ? `<button class="btn-secondary" onclick="deleteDC('${venueId}')">✕ Rimuovi tutto</button>` : ''}
+        </div>
+        <div id="dc-ok-${venueId}" style="display:none;margin-top:.6rem;font-size:.72rem;color:var(--green);">✓ Salvato!</div>`;
+      bodyEl.appendChild(form);
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn-secondary';
+      editBtn.style.marginTop = '.7rem';
+      editBtn.textContent = '✏️ Modifica dress code';
+      editBtn.addEventListener('click', () => form.classList.toggle('visible'));
+      bodyEl.insertBefore(editBtn, form);
+    }
+  }
+
+  function previewDC(venueId) {
+    const file = document.getElementById('dc-file-' + venueId).files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrap = document.getElementById('dc-preview-' + venueId);
+      const img  = document.getElementById('dc-preview-img-' + venueId);
+      if (wrap && img) { img.src = e.target.result; wrap.style.display = 'block'; }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveDC(venueId) {
+    const fileInput = document.getElementById('dc-file-' + venueId);
+    const nota      = (document.getElementById('dc-nota-' + venueId).value || '').trim();
+    const okEl      = document.getElementById('dc-ok-' + venueId);
+    const file      = fileInput ? fileInput.files[0] : null;
+
+    const btn = document.querySelector(`#dc-form-${venueId} .btn-primary`);
+    if (btn) { btn.disabled = true; btn.textContent = 'Salvataggio…'; }
+
+    try {
+      let imageBase64 = null;
+      if (file) {
+        imageBase64 = await new Promise((res, rej) => {
+          const reader = new FileReader();
+          reader.onload  = e => res(e.target.result);
+          reader.onerror = rej;
+          reader.readAsDataURL(file);
+        });
+      } else {
+        const snap = await db.collection('dressCode').doc(venueId).get();
+        imageBase64 = snap.exists ? (snap.data().imageBase64 || null) : null;
+      }
+
+      await db.collection('dressCode').doc(venueId).set(
+        { imageBase64, nota, updatedAt: Date.now() },
+        { merge: true }
+      );
+
+      if (okEl) { okEl.style.display = 'block'; setTimeout(() => okEl.style.display = 'none', 2500); }
+    } catch(e) {
+      alert('Errore nel salvataggio: ' + e.message);
+    }
+
+    if (btn) { btn.disabled = false; btn.textContent = '✦ Salva'; }
+  }
+
+  async function deleteDC(venueId) {
+    if (!confirm('Rimuovere dress code e nota per questo locale?')) return;
+    await db.collection('dressCode').doc(venueId).set({ imageBase64: null, nota: '', updatedAt: Date.now() });
+  }
+  /* ── TEMPLATE DROPDOWN ── */
+  const TEMPLATES = [
+    {ico:'🏆', nome:'1° del mese',      pin:true,  lett:false, dest:'tutti', titolo:'🏆 VINCITORE DEL MESE', testo:'Complimenti al PR primo in classifica!\n\nHai guadagnato: 🎟 ingresso omaggio + 🍹 drink omaggio al prossimo evento Astra.\n\nIl mese prossimo riparte da zero — chi sarà il primo? 🔥'},
+    {ico:'📅', nome:'Nuovo evento',      pin:false, lett:true,  dest:'tutti', titolo:'📅 NUOVO EVENTO IN ARRIVO', testo:'Ragazzi, nuovo evento confermato!\n\nGuardate la sezione eventi per i dettagli. Iniziate subito 🚀'},
+    {ico:'🎟', nome:'Ritiro biglietti',  pin:false, lett:true,  dest:'tutti', titolo:'🎟 RITIRO BIGLIETTI', testo:'Il ritiro dei biglietti è aperto!\n\nPortate un documento.\n\nOrari: [inserire]\nLuogo: [inserire]'},
+    {ico:'📊', nome:'Scarico sera',      pin:false, lett:true,  dest:'tutti', titolo:'📊 PROMEMORIA SCARICO SERA', testo:'Fate lo scarico con tutti i soldi prima di entrare.\nNiente scarico = niente accesso.'},
+    {ico:'👔', nome:'Dress code',        pin:false, lett:true,  dest:'tutti', titolo:'👔 DRESS CODE OBBLIGATORIO', testo:"Ricordate il dress code!\n\nVedete la sezione Dress Code in bacheca. Chi non rispetta non entra 🚫"},
+    {ico:'⚠️',nome:'Avviso urgente',    pin:true,  lett:true,  dest:'tutti', titolo:'⚠️ AVVISO IMPORTANTE', testo:'Comunicazione urgente a tutti i PR.\n\n[Scrivi il messaggio]\n\nConfermate lettura. Grazie.'},
+    {ico:'💰', nome:'Pagamenti',         pin:false, lett:false, dest:'tutti', titolo:'💰 PAGAMENTI PR', testo:'I pagamenti sono pronti!\n\nControllate le statistiche per il vostro importo.\nPagamento entro [inserire data].'},
+    {ico:'🎉', nome:'Post evento',       pin:false, lett:false, dest:'tutti', titolo:'🎉 GRAZIE A TUTTI!', testo:'Evento concluso — grazie a tutti i PR!\n\nStatistiche in area PR. Pagamenti in arrivo 💪'},
+  ];
+
+  function tplToggle() {
+    const dd = document.getElementById('tpl-dd');
+    const bt = document.getElementById('tpl-btn');
+    const o  = dd.classList.toggle('open');
+    bt.classList.toggle('open', o);
+  }
+  function tplChiudi() {
+    document.getElementById('tpl-dd').classList.remove('open');
+    document.getElementById('tpl-btn').classList.remove('open');
+  }
+  function tplCostruisci() {
+    const dd = document.getElementById('tpl-dd');
+    dd.innerHTML = '';
+    TEMPLATES.forEach(t => {
+      const el = document.createElement('div');
+      el.className = 'tpl-item';
+      el.innerHTML = '<div class="tpl-ico">' + t.ico + '</div>'
+        + '<div><div class="tpl-iname">' + t.nome + '</div><div class="tpl-idesc">' + t.titolo + '</div></div>';
+      el.onclick = () => tplApplica(t);
+      dd.appendChild(el);
+    });
+  }
+  function tplApplica(t) {
+    document.getElementById('msg-titolo').value    = t.titolo;
+    document.getElementById('msg-testo').value     = t.testo;
+    document.getElementById('msg-dest').value      = t.dest;
+    document.getElementById('msg-pin').checked     = t.pin;
+    document.getElementById('msg-lettura').checked = t.lett;
+    document.getElementById('tpl-btxt').textContent = t.ico + '  ' + t.nome;
+    document.getElementById('tpl-bsub').textContent = 'Template applicato — modifica pure';
+    tplChiudi();
+  }
+
+  /* ── Aggancia template all'apertura form ── */
+  const _origToggle = window.toggleAddForm;
+  window.toggleAddForm = function() {
+    const form = document.getElementById('add-msg-form');
+    const opening = !form.classList.contains('visible');
+    _origToggle();
+    if (opening) {
+      tplCostruisci();
+      tplChiudi();
+      document.getElementById('tpl-btxt').textContent = 'Scegli un template';
+      document.getElementById('tpl-bsub').textContent = 'Compila il form in automatico';
+    } else {
+      tplChiudi();
+    }
+  };
+
+  /* ── CONFERMA LETTURA ──
+     Letture salvate in sottocollezione bacheca/{id}/letture/{user}
+     NON si tocca il documento principale → nessun loop onSnapshot */
+  const _letture = {};
+
+  function confermaLettura(msgId, btn) {
+    btn.disabled = true; btn.textContent = '…';
+    db.collection('bacheca').doc(msgId).collection('letture').doc(user)
+      .set({ letto: true, ts: Date.now(), nome })
+      .then(() => { _letture[msgId] = true; renderMsgs(); })
+      .catch(() => { btn.disabled = false; btn.textContent = '✓ Ho letto'; });
+  }
+
+  /* Carica letture del PR corrente UNA SOLA VOLTA all'avvio */
+  function caricaLetture(docs) {
+    if (isAdmin || !user) return;
+    Promise.all(docs.map(d =>
+      db.collection('bacheca').doc(d.id).collection('letture').doc(user).get()
+        .then(l => { if (l.exists && l.data().letto) _letture[d.id] = true; })
+        .catch(() => {})
+    )).then(() => renderMsgs());
+  }
+
+
+  /* ── PANNELLO LETTURE ADMIN ── */
+  function toggleLetture(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.toggle('open');
+    if (isOpen) {
+      const msgId = header.closest('.letture-panel').dataset.msgId;
+      caricaListaLetture(msgId, body);
+    }
+  }
+
+  function caricaContatoreLetture(msgId) {
+    db.collection('bacheca').doc(msgId).collection('letture').get()
+      .then(snap => {
+        const el = document.getElementById('cnt-' + msgId);
+        if (el) el.textContent = snap.size + ' / ?';
+      }).catch(() => {});
+  }
+
+  async function caricaListaLetture(msgId, bodyEl) {
+    bodyEl.innerHTML = '<div class="letture-empty">Caricamento...</div>';
+    try {
+      // Carica chi ha letto
+      const lettureSnap = await db.collection('bacheca').doc(msgId).collection('letture').get();
+      const letti = {};
+      lettureSnap.docs.forEach(d => {
+        letti[d.id] = { nome: d.data().nome || d.id, ts: d.data().ts };
+      });
+      // Carica tutti i PR
+      const prSnap = await db.collection('utenti').where('role','==','pr').get();
+      const tutti = prSnap.docs.map(d => ({ id: d.id, nome: d.data().nome || d.id }))
+        .sort((a,b) => a.nome.localeCompare(b.nome));
+      // Aggiorna contatore
+      const cnt = document.getElementById('cnt-' + msgId);
+      if (cnt) cnt.textContent = lettureSnap.size + ' / ' + tutti.length;
+      if (!tutti.length) { bodyEl.innerHTML = '<div class="letture-empty">Nessun PR trovato</div>'; return; }
+      bodyEl.innerHTML = '';
+      tutti.forEach(pr => {
+        const haLetto = letti[pr.id];
+        const row = document.createElement('div');
+        row.className = 'lettura-row';
+        row.innerHTML = '<span class="lettura-check">' + (haLetto ? '✅' : '⬜') + '</span>'
+          + '<span class="lettura-nome" style="' + (haLetto ? 'color:var(--green)' : 'color:var(--muted)') + '">' + pr.nome + '</span>'
+          + (haLetto ? '<span class="lettura-time">' + fmtTs(haLetto.ts) + '</span>' : '<span class="lettura-time">non letto</span>');
+        bodyEl.appendChild(row);
+      });
+    } catch(e) {
+      bodyEl.innerHTML = '<div class="letture-empty">Errore caricamento</div>';
+    }
+  }
+
+
+
+  /* ══════════════════════════════════════════════
+     REPORT
+  ══════════════════════════════════════════════ */
+  let repLoaded = false;
+
+  /* ══════════════════════════════════════════════
+     REPORT ADMIN
+  ══════════════════════════════════════════════ */
+  let repLoaded = false;
+  const TAGS = ['in-corso','accettato','risolto','rifiutato'];
+  const TAG_LABEL = {'in-corso':'🔵 In corso','accettato':'✅ Accettato','risolto':'🟠 Risolto','rifiutato':'❌ Rifiutato'};
+
+  function loadReports() {
+    if (!isAdmin) return;
+    repLoaded = true;
+    const list = document.getElementById('rep-list');
+    list.innerHTML = '<div class="empty-state">Caricamento…</div>';
+    db.collection('report').get().then(snap => {
+      if (snap.empty) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">🚩</div><p>Nessuna segnalazione ancora</p></div>'; return; }
+      const docs = snap.docs.sort((a,b) => (b.data().ts||0)-(a.data().ts||0));
+      list.innerHTML = '';
+      docs.forEach(doc => {
+        const d = doc.data();
+        const tipoColor = d.tipo==='problema' ? 'rgba(252,129,129,.1)' : d.tipo==='consiglio' ? 'rgba(104,211,145,.1)' : 'rgba(255,255,255,.06)';
+        const tipoLabel = d.tipo==='problema' ? '🐛 Problema' : d.tipo==='consiglio' ? '💡 Consiglio' : '📝 Altro';
+        const card = document.createElement('div');
+        card.className = 'rep-card';
+        card.dataset.id = doc.id;
+
+        const tagsHtml = TAGS.map(t =>
+          `<button class="rep-tag ${t}${d.tag===t?' attivo':''}" onclick="setTag('${doc.id}','${t}',this)">${TAG_LABEL[t]}</button>`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="rep-meta">
+            <span class="rep-author">${d.autore||'anonimo'}</span>
+            <span class="rep-time">${fmtTs(d.ts)}</span>
+            <span class="rep-tipo-badge" style="background:${tipoColor};border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);">${tipoLabel}</span>
+          </div>
+          <div class="rep-body">${d.testo}</div>
+          <div class="rep-tag-row">${tagsHtml}</div>
+          <div class="rep-comment-wrap">
+            <textarea class="rep-comment-input" rows="2" placeholder="Commento per l'utente (opzionale)…">${d.commento||''}</textarea>
+            <button class="rep-save-btn" onclick="salvaRisposta('${doc.id}',this)">Salva</button>
+          </div>
+          <div class="rep-saved-msg" style="display:none;font-size:.65rem;color:var(--green);margin-top:.4rem;">✓ Salvato</div>
+          <div style="margin-top:.6rem;text-align:right;">
+            <button class="btn-del-msg" onclick="eliminaReport('${doc.id}',this)">Elimina</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }).catch(() => {
+      document.getElementById('rep-list').innerHTML = '<div class="empty-state">Errore caricamento.</div>';
+    });
+  }
+
+  async function setTag(id, tag, btn) {
+    const card = btn.closest('.rep-card');
+    card.querySelectorAll('.rep-tag').forEach(b => b.classList.remove('attivo'));
+    btn.classList.add('attivo');
+    await db.collection('report').doc(id).update({ tag });
+  }
+
+  async function salvaRisposta(id, btn) {
+    const card = btn.closest('.rep-card');
+    const commento = card.querySelector('.rep-comment-input').value.trim();
+    const msg = card.querySelector('.rep-saved-msg');
+    btn.disabled = true;
+    await db.collection('report').doc(id).update({ commento });
+    btn.disabled = false;
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 2500);
+  }
+
+  async function eliminaReport(id, btn) {
+    if (!confirm('Eliminare questa segnalazione?')) return;
+    btn.disabled = true;
+    await db.collection('report').doc(id).delete();
+    btn.closest('.rep-card').remove();
+  }
+
+</script>
+</body>
+</html>

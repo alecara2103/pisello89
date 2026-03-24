@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Il mio profilo — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.4);
+      --green: #68D391; --red: #FC8181; --yellow: #F6E05E;
+    }
+    html, body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background: radial-gradient(ellipse at 20% 10%, rgba(255,107,0,.06) 0%, transparent 55%); }
+
+    /* TOPBAR */
+    .topbar { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:.85rem 1.2rem; background:rgba(10,10,10,.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border2); }
+    .topbar-logo { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.1em; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+    .topbar-back { font-size:.6rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.25); padding:.28rem .75rem; border-radius:99px; text-decoration:none; transition:background .2s; }
+    .topbar-back:hover { background:rgba(255,107,0,.2); }
+
+    /* LAYOUT */
+    .stage { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:5.5rem 1.2rem 4rem; display:flex; flex-direction:column; gap:1rem; }
+
+    /* HERO */
+    .profile-hero { text-align:center; margin-bottom:.5rem; }
+    .avatar { width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--orange2)); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#000; margin:0 auto .8rem; box-shadow:0 0 0 3px rgba(255,107,0,.25), 0 0 24px rgba(255,107,0,.2); }
+    .profile-name { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:.06em; }
+    .profile-username { font-size:.65rem; color:var(--muted); letter-spacing:.2em; margin-top:.2rem; }
+
+    /* CARDS */
+    .card { background:var(--s1); border:1px solid var(--border2); border-radius:18px; padding:1.3rem 1.4rem; animation:rise .4s ease both; }
+    @keyframes rise { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .card-title { font-size:.6rem; font-weight:600; letter-spacing:.26em; text-transform:uppercase; color:var(--orange); margin-bottom:1rem; }
+
+    /* INFO ROWS */
+    .info-row { display:flex; justify-content:space-between; align-items:center; padding:.55rem 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:.82rem; }
+    .info-row:last-child { border-bottom:none; }
+    .info-label { color:var(--muted); font-size:.72rem; }
+    .info-value { color:var(--white); font-weight:500; text-align:right; }
+
+    /* PUNTI */
+    .pts-big { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--orange); line-height:1; }
+    .pts-sub { font-size:.62rem; color:var(--muted); letter-spacing:.2em; text-transform:uppercase; margin-top:.2rem; }
+
+    /* SWITCH PROFILO */
+    .sw-profilo { position:relative; width:44px; height:24px; flex-shrink:0; cursor:pointer; }
+    .sw-profilo input { opacity:0; width:0; height:0; position:absolute; }
+    .sw-profilo-track { position:absolute; inset:0; background:rgba(255,255,255,.1); border-radius:99px; transition:background .25s; border:1px solid rgba(255,255,255,.08); }
+    .sw-profilo input:checked + .sw-profilo-track { background:var(--orange); border-color:var(--orange); }
+    .sw-profilo-track::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform .25s cubic-bezier(.22,1,.36,1); box-shadow:0 1px 4px rgba(0,0,0,.3); }
+    .sw-profilo input:checked + .sw-profilo-track::after { transform:translateX(20px); }
+
+    /* TOGGLE SWITCH */
+    #anonimo-track::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform .25s cubic-bezier(.22,1,.36,1); box-shadow:0 1px 4px rgba(0,0,0,.3); }
+    #toggle-anonimo:checked + #anonimo-track::after { transform:translateX(18px); }
+
+    /* AVATAR UPLOAD */
+    .avatar-wrap { position:relative; width:72px; height:72px; margin:0 auto .8rem; cursor:pointer; }
+    .avatar { width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--orange2)); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#000; box-shadow:0 0 0 3px rgba(255,107,0,.25), 0 0 24px rgba(255,107,0,.2); object-fit:cover; transition:filter .2s; }
+    .avatar-wrap:hover .avatar { filter:brightness(.6); }
+    .avatar-edit-overlay { position:absolute; inset:0; border-radius:50%; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s; pointer-events:none; }
+    .avatar-wrap:hover .avatar-edit-overlay { opacity:1; }
+    .avatar-edit-overlay span { font-size:.55rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:#fff; }
+    .avatar-upload-input { display:none; }
+    .avatar-uploading { position:absolute; inset:0; border-radius:50%; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; }
+    .avatar-uploading.show { display:flex; }
+    .avatar-uploading span { font-size:.5rem; color:var(--orange); letter-spacing:.1em; text-transform:uppercase; }
+    .badge-verificato { display:inline-flex; align-items:center; gap:.35rem; font-size:.6rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:rgba(104,211,145,.12); border:1px solid rgba(104,211,145,.3); color:var(--green); padding:.22rem .65rem; border-radius:99px; }
+    .badge-nonverificato { display:inline-flex; align-items:center; gap:.35rem; font-size:.6rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:rgba(246,224,94,.1); border:1px solid rgba(246,224,94,.3); color:var(--yellow); padding:.22rem .65rem; border-radius:99px; }
+
+    /* CODICE AMICO */
+    .codice-box { background:var(--s2); border:1px solid var(--border2); border-radius:12px; padding:1rem 1.2rem; display:flex; align-items:center; justify-content:space-between; gap:.8rem; margin-top:.5rem; }
+    .codice-text { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.12em; color:var(--orange); }
+    .codice-locked { font-size:.72rem; color:rgba(255,255,255,.25); letter-spacing:.12em; font-style:italic; }
+    .btn-copy { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,107,0,.12); color:var(--orange); border:1px solid rgba(255,107,0,.3); border-radius:8px; padding:.35rem .8rem; cursor:pointer; transition:background .2s; white-space:nowrap; }
+    .btn-copy:hover { background:rgba(255,107,0,.22); }
+    .btn-copy.copied { background:rgba(104,211,145,.12); color:var(--green); border-color:rgba(104,211,145,.3); }
+
+    /* VERIFICA EMAIL */
+    .verify-steps { display:flex; flex-direction:column; gap:.7rem; }
+    .f { display:flex; flex-direction:column; gap:.35rem; }
+    .f label { font-size:.6rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+    .f input { background:var(--s2); border:1px solid var(--border2); border-radius:10px; color:var(--white); font-family:'Poppins',sans-serif; font-size:.9rem; padding:.7rem 1rem; outline:none; transition:border-color .2s; width:100%; }
+    .f input:focus { border-color:var(--orange); }
+    .f input::placeholder { color:rgba(255,255,255,.2); }
+    .btn-primary { font-family:'Poppins',sans-serif; font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:10px; padding:.75rem 1.4rem; cursor:pointer; transition:background .22s; width:100%; }
+    .btn-primary:hover { background:var(--orange2); }
+    .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-secondary { font-family:'Poppins',sans-serif; font-size:.68rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; background:none; color:var(--muted); border:1px solid var(--border2); border-radius:10px; padding:.65rem 1.2rem; cursor:pointer; transition:background .22s; width:100%; }
+    .btn-secondary:hover { color:var(--white); border-color:rgba(255,255,255,.2); }
+    .msg-ok  { font-size:.72rem; color:var(--green); text-align:center; padding:.5rem; display:none; }
+    .msg-err { font-size:.72rem; color:var(--red); text-align:center; padding:.5rem; display:none; }
+
+    /* LOGOUT */
+    .btn-logout { font-family:'Poppins',sans-serif; font-size:.68rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:.7rem; cursor:pointer; transition:color .22s, border-color .22s; width:100%; }
+    .btn-logout:hover { color:var(--red); border-color:rgba(252,129,129,.3); }
+
+    /* Step OTP */
+    #step-otp { display:none; }
+    .otp-hint { font-size:.72rem; color:var(--muted); line-height:1.6; margin-bottom:.8rem; }
+    .otp-hint strong { color:var(--white); }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-logo" href="index.html">ASTRA</a>
+  <a class="topbar-back" href="index.html">← Home</a>
+</div>
+
+<div class="stage">
+
+  <!-- Avatar + nome -->
+  <div class="profile-hero">
+    <div class="avatar-wrap" onclick="document.getElementById('avatar-file').click()">
+      <div class="avatar" id="avatar-initials">?</div>
+      <div class="avatar-edit-overlay"><span>✏ Cambia</span></div>
+      <div class="avatar-uploading" id="avatar-uploading"><span>…</span></div>
+      <input type="file" class="avatar-upload-input" id="avatar-file" accept="image/*" onchange="uploadAvatar(event)" />
+      <!-- Icona fotocamera sempre visibile -->
+      <div style="position:absolute;bottom:2px;right:2px;width:22px;height:22px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;border:2px solid var(--black);pointer-events:none;">📷</div>
+    </div>
+    <div class="profile-name" id="profile-name">–</div>
+    <div class="profile-username" id="profile-username">@–</div>
+    <div id="profile-role-badge" style="display:none;margin-top:.4rem;font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,107,0,.15);color:var(--orange);border:1px solid rgba(255,107,0,.4);padding:.22rem .75rem;border-radius:99px;"></div>
+    <div style="font-size:.6rem;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-top:.3rem;">Tocca la foto per cambiarla</div>
+  </div>
+
+  <!-- Info personali -->
+  <div class="card" style="animation-delay:.05s">
+    <div class="card-title">Informazioni personali</div>
+    <div class="info-row"><span class="info-label">Nome</span><span class="info-value" id="info-nome">–</span></div>
+    <div class="info-row" id="info-cognome-row"><span class="info-label">Cognome</span><span class="info-value" id="info-cognome">–</span></div>
+    <div class="info-row"><span class="info-label">Username</span><span class="info-value" id="info-username">–</span></div>
+    <div class="info-row" id="info-tel-row"><span class="info-label">Telefono</span><span class="info-value" id="info-tel">–</span></div>
+    <div class="info-row" id="info-email-row"><span class="info-label">Email</span><span class="info-value" id="info-email">–</span></div>
+    <div class="info-row" id="info-ruolo-row" style="display:none;"><span class="info-label">Ruolo</span><span class="info-value" id="info-ruolo">–</span></div>
+    <div class="info-row" id="info-verificato-row"><span class="info-label">Account</span><span class="info-value" id="info-verificato">–</span></div>
+  </div>
+
+  <!-- Nome visualizzato -->
+  <div class="card" style="animation-delay:.08s">
+    <div class="card-title">Nome visualizzato</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;">Se imposti un nome visualizzato, verrà mostrato al posto del tuo nome in tutta l'app (navbar, spotted, eventi…). Lascia vuoto per usare il nome reale.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;">
+      <input type="text" id="alias-input" placeholder="Es. La Pantera Rosa…" maxlength="30"
+        style="flex:1 1 160px;min-width:0;background:var(--s2);border:1px solid var(--border2);border-radius:10px;color:var(--white);font-family:'Poppins',sans-serif;font-size:.85rem;padding:.65rem 1rem;outline:none;transition:border-color .2s;box-sizing:border-box;"
+        oninput="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor=''" />
+      <button onclick="saveAlias()" style="font-family:'Poppins',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:var(--orange);color:#000;border:none;border-radius:9px;padding:.65rem 1.1rem;cursor:pointer;white-space:nowrap;transition:background .22s;flex:1 1 auto;">Salva</button>
+    </div>
+    <div id="alias-msg" style="display:none;font-size:.65rem;margin-top:.6rem;color:var(--green);">✓ Alias salvato</div>
+  </div>
+
+  <!-- Punti -->
+  <div class="card" id="card-punti" style="animation-delay:.1s">
+    <div class="card-title">I tuoi punti</div>
+    <div class="pts-big" id="info-punti">0</div>
+    <div class="pts-sub">punti Astra</div>
+  </div>
+
+  <!-- Preferenze partecipazione -->
+  <div class="card" style="animation-delay:.12s">
+    <div class="card-title">Preferenze partecipazione</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;">
+      Quando partecipi a un evento puoi scegliere se apparire nella lista con il tuo nome oppure in modo anonimo.
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+      <div>
+        <div style="font-size:.82rem;font-weight:500;color:var(--white);">🕵️ Modalità anonimo predefinita</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:.2rem;">Attivando questo, ogni nuova partecipazione sarà anonima per default</div>
+      </div>
+      <label class="sw-profilo">
+        <input type="checkbox" id="sw-anonimo-default" onchange="toggleAnonimoDefault(this.checked)" />
+        <span class="sw-profilo-track"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Codice amico -->
+  <div class="card" id="card-codice" style="animation-delay:.15s">
+    <div class="card-title">Codice amico</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:.8rem;">
+      Condividi il tuo codice con gli amici. Quando si registrano con il tuo codice guadagni <strong style="color:var(--orange);">+5 punti</strong> per ogni amico.
+    </div>
+    <div id="codice-locked-msg" style="display:none;font-size:.75rem;color:var(--yellow);background:rgba(246,224,94,.07);border:1px solid rgba(246,224,94,.2);border-radius:10px;padding:.8rem 1rem;line-height:1.6;">
+      🔒 Verifica il tuo account con l'email per sbloccare il codice amico.
+    </div>
+    <div class="codice-box" id="codice-box" style="display:none;">
+      <span class="codice-text" id="codice-text">–</span>
+      <button class="btn-copy" id="btn-copy" onclick="copyCodice()">📋 Copia</button>
+    </div>
+  </div>
+
+  <!-- Verifica account -->
+  <div class="card" id="card-verifica" style="animation-delay:.2s">
+    <div class="card-title">Verifica account</div>
+
+    <!-- Step 1: inserisci email -->
+    <div id="step-email" class="verify-steps">
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:.4rem;">
+        Verifica il tuo account inserendo la tua email. Riceverai un codice di 6 cifre da inserire qui.
+      </p>
+      <div class="f">
+        <label>La tua email *</label>
+        <input type="email" id="input-email" placeholder="es. mario@gmail.com" />
+      </div>
+      <button class="btn-primary" id="btn-send-otp" onclick="sendOtp()">Invia codice →</button>
+      <div class="msg-ok" id="msg-send-ok">✓ Codice inviato! Controlla la tua email.</div>
+      <div class="msg-err" id="msg-send-err"></div>
+    </div>
+
+    <!-- Step 2: inserisci OTP -->
+    <div id="step-otp" class="verify-steps">
+      <p class="otp-hint">Abbiamo inviato un codice a <strong id="otp-email-hint"></strong>. Inseriscilo qui sotto.</p>
+      <div class="f">
+        <label>Codice di verifica *</label>
+        <input type="text" id="input-otp" placeholder="Es. 482910" maxlength="6" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+      </div>
+      <button class="btn-primary" id="btn-verify-otp" onclick="verifyOtp()">Verifica →</button>
+      <button class="btn-secondary" style="margin-top:.3rem;" onclick="backToEmail()">← Cambia email</button>
+      <div class="msg-ok" id="msg-otp-ok">✓ Account verificato!</div>
+      <div class="msg-err" id="msg-otp-err"></div>
+    </div>
+  </div>
+
+  <!-- Preferenze privacy -->
+  <div class="card" id="card-privacy" style="animation-delay:.25s">
+    <div class="card-title">Preferenze privacy</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+      <div>
+        <div style="font-size:.82rem;font-weight:500;color:var(--white);margin-bottom:.3rem;">🕵️ Partecipazione anonima</div>
+        <div style="font-size:.7rem;color:var(--muted);line-height:1.6;">Quando attivo, il tuo nome non sarà visibile nella lista partecipanti degli eventi.</div>
+      </div>
+      <label style="position:relative;width:44px;height:26px;flex-shrink:0;cursor:pointer;">
+        <input type="checkbox" id="toggle-anonimo" onchange="saveAnonimoDefault(this.checked)" style="opacity:0;width:0;height:0;position:absolute;" />
+        <span id="anonimo-track" style="position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:99px;transition:background .25s;border:1px solid rgba(255,255,255,.08);"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Bottone pannello (solo staff) -->
+  <button id="btn-go-pannello" style="display:none;font-family:'Poppins',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;background:rgba(255,107,0,.12);color:var(--orange);border:1px solid rgba(255,107,0,.3);border-radius:10px;padding:.7rem;cursor:pointer;transition:background .22s;width:100%;" onmouseover="this.style.background='rgba(255,107,0,.22)'" onmouseout="this.style.background='rgba(255,107,0,.12)'"></button>
+
+  <!-- Logout -->
+  <button class="btn-logout" onclick="doLogout()">Esci dall'account</button>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // Istruzioni: crea account su emailjs.com (gratuito), crea un template con variabili {{to_email}}, {{otp_code}}, {{username}}
+  // Poi sostituisci questi valori con i tuoi
+  const EMAILJS_SERVICE_ID  = 'service_pu0x9re';
+  const EMAILJS_TEMPLATE_ID = 'template_efzcieh';
+  const EMAILJS_PUBLIC_KEY  = 'szk5hOAwEtNAv-3A-';
+
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  /* ── Firebase ── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  /* ── Auth check ── */
+  const sessRole  = sessionStorage.getItem('astra_role') || (sessionStorage.getItem('astra_admin') === '1' ? 'admin' : null);
+  const sessUser  = sessionStorage.getItem('astra_user');
+  const lsUser    = localStorage.getItem('astra_rewards_user');
+
+  // Determina username e collezione in base al ruolo
+  const isStaff    = sessRole === 'admin' || sessRole === 'pr';
+  const username   = sessUser || lsUser;
+  const collection = isStaff ? 'utenti' : 'utentiAstra';
+
+  if (!username) { window.location.href = 'index.html'; }
+
+  /* ── State ── */
+  let userData     = null;
+  let currentOtp   = null;
+  let currentEmail = null;
+
+  /* ── Genera codice amico univoco ── */
+  async function generaCodiceAmico(username) {
+    let codice, exists = true;
+    while (exists) {
+      const n = String(Math.floor(1000 + Math.random() * 9000));
+      codice = username.toUpperCase() + '#' + n;
+      const snap = await db.collection('utentiAstra').where('codiceAmico', '==', codice).limit(1).get();
+      exists = !snap.empty;
+    }
+    return codice;
+  }
+
+  /* ── Cloudinary config ── */
+  const CL_CLOUD  = 'diw6pymyn';
+  const CL_PRESET = 'ulqi3cma';
+
+  /* ── Load user ── */
+  async function loadUser() {
+    let snap = await db.collection(collection).doc(username).get();
+
+    // Fallback: se non trovato nella collezione attesa, prova l'altra
+    if (!snap.exists) {
+      const fallback = isStaff ? 'utentiAstra' : 'utenti';
+      snap = await db.collection(fallback).doc(username).get();
+    }
+
+    if (!snap.exists) { window.location.href = 'index.html'; return; }
+    userData = snap.data();
+
+    // Avatar: foto o iniziali
+    if (userData.fotoUrl) {
+      setAvatarImage(userData.fotoUrl);
+    } else {
+      const initials = ((userData.nome?.[0] || '') + (userData.cognome?.[0] || '')).toUpperCase() || '?';
+      document.getElementById('avatar-initials').textContent = initials;
+    }
+
+    // Badge ruolo sotto il nome
+    const roleLabel = sessRole === 'admin' ? '⚙ Admin' : sessRole === 'pr' ? '🎫 PR' : null;
+    const roleBadgeEl = document.getElementById('profile-role-badge');
+    if (roleLabel && roleBadgeEl) {
+      roleBadgeEl.textContent = roleLabel;
+      roleBadgeEl.style.display = 'inline-flex';
+    }
+
+    document.getElementById('profile-name').textContent     = userData.nome + (userData.cognome ? ' ' + userData.cognome : '');
+    document.getElementById('profile-username').textContent = '@' + userData.username;
+
+    // Carica alias
+    const aliasInput = document.getElementById('alias-input');
+    if (aliasInput && userData.alias) aliasInput.value = userData.alias;
+
+    // Info comuni
+    document.getElementById('info-nome').textContent     = userData.nome || '–';
+    document.getElementById('info-username').textContent = '@' + userData.username;
+
+    if (isStaff) {
+      // Sezione staff: nascondi campi utente, mostra ruolo
+      document.getElementById('info-cognome-row').style.display = 'none';
+      document.getElementById('info-tel-row').style.display     = 'none';
+      document.getElementById('info-email-row').textContent !== undefined && (document.getElementById('info-email').textContent = userData.email || 'Non impostata');
+      document.getElementById('info-ruolo').textContent = sessRole === 'admin' ? 'Amministratore' : 'Public Relations';
+      document.getElementById('info-ruolo-row').style.display = 'flex';
+      // Nascondi sezioni solo-utente
+      document.getElementById('card-punti').style.display        = 'none';
+      document.getElementById('card-codice').style.display       = 'none';
+      document.getElementById('card-verifica').style.display     = 'none';
+      document.getElementById('card-privacy').style.display      = 'none';
+      // Mostra link pannello
+      const pannelloBtn = document.getElementById('btn-go-pannello');
+      if (pannelloBtn) {
+        pannelloBtn.style.display = 'block';
+        pannelloBtn.textContent   = sessRole === 'admin' ? '⚙ Vai al Pannello Admin' : '📊 Vai alla Dashboard PR';
+        pannelloBtn.onclick = () => { window.location.href = sessRole === 'admin' ? 'PannelloAdmin.html' : 'DashboardPR.html'; };
+      }
+    } else {
+      // Sezione utente normale
+      document.getElementById('info-cognome').textContent  = userData.cognome || '–';
+      document.getElementById('info-tel').textContent      = userData.tel || '–';
+      document.getElementById('info-email').textContent    = userData.email || 'Non impostata';
+      document.getElementById('info-punti').textContent    = userData.punti || 0;
+      document.getElementById('info-ruolo-row').style.display = 'none';
+
+      // Toggle anonimo di default
+      const toggleAnonimo = document.getElementById('toggle-anonimo');
+      const trackAnonimo  = document.getElementById('anonimo-track');
+      if (toggleAnonimo) {
+        toggleAnonimo.checked = !!userData.anonimoDefault;
+        trackAnonimo.style.background = userData.anonimoDefault ? 'var(--orange)' : 'rgba(255,255,255,.1)';
+      }
+
+      if (userData.verificato) {
+        document.getElementById('info-verificato').innerHTML = '<span class="badge-verificato">✓ Verificato</span>';
+        let codice = userData.codiceAmico;
+        if (!codice) {
+          codice = await generaCodiceAmico(userData.username);
+          await db.collection('utentiAstra').doc(username).update({ codiceAmico: codice });
+          userData.codiceAmico = codice;
+        }
+        document.getElementById('codice-locked-msg').style.display = 'none';
+        document.getElementById('codice-box').style.display        = 'flex';
+        document.getElementById('codice-text').textContent         = codice;
+        document.getElementById('card-verifica').style.display     = 'none';
+      } else {
+        document.getElementById('info-verificato').innerHTML = '<span class="badge-nonverificato">⚠ Non verificato</span>';
+        document.getElementById('codice-locked-msg').style.display = 'block';
+        document.getElementById('codice-box').style.display        = 'none';
+        if (userData.email) document.getElementById('input-email').value = userData.email;
+      }
+    } // fine else utente normale
+  }
+
+  /* ── Copia codice ── */
+  function copyCodice() {
+    const codice = document.getElementById('codice-text').textContent;
+    navigator.clipboard.writeText(codice).then(() => {
+      const btn = document.getElementById('btn-copy');
+      btn.textContent = '✓ Copiato!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copia'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  /* ── Invia OTP ── */
+  async function sendOtp() {
+    const email = document.getElementById('input-email').value.trim().toLowerCase();
+    if (!email || !email.includes('@')) {
+      showMsg('msg-send-err', 'Inserisci un indirizzo email valido.');
+      return;
+    }
+
+    const btn = document.getElementById('btn-send-otp');
+    btn.disabled = true; btn.textContent = 'Invio…';
+    hideMsg('msg-send-ok'); hideMsg('msg-send-err');
+
+    // Genera OTP 6 cifre
+    currentOtp   = String(Math.floor(100000 + Math.random() * 900000));
+    currentEmail = email;
+
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: email,
+        otp_code: currentOtp,
+        username: userData.username,
+        nome:     userData.nome
+      });
+
+      // Salva email su Firestore (non ancora verificata)
+      await db.collection('utentiAstra').doc(username).update({ email });
+
+      showMsg('msg-send-ok', '✓ Codice inviato! Controlla la tua email.');
+      document.getElementById('otp-email-hint').textContent = email;
+
+      // Passa a step OTP dopo 1.2s
+      setTimeout(() => {
+        document.getElementById('step-email').style.display = 'none';
+        document.getElementById('step-otp').style.display   = 'flex';
+      }, 1200);
+
+    } catch(e) {
+      console.error('EmailJS error:', e);
+      showMsg('msg-send-err', 'Errore invio email. Controlla la configurazione EmailJS.');
+    }
+
+    btn.disabled = false; btn.textContent = 'Invia codice →';
+  }
+
+  /* ── Verifica OTP ── */
+  async function verifyOtp() {
+    const entered = document.getElementById('input-otp').value.trim();
+    if (!entered) { showMsg('msg-otp-err', 'Inserisci il codice.'); return; }
+    if (entered !== currentOtp) { showMsg('msg-otp-err', 'Codice errato. Riprova.'); return; }
+
+    const btn = document.getElementById('btn-verify-otp');
+    btn.disabled = true; btn.textContent = 'Verifica…';
+    hideMsg('msg-otp-err');
+
+    try {
+      await db.collection('utentiAstra').doc(username).update({
+        verificato: true,
+        email: currentEmail
+      });
+
+      showMsg('msg-otp-ok', '🎉 Account verificato! Il tuo codice amico è ora attivo.');
+      setTimeout(() => loadUser(), 1800);
+    } catch(e) {
+      showMsg('msg-otp-err', 'Errore: ' + e.message);
+      btn.disabled = false; btn.textContent = 'Verifica →';
+    }
+  }
+
+  function backToEmail() {
+    document.getElementById('step-otp').style.display   = 'none';
+    document.getElementById('step-email').style.display = 'flex';
+    currentOtp = null;
+  }
+
+  /* ── Helpers ── */
+  function showMsg(id, text) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+  function hideMsg(id) { document.getElementById(id).style.display = 'none'; }
+
+  /* ── Avatar helpers ── */
+  function setAvatarImage(url) {
+    const avatarEl = document.getElementById('avatar-initials');
+    avatarEl.style.cssText = 'width:72px;height:72px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px rgba(255,107,0,.25),0 0 24px rgba(255,107,0,.2);display:flex;align-items:center;justify-content:center;background:none;';
+    avatarEl.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Foto profilo" />`;
+  }
+
+  /* ── Upload foto profilo su Cloudinary ── */
+  async function uploadAvatar(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const uploading = document.getElementById('avatar-uploading');
+    uploading.classList.add('show');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CL_PRESET);
+      formData.append('folder', 'astra_profili');
+
+      const res  = await fetch(`https://api.cloudinary.com/v1_1/${CL_CLOUD}/image/upload`, {
+        method: 'POST', body: formData
+      });
+      const data = await res.json();
+
+      if (!data.secure_url) throw new Error('Upload fallito');
+
+      // Salva URL su Firestore
+      await db.collection(collection).doc(username).update({ fotoUrl: data.secure_url });
+      userData.fotoUrl = data.secure_url;
+
+      // Aggiorna avatar nell'UI
+      setAvatarImage(data.secure_url);
+
+    } catch(err) {
+      console.error('Upload avatar:', err);
+      alert('Errore nel caricamento della foto. Riprova.');
+    }
+
+    uploading.classList.remove('show');
+    e.target.value = '';
+  }
+
+  /* ── Toggle anonimo default ── */
+  async function toggleAnonimoDefault(checked) {
+    try {
+      await db.collection('utentiAstra').doc(username).update({ anonimoDefault: checked });
+      userData.anonimoDefault = checked;
+    } catch(e) { console.error('toggleAnonimoDefault:', e); }
+  }
+
+  /* ── Salva preferenza anonimo ── */
+  async function saveAnonimoDefault(val) {
+    const track = document.getElementById('anonimo-track');
+    track.style.background = val ? 'var(--orange)' : 'rgba(255,255,255,.1)';
+    // Aggiorna la pseudo-pallina
+    const input = document.getElementById('toggle-anonimo');
+    // Simula movimento con CSS inline
+    track.style.setProperty('--sw-x', val ? '18px' : '0px');
+    try {
+      await db.collection('utentiAstra').doc(username).update({ anonimoDefault: val });
+      userData.anonimoDefault = val;
+    } catch(e) { console.error('saveAnonimoDefault:', e); }
+  }
+
+  /* ── Salva alias ── */
+  async function saveAlias() {
+    const alias = document.getElementById('alias-input').value.trim();
+    try {
+      await db.collection(collection).doc(username).update({ alias: alias || '' });
+      userData.alias = alias;
+      // Aggiorna subito sessionStorage e localStorage così la navbar si aggiorna ovunque
+      sessionStorage.setItem('astra_alias', alias);
+      localStorage.setItem('ls_astra_alias', alias);
+      const msg = document.getElementById('alias-msg');
+      msg.textContent = alias ? '✓ Nome visualizzato salvato' : '✓ Nome visualizzato rimosso';
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 2500);
+    } catch(e) { console.error('saveAlias:', e); }
+  }
+
+  /* ── Logout ── */
+  function doLogout() {
+    if (!confirm('Vuoi uscire dal tuo account?')) return;
+    sessionStorage.clear();
+    localStorage.removeItem('astra_rewards_user');
+    localStorage.removeItem('ls_astra_role');
+    localStorage.removeItem('ls_astra_user');
+    localStorage.removeItem('ls_astra_nome');
+    localStorage.removeItem('ls_astra_admin');
+    window.location.href = 'index.html';
+  }
+
+  loadUser();
+</script>
+</body>
+</html>

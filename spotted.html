@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — Spotted degli eventi liceali di Roma." />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Spotted — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818; --s3: #222222;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.4);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background: radial-gradient(ellipse at 15% 15%, rgba(255,107,0,.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 85%, rgba(255,107,0,.04) 0%, transparent 50%); }
+    header { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem clamp(1.5rem,5vw,4rem); border-bottom:1px solid var(--border); background:rgba(10,10,10,.9); backdrop-filter:blur(14px); }
+    .logo { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:.1em; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+    header nav a { font-size:.7rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); text-decoration:none; transition:color .3s; }
+    header nav a:hover { color:var(--white); }
+    .hero { position:relative; z-index:1; text-align:center; padding:clamp(3.5rem,8vw,6rem) clamp(1.5rem,5vw,4rem) clamp(2rem,4vw,3.5rem); }
+    .pill { display:inline-flex; align-items:center; gap:.5rem; font-size:.62rem; font-weight:500; letter-spacing:.32em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.32rem 1rem; border-radius:99px; margin-bottom:1.5rem; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,9vw,8rem); letter-spacing:.05em; line-height:.92; margin-bottom:1.2rem; }
+    .hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero p { font-size:clamp(.83rem,1.4vw,1rem); font-weight:300; color:var(--muted); max-width:460px; margin:0 auto; line-height:1.72; }
+    .wrap { position:relative; z-index:1; padding:0 clamp(1.5rem,5vw,4rem) 6rem; }
+    @keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .eventi-grid { display:flex; flex-direction:column; gap:1rem; }
+    .ev-folder { background:var(--s1); border:1px solid var(--border2); border-radius:18px; overflow:hidden; transition:border-color .25s; cursor:pointer; }
+    .ev-folder:hover { border-color:rgba(255,107,0,.3); }
+    .ev-folder-hdr { display:flex; align-items:center; gap:1rem; padding:1.1rem 1.4rem; user-select:none; }
+    .ev-folder-icon { font-size:1.3rem; flex-shrink:0; }
+    .ev-folder-info { flex:1; min-width:0; }
+    .ev-folder-name { font-size:1rem; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-folder-sub { font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); margin-top:.15rem; }
+    .ev-folder-arrow { font-size:.9rem; color:var(--muted); flex-shrink:0; }
+    .login-required { background:var(--s1); border:1px solid var(--border); border-radius:18px; padding:2.5rem; text-align:center; }
+    .login-required h3 { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:.06em; margin-bottom:.6rem; }
+    .login-required p { font-size:.82rem; color:var(--muted); line-height:1.65; }
+    .btn-back { font-family:'Poppins',sans-serif; font-size:.62rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); background:rgba(255,107,0,.08); border:1px solid rgba(255,107,0,.25); border-radius:99px; padding:.28rem .85rem; cursor:pointer; display:inline-block; margin-bottom:1.2rem; transition:background .2s; }
+    .btn-back:hover { background:rgba(255,107,0,.16); }
+    .evento-title { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:.05em; color:var(--white); margin-bottom:1.2rem; }
+    .spotted-compose { background:var(--s1); border:1px solid var(--border); border-radius:18px; padding:1.4rem 1.5rem; margin-bottom:1.5rem; }
+    .spotted-compose-top { display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; }
+    .spotted-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--orange2)); display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; color:#000; flex-shrink:0; overflow:hidden; }
+    .spotted-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .spotted-who { font-size:.72rem; color:var(--muted); }
+    .spotted-who strong { color:var(--white); }
+    .spotted-textarea { width:100%; background:var(--s2); border:1px solid var(--border2); border-radius:12px; color:var(--white); font-family:'Poppins',sans-serif; font-size:.88rem; padding:.85rem 1rem; outline:none; resize:none; transition:border-color .2s; line-height:1.6; }
+    .spotted-textarea:focus { border-color:var(--orange); }
+    @media (max-width:768px) {
+      .spotted-textarea { font-size:16px; }
+      .reply-compose textarea { font-size:16px; }
+    }
+    .spotted-textarea::placeholder { color:rgba(255,255,255,.2); }
+    .spotted-footer { display:flex; align-items:center; justify-content:space-between; margin-top:.85rem; flex-wrap:wrap; gap:.6rem; }
+    .spotted-anon-toggle { display:flex; align-items:center; gap:.6rem; cursor:pointer; user-select:none; }
+    .spotted-anon-label { font-size:.68rem; color:var(--muted); }
+    .sw-sm { position:relative; width:34px; height:20px; flex-shrink:0; }
+    .sw-sm input { opacity:0; width:0; height:0; position:absolute; }
+    .sw-sm-track { position:absolute; inset:0; background:rgba(255,255,255,.1); border-radius:99px; cursor:pointer; transition:background .25s; border:1px solid rgba(255,255,255,.08); }
+    .sw-sm input:checked + .sw-sm-track { background:var(--orange); border-color:var(--orange); }
+    .sw-sm-track::after { content:''; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; transition:transform .25s cubic-bezier(.22,1,.36,1); box-shadow:0 1px 3px rgba(0,0,0,.3); }
+    .sw-sm input:checked + .sw-sm-track::after { transform:translateX(14px); }
+    .btn-spotted-send { font-family:'Poppins',sans-serif; font-size:.68rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:9px; padding:.52rem 1.2rem; cursor:pointer; transition:background .22s; }
+    .btn-spotted-send:hover { background:var(--orange2); }
+    .btn-spotted-send:disabled { opacity:.5; cursor:not-allowed; }
+    .char-count { font-size:.6rem; color:rgba(255,255,255,.2); }
+    .spotted-list { display:flex; flex-direction:column; gap:1rem; }
+    .spotted-card { background:var(--s1); border:1px solid var(--border2); border-radius:18px; padding:1.2rem 1.4rem; animation:rise .5s ease both; transition:border-color .25s; }
+    .spotted-card:hover { border-color:rgba(255,107,0,.2); }
+    .spotted-card-header { display:flex; align-items:flex-start; gap:.75rem; margin-bottom:.85rem; }
+    .spotted-card-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--orange2)); display:flex; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#000; flex-shrink:0; overflow:hidden; }
+    .spotted-card-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .spotted-card-anon { width:32px; height:32px; border-radius:50%; background:#222; display:flex; align-items:center; justify-content:center; font-size:.85rem; flex-shrink:0; border:1px solid rgba(255,255,255,.08); }
+    .spotted-card-meta { flex:1; min-width:0; }
+    .spotted-card-name { font-size:.75rem; font-weight:600; color:var(--white); display:flex; align-items:center; }
+    .spotted-card-time { font-size:.58rem; color:rgba(255,255,255,.22); letter-spacing:.08em; margin-top:.1rem; }
+    .spotted-card-text { font-size:.88rem; color:var(--muted); line-height:1.7; white-space:pre-wrap; margin-bottom:1rem; }
+    .spotted-replies { border-top:1px solid rgba(255,255,255,.05); padding-top:.85rem; display:flex; flex-direction:column; gap:.6rem; }
+    .spotted-reply { display:flex; gap:.65rem; align-items:flex-start; }
+    .reply-avatar { width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--orange2)); display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:700; color:#000; flex-shrink:0; overflow:hidden; }
+    .reply-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .reply-anon { width:26px; height:26px; border-radius:50%; background:#222; display:flex; align-items:center; justify-content:center; font-size:.7rem; flex-shrink:0; border:1px solid rgba(255,255,255,.08); }
+    .reply-body { flex:1; background:var(--s2); border-radius:10px; padding:.6rem .85rem; }
+    .reply-name { font-size:.6rem; font-weight:600; color:var(--orange); margin-bottom:.25rem; display:flex; align-items:center; justify-content:space-between; }
+    .reply-text { font-size:.78rem; color:var(--muted); line-height:1.6; white-space:pre-wrap; }
+    .reply-time { font-size:.55rem; color:rgba(255,255,255,.18); margin-top:.25rem; }
+    .reply-compose { display:flex; gap:.6rem; align-items:flex-end; margin-top:.7rem; }
+    .reply-compose textarea { flex:1; background:var(--s2); border:1px solid var(--border2); border-radius:10px; color:var(--white); font-family:'Poppins',sans-serif; font-size:.8rem; padding:.55rem .85rem; outline:none; resize:none; transition:border-color .2s; line-height:1.5; }
+    .reply-compose textarea:focus { border-color:var(--orange); }
+    .reply-compose textarea::placeholder { color:rgba(255,255,255,.2); }
+    .btn-reply-send { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:8px; padding:.52rem .9rem; cursor:pointer; transition:background .22s; white-space:nowrap; flex-shrink:0; }
+    .btn-reply-send:hover { background:var(--orange2); }
+    .btn-show-reply { font-family:'Poppins',sans-serif; font-size:.62rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; background:none; color:var(--orange); border:none; cursor:pointer; padding:.3rem 0; }
+    .empty-state { text-align:center; padding:5rem 2rem; }
+    .empty-icon { font-size:2.5rem; margin-bottom:1rem; opacity:.18; }
+    .empty-state p { font-size:.72rem; color:rgba(255,255,255,.18); letter-spacing:.2em; text-transform:uppercase; }
+    footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.18); }
+    footer b { color:var(--orange); opacity:.5; font-weight:400; margin:0 .5rem; }
+    @media (max-width:580px) { header nav a { font-size:.55rem; letter-spacing:.1em; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">ASTRA</a>
+  <nav><a href="index.html">← Home</a></nav>
+</header>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Community</div>
+  <h1>ASTRA<br><em>SPOTTED</em></h1>
+  <p>Scrivi uno spotted per ogni evento — visibile o anonimo, tu scegli.</p>
+</section>
+
+<div class="wrap">
+
+  <!-- Non loggato -->
+  <div class="login-required" id="spotted-login-req" style="display:none;">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">👀</div>
+    <h3>Accedi per lo Spotted</h3>
+    <p>Devi essere loggato per leggere e pubblicare post nello Spotted.</p>
+  </div>
+
+  <!-- Lista eventi -->
+  <div id="spotted-eventi-grid" style="display:none;">
+    <div class="eventi-grid" id="eventi-grid-inner">
+      <div class="empty-state"><div class="empty-icon">👀</div><p>Caricamento eventi…</p></div>
+    </div>
+  </div>
+
+  <!-- Vista spotted di un evento -->
+  <div id="spotted-evento-view" style="display:none;">
+    <button class="btn-back" onclick="backToList()">← Tutti gli eventi</button>
+    <div class="evento-title" id="spotted-evento-nome"></div>
+    <div class="spotted-compose">
+      <div class="spotted-compose-top">
+        <div class="spotted-avatar" id="compose-avatar">?</div>
+        <div class="spotted-who">Pubblica come <strong id="compose-name">–</strong></div>
+      </div>
+      <textarea class="spotted-textarea" id="spotted-text" rows="3" maxlength="400" placeholder="Scrivi il tuo spotted… 👀" oninput="updateCharCount()"></textarea>
+      <div style="font-size:.62rem;color:rgba(255,255,255,.25);margin-top:.4rem;line-height:1.5;">💡 Puoi pubblicare uno spotted ogni <strong style="color:rgba(255,255,255,.4);">10 minuti</strong> e rispondere ogni <strong style="color:rgba(255,255,255,.4);">1 minuto</strong>.</div>
+      <div id="spotted-cooldown-msg" style="display:none;font-size:.68rem;color:#F6AD55;margin-top:.4rem;"></div>
+      <div class="spotted-footer">
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <label class="spotted-anon-toggle">
+            <div class="sw-sm"><input type="checkbox" id="spotted-anon"/><span class="sw-sm-track"></span></div>
+            <span class="spotted-anon-label">🕵️ Anonimo</span>
+          </label>
+          <span class="char-count"><span id="char-count">0</span>/400</span>
+        </div>
+        <button class="btn-spotted-send" id="btn-spotted-send" onclick="pubblicaSpotted()">Pubblica ✦</button>
+      </div>
+    </div>
+    <div class="spotted-list" id="spotted-list"></div>
+  </div>
+
+</div>
+
+<footer>© 2026 Astra Events <b>✦</b> Spotted <b>✦</b> Roma, Italia</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  const sessRole   = sessionStorage.getItem('astra_role') || (sessionStorage.getItem('astra_admin')==='1'?'admin':null);
+  const sessUser   = sessionStorage.getItem('astra_user');
+  const lsUser     = localStorage.getItem('astra_rewards_user');
+  const loggedUser = sessUser || lsUser || null;
+  const isStaff    = sessRole === 'admin' || sessRole === 'pr';
+
+  let spUserData = null;
+  let currentEvId = null;
+  let spUnsub = null;
+
+  const COOLDOWN_SPOTTED = 10 * 60 * 1000;
+  const COOLDOWN_REPLY   =  1 * 60 * 1000;
+
+  function getRem(key, cd) { const last=parseInt(localStorage.getItem(key)||'0'); const diff=cd-(Date.now()-last); return diff>0?diff:0; }
+  function fmtRem(ms) { const sec=Math.ceil(ms/1000); return sec>=60?`${Math.ceil(sec/60)} minut${Math.ceil(sec/60)===1?'o':'i'}`:`${sec} second${sec===1?'o':'i'}`; }
+  function fmtTs(ts) { return new Date(ts).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+  function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  async function init() {
+    if (!loggedUser) { document.getElementById('spotted-login-req').style.display='block'; return; }
+    try {
+      const col  = isStaff ? 'utenti' : 'utentiAstra';
+      const snap = await db.collection(col).doc(loggedUser).get();
+      if (snap.exists) {
+        spUserData = snap.data();
+        const initials = ((spUserData.nome?.[0]||'')+(spUserData.cognome?.[0]||'')).toUpperCase()||'?';
+        const av = document.getElementById('compose-avatar');
+        av.innerHTML = spUserData.fotoUrl?`<img src="${spUserData.fotoUrl}"/>`:initials;
+        const displayName = spUserData.alias || (spUserData.nome+(spUserData.cognome?' '+spUserData.cognome:''));
+        document.getElementById('compose-name').textContent = displayName;
+      }
+    } catch(e) { console.warn(e); }
+    document.getElementById('spotted-eventi-grid').style.display = 'block';
+    loadEventi();
+  }
+
+  function loadEventi() {
+    db.collection('eventi').onSnapshot(snap => {
+      const now = Date.now();
+      const evs = snap.docs.filter(d=>!d.data().publishAt||d.data().publishAt<=now).map(d=>({id:d.id,...d.data()})).sort((a,b)=>new Date(b.date)-new Date(a.date));
+      const grid = document.getElementById('eventi-grid-inner');
+      grid.innerHTML = '';
+      if (!evs.length) { grid.innerHTML='<div class="empty-state"><div class="empty-icon">👀</div><p>Nessun evento disponibile</p></div>'; return; }
+      evs.forEach(ev => {
+        const f = document.createElement('div');
+        f.className = 'ev-folder';
+        f.innerHTML = `<div class="ev-folder-hdr"><div class="ev-folder-icon">👀</div><div class="ev-folder-info"><div class="ev-folder-name">${ev.name}</div><div class="ev-folder-sub">Spotted evento</div></div><div class="ev-folder-arrow">›</div></div>`;
+        f.onclick = () => openEvento(ev.id, ev.name);
+        grid.appendChild(f);
+      });
+    });
+  }
+
+  function openEvento(evId, evName) {
+    currentEvId = evId;
+    document.getElementById('spotted-eventi-grid').style.display='none';
+    document.getElementById('spotted-evento-view').style.display='block';
+    document.getElementById('spotted-evento-nome').textContent=evName;
+    document.getElementById('spotted-list').innerHTML='<div class="empty-state"><div class="empty-icon">👀</div><p>Caricamento…</p></div>';
+    document.getElementById('spotted-text').value='';
+    document.getElementById('char-count').textContent='0';
+    loadFeed(evId);
+  }
+
+  function backToList() {
+    if (spUnsub) { spUnsub(); spUnsub=null; }
+    currentEvId=null;
+    document.getElementById('spotted-evento-view').style.display='none';
+    document.getElementById('spotted-eventi-grid').style.display='block';
+  }
+
+  function loadFeed(evId) {
+    if (spUnsub) spUnsub();
+    spUnsub = db.collection('spotted').where('eventoId','==',evId).onSnapshot(snap => {
+      const list = document.getElementById('spotted-list');
+      if (snap.empty) { list.innerHTML='<div class="empty-state"><div class="empty-icon">👀</div><p>Nessuno spotted ancora — sii il primo!</p></div>'; return; }
+      const docs = snap.docs.slice().sort((a,b)=>(b.data().ts||0)-(a.data().ts||0));
+      list.innerHTML='';
+      docs.forEach((doc,i)=>list.appendChild(buildCard(doc.id,doc.data(),i)));
+    }, ()=>{ document.getElementById('spotted-list').innerHTML='<div class="empty-state"><div class="empty-icon">⚠️</div><p>Errore caricamento</p></div>'; });
+  }
+
+  function updateCharCount() {
+    const len=document.getElementById('spotted-text').value.length;
+    document.getElementById('char-count').textContent=len;
+    document.getElementById('btn-spotted-send').disabled=len===0;
+  }
+
+  async function pubblicaSpotted() {
+    const text=document.getElementById('spotted-text').value.trim();
+    const anonimo=document.getElementById('spotted-anon').checked;
+    if (!text||!loggedUser||!currentEvId) return;
+    const key=`sp_last_${loggedUser}`;
+    const rem=getRem(key,COOLDOWN_SPOTTED);
+    if (rem>0) {
+      const el=document.getElementById('spotted-cooldown-msg');
+      el.textContent=`⏳ Aspetta ancora ${fmtRem(rem)} prima di pubblicare.`;
+      el.style.display='block';
+      const t=setInterval(()=>{ const r=getRem(key,COOLDOWN_SPOTTED); if(r<=0){el.style.display='none';clearInterval(t);}else el.textContent=`⏳ Aspetta ancora ${fmtRem(r)} prima di pubblicare.`; },1000);
+      return;
+    }
+    const btn=document.getElementById('btn-spotted-send');
+    btn.disabled=true; btn.textContent='Invio…';
+    document.getElementById('spotted-cooldown-msg').style.display='none';
+    const u=spUserData||{};
+    const displayNome = u.alias || u.nome || loggedUser;
+    const displayCognome = u.alias ? '' : (u.cognome||'');
+    try {
+      await db.collection('spotted').add({ eventoId:currentEvId, testo:text, anonimo, username:loggedUser, nome:displayNome, cognome:displayCognome, fotoUrl:anonimo?'':(u.fotoUrl||''), ruolo:isStaff?sessRole:null, risposte:[], ts:Date.now() });
+      localStorage.setItem(key,Date.now().toString());
+      document.getElementById('spotted-text').value='';
+      document.getElementById('char-count').textContent='0';
+    } catch(e) { console.error(e); }
+    btn.disabled=false; btn.textContent='Pubblica ✦';
+  }
+
+  function buildCard(id, p, i) {
+    const card=document.createElement('div');
+    card.className='spotted-card';
+    card.style.animationDelay=i*0.05+'s';
+    const avatarHtml=p.anonimo?`<div class="spotted-card-anon">🕵️</div>`:`<div class="spotted-card-avatar">${p.fotoUrl?`<img src="${p.fotoUrl}"/>`:((p.nome?.[0]||'')+(p.cognome?.[0]||'')).toUpperCase()||'?'}</div>`;
+    let roleBadge='';
+    if (!p.anonimo&&p.ruolo==='admin') roleBadge=`<span style="font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,107,0,.15);color:var(--orange);border:1px solid rgba(255,107,0,.3);border-radius:6px;padding:.1rem .4rem;margin-left:.35rem;">Admin</span>`;
+    if (!p.anonimo&&p.ruolo==='pr')    roleBadge=`<span style="font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(99,179,237,.12);color:#63B3ED;border:1px solid rgba(99,179,237,.3);border-radius:6px;padding:.1rem .4rem;margin-left:.35rem;">PR</span>`;
+    const displayName=p.anonimo?'Anonimo':(p.nome+(p.cognome?' '+p.cognome:''));
+    const risposte=p.risposte||[];
+    const canDelete = isStaff || p.username === loggedUser;
+    const delBtn=canDelete?`<button onclick="eliminaSpotted('${id}')" style="font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:rgba(252,129,129,.08);color:#FC8181;border:1px solid rgba(252,129,129,.25);border-radius:7px;padding:.25rem .6rem;cursor:pointer;flex-shrink:0;">✕ Elimina</button>`:'';
+    card.innerHTML=`
+      <div class="spotted-card-header">
+        ${avatarHtml}
+        <div class="spotted-card-meta" style="flex:1;min-width:0;">
+          <div class="spotted-card-name">${displayName}${roleBadge}</div>
+          <div class="spotted-card-time">${fmtTs(p.ts)}</div>
+        </div>
+        ${delBtn}
+      </div>
+      <div class="spotted-card-text">${escHtml(p.testo)}</div>
+      <div class="spotted-replies" id="replies-${id}">
+        ${risposte.map((r,ri)=>buildReplyHtml(r,id,ri)).join('')}
+      </div>
+      ${loggedUser?`
+        <div class="reply-compose" id="reply-compose-${id}" style="display:none;">
+          <div style="display:flex;flex-direction:column;gap:.5rem;flex:1;">
+            <textarea rows="1" placeholder="Rispondi…" maxlength="280" id="reply-text-${id}" oninput="autoResize(this)"></textarea>
+            <label class="spotted-anon-toggle">
+              <div class="sw-sm"><input type="checkbox" id="reply-anon-${id}"/><span class="sw-sm-track"></span></div>
+              <span class="spotted-anon-label" style="font-size:.62rem;">🕵️ Rispondi in anonimo</span>
+            </label>
+          </div>
+          <button class="btn-reply-send" onclick="pubblicaRisposta('${id}')">Invia</button>
+        </div>
+        <button class="btn-show-reply" onclick="toggleReplyBox('${id}')">💬 Rispondi</button>
+      `:''}`;
+    return card;
+  }
+
+  function buildReplyHtml(r, postId, ri) {
+    const av=r.anonimo?`<div class="reply-anon">🕵️</div>`:`<div class="reply-avatar">${r.fotoUrl?`<img src="${r.fotoUrl}"/>`:((r.nome?.[0]||'')+(r.cognome?.[0]||'')).toUpperCase()||'?'}</div>`;
+    const name=r.anonimo?'Anonimo':(r.nome+(r.cognome?' '+r.cognome:''));
+    const canDeleteReply = (isStaff || r.username === loggedUser) && postId !== undefined;
+    const delBtn=canDeleteReply?`<button onclick="eliminaRisposta('${postId}',${ri})" style="font-family:'Poppins',sans-serif;font-size:.52rem;font-weight:600;background:rgba(252,129,129,.08);color:#FC8181;border:1px solid rgba(252,129,129,.2);border-radius:6px;padding:.18rem .5rem;cursor:pointer;">✕</button>`:'';
+    return `<div class="spotted-reply">${av}<div class="reply-body"><div class="reply-name"><span>${name}</span>${delBtn}</div><div class="reply-text">${escHtml(r.testo)}</div><div class="reply-time">${fmtTs(r.ts)}</div></div></div>`;
+  }
+
+  function toggleReplyBox(id) { const box=document.getElementById('reply-compose-'+id); if(box) box.style.display=box.style.display==='none'?'flex':'none'; }
+  function autoResize(el) { el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+
+  async function pubblicaRisposta(postId) {
+    if (!loggedUser) return;
+    const key=`reply_last_${loggedUser}`;
+    const rem=getRem(key,COOLDOWN_REPLY);
+    if (rem>0) {
+      const msgId=`reply-cooldown-${postId}`;
+      let msgEl=document.getElementById(msgId);
+      if (!msgEl) { msgEl=document.createElement('div'); msgEl.id=msgId; msgEl.style.cssText='font-size:.65rem;color:#F6AD55;margin-top:.4rem;'; document.getElementById('reply-compose-'+postId)?.appendChild(msgEl); }
+      msgEl.textContent=`⏳ Aspetta ancora ${fmtRem(rem)} prima di rispondere.`;
+      const t=setInterval(()=>{ const r=getRem(key,COOLDOWN_REPLY); if(r<=0){msgEl.textContent='';clearInterval(t);}else msgEl.textContent=`⏳ Aspetta ancora ${fmtRem(r)} prima di rispondere.`; },1000);
+      return;
+    }
+    const textEl=document.getElementById('reply-text-'+postId);
+    const anonEl=document.getElementById('reply-anon-'+postId);
+    const text=textEl.value.trim();
+    const anonimo=anonEl?anonEl.checked:false;
+    if (!text) return;
+    const u=spUserData||{};
+    const replyNome = u.alias || u.nome || loggedUser;
+    const replyCognome = u.alias ? '' : (u.cognome||'');
+    const risposta={ testo:text, anonimo, username:loggedUser, nome:replyNome, cognome:replyCognome, fotoUrl:anonimo?'':(u.fotoUrl||''), ruolo:isStaff?sessRole:null, ts:Date.now() };
+    const ref=db.collection('spotted').doc(postId);
+    const snap=await ref.get();
+    if (!snap.exists) return;
+    await ref.update({ risposte:[...(snap.data().risposte||[]),risposta] });
+    localStorage.setItem(key,Date.now().toString());
+    textEl.value=''; textEl.style.height='auto';
+    document.getElementById('reply-compose-'+postId).style.display='none';
+  }
+
+  async function eliminaSpotted(postId) {
+    if (!confirm('Eliminare questo spotted?')) return;
+    try {
+      const snap = await db.collection('spotted').doc(postId).get();
+      if (!snap.exists) return;
+      const canDelete = isStaff || snap.data().username === loggedUser;
+      if (!canDelete) return;
+      await db.collection('spotted').doc(postId).delete();
+    } catch(e) { console.error(e); }
+  }
+
+  async function eliminaRisposta(postId, ri) {
+    if (!confirm('Eliminare questa risposta?')) return;
+    try {
+      const ref  = db.collection('spotted').doc(postId);
+      const snap = await ref.get();
+      if (!snap.exists) return;
+      const risposte = [...(snap.data().risposte||[])];
+      const canDelete = isStaff || risposte[ri]?.username === loggedUser;
+      if (!canDelete) return;
+      risposte.splice(ri, 1);
+      await ref.update({ risposte });
+    } catch(e) { console.error(e); }
+  }
+
+  init();
+</script>
+</body>
+</html>

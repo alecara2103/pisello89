@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Le Mie Statistiche — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818; --s3: #222222;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.4);
+      --green: #68D391; --blue: #63B3ED; --red: #FC8181;
+      --purple: #A78BFA; --yellow: #F6E05E;
+    }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; padding-top: 48px; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background: radial-gradient(ellipse at 20% 10%, rgba(255,107,0,.06) 0%, transparent 55%); }
+
+    /* ── TOPBAR ── */
+    .topbar { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:.8rem 1.2rem; background:rgba(10,10,10,.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border2); }
+    .topbar-left { display:flex; align-items:center; gap:.8rem; }
+    .logo-txt { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:.1em; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .back-btn { font-size:.55rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.25); padding:.28rem .7rem; border-radius:99px; transition:background .2s; white-space:nowrap; }
+    .back-btn:hover { background:rgba(255,107,0,.2); }
+    .btn-exit { font-family:'Poppins',sans-serif; font-size:.55rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid var(--border2); border-radius:8px; padding:.28rem .7rem; cursor:pointer; transition:color .2s; }
+    .btn-exit:hover { color:var(--white); }
+
+    /* ── HERO ── */
+    .hero { position:relative; z-index:1; text-align:center; padding:5.5rem 1.5rem 1.5rem; }
+    .pill { display:inline-flex; align-items:center; gap:.45rem; font-size:.58rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.28rem .9rem; border-radius:99px; margin-bottom:1rem; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,8vw,5rem); letter-spacing:.04em; line-height:.9; margin-bottom:.5rem; }
+    .hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-sub { font-size:.8rem; color:var(--muted); }
+
+    /* ── TABS ── */
+    .tabs-wrap { position:relative; z-index:1; padding:.8rem clamp(1rem,4vw,2.5rem) 0; display:flex; justify-content:center; }
+    .tabs { display:inline-flex; background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:.3rem; gap:.3rem; }
+    .tab { font-family:'Poppins',sans-serif; font-size:.68rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.55rem 1.2rem; border-radius:10px; cursor:pointer; transition:background .22s,color .22s; white-space:nowrap; }
+    .tab.active { background:var(--orange); color:#000; font-weight:600; }
+    .tab:not(.active):hover { background:rgba(255,107,0,.1); color:var(--orange); }
+
+    /* ── PAGE ── */
+    .page { position:relative; z-index:1; padding:1.5rem clamp(1rem,4vw,2.5rem) 5rem; max-width:900px; margin:0 auto; }
+
+    /* ── GLOBAL BANNER ── */
+    .global-banner { background:var(--s1); border:1px solid var(--border); border-radius:18px; padding:1.4rem 1.5rem; margin-bottom:1.5rem; }
+    .gb-label { font-size:.58rem; font-weight:600; letter-spacing:.24em; text-transform:uppercase; color:var(--orange); margin-bottom:1rem; }
+    .kpi-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.75rem; }
+    @media (min-width:600px) { .kpi-grid { grid-template-columns:repeat(3,1fr); } }
+    @media (min-width:900px) { .kpi-grid { grid-template-columns:repeat(6,1fr); } }
+    .kpi { background:var(--s2); border:1px solid var(--border2); border-radius:12px; padding:.85rem .9rem; text-align:center; }
+    .kpi-val { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:.04em; line-height:1; }
+    .kpi-name { font-size:.52rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-top:.2rem; }
+    .kpi-sub { font-size:.55rem; color:var(--muted); margin-top:.15rem; }
+    .c-orange { color:var(--orange); }
+    .c-green  { color:var(--green); }
+    .c-blue   { color:var(--blue); }
+    .c-red    { color:var(--red); }
+    .c-purple { color:var(--purple); }
+    .c-yellow { color:var(--yellow); }
+
+    /* ── EVENT FOLDERS ── */
+    .event-folder { background:var(--s1); border:1px solid var(--border2); border-radius:16px; overflow:hidden; margin-bottom:.8rem; transition:border-color .25s; }
+    .event-folder.open { border-color:rgba(255,107,0,.35); }
+
+    .folder-header { display:flex; align-items:center; gap:1rem; padding:1rem 1.3rem; cursor:pointer; user-select:none; transition:background .2s; }
+    .folder-header:hover { background:rgba(255,255,255,.02); }
+    .folder-icon { font-size:1.2rem; flex-shrink:0; }
+    .folder-info { flex:1; min-width:0; }
+    .folder-name { font-size:.95rem; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .folder-date { font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); margin-top:.1rem; }
+    .folder-badge { font-size:.6rem; font-weight:600; font-family:'Bebas Neue',sans-serif; letter-spacing:.06em; color:var(--green); background:rgba(104,211,145,.1); border:1px solid rgba(104,211,145,.25); border-radius:8px; padding:.2rem .55rem; flex-shrink:0; }
+    .folder-badge.zero { color:var(--muted); background:rgba(255,255,255,.04); border-color:var(--border2); }
+    .folder-arrow { font-size:.85rem; color:var(--muted); transition:transform .25s; flex-shrink:0; }
+    .event-folder.open .folder-arrow { transform:rotate(90deg); }
+
+    /* ── STATS PANEL ── */
+    .stats-panel { display:none; border-top:1px solid var(--border2); padding:1.2rem 1.3rem; background:var(--s3); }
+    .event-folder.open .stats-panel { display:block; }
+
+    .mini-kpi-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.6rem; margin-bottom:1.1rem; }
+    @media (min-width:500px) { .mini-kpi-grid { grid-template-columns:repeat(3,1fr); } }
+    .mini-kpi { background:var(--s2); border:1px solid var(--border2); border-radius:10px; padding:.75rem .85rem; }
+    .mini-kpi-val { font-family:'Bebas Neue',sans-serif; font-size:1.65rem; letter-spacing:.04em; line-height:1; }
+    .mini-kpi-name { font-size:.5rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-top:.15rem; }
+    .mini-kpi-sub { font-size:.52rem; color:var(--muted); margin-top:.1rem; }
+
+    .detail-sec { margin-top:1rem; }
+    .detail-title { font-size:.58rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); margin-bottom:.5rem; }
+    .detail-row { display:flex; justify-content:space-between; align-items:center; font-size:.72rem; color:var(--muted); padding:.38rem 0; border-bottom:1px solid rgba(255,255,255,.04); gap:1rem; }
+    .detail-row:last-child { border-bottom:none; }
+    .detail-row strong { color:var(--white); font-weight:500; white-space:nowrap; }
+    .detail-row .val { white-space:nowrap; }
+
+    .no-data { text-align:center; padding:1.5rem; font-size:.68rem; color:rgba(255,255,255,.18); letter-spacing:.18em; text-transform:uppercase; }
+    .loading { text-align:center; padding:1.2rem; font-size:.7rem; color:var(--muted); }
+
+    .empty-state { text-align:center; padding:4rem 1.5rem; font-size:.72rem; color:rgba(255,255,255,.18); letter-spacing:.2em; text-transform:uppercase; }
+    .tot-event-name { font-size:.88rem; font-weight:600; color:var(--white); margin-bottom:.85rem; line-height:1.3; }
+    .tot-kpis { display:grid; grid-template-columns:repeat(auto-fill, minmax(72px,1fr)); gap:.5rem; }
+    .tot-kpi { background:var(--s2); border:1px solid var(--border2); border-radius:10px; padding:.6rem .5rem; text-align:center; }
+    .tot-kpi-accent { border-color:rgba(104,211,145,.25); background:rgba(104,211,145,.06); }
+    .tot-val { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:.04em; line-height:1; }
+    .tot-lbl { font-size:.5rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:.2rem; }
+    footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.15); }
+    footer b { color:var(--orange); opacity:.4; font-weight:400; margin:0 .5rem; }
+  
+    /* ── Topbar nav ── */
+    .topbar-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,107,0,.18);}
+    .topbar-nav-links{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .topbar-nav-links a{font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;transition:background .2s;white-space:nowrap;}
+    .topbar-nav-links a:hover{background:rgba(255,107,0,.2);}
+    .topbar-nav-pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;white-space:nowrap;}
+    .topbar-nav-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:tnblink 2s ease infinite;flex-shrink:0;}
+    @keyframes tnblink{0%,100%{opacity:1}50%{opacity:.25}}
+  </style>
+</head>
+<body>
+<div class="topbar-nav">
+  <div class="topbar-nav-links"><a href="index.html">← Home</a><a href="DashboardPR.html">← Dashboard PR</a></div>
+  <div style="display:flex;align-items:center;gap:.5rem;">
+    <div class="topbar-nav-pill"><span class="topbar-nav-dot"></span>Area PR</div>
+    <button class="btn-exit" onclick="logout()">Esci</button>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Area PR</div>
+  <h1>LE MIE<br><em>STATISTICHE</em></h1>
+  <div class="hero-sub" id="hero-sub">Caricamento…</div>
+</section>
+
+
+
+<div class="page">
+  <!-- TAB EVENTI -->
+  <div id="tab-eventi">
+    <!-- Global summary at top -->
+    <div class="global-banner" id="global-banner" style="display:none;">
+      <div class="gb-label">✦ Totale su tutti gli eventi</div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+    </div>
+    <div id="events-list"><div class="loading">Caricamento eventi…</div></div>
+  </div>
+
+  <!-- TAB GLOBALE -->
+<footer>© 2026 Astra Events <b>✦</b> Area PR <b>✦</b> Le mie statistiche</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  /* ── Auth: solo PR ────────────────────────────────────── */
+  const role  = sessionStorage.getItem('astra_role');
+  const prId  = sessionStorage.getItem('astra_user');  // username = doc id in Firestore
+  const prAlias = sessionStorage.getItem('astra_alias') || localStorage.getItem('ls_astra_alias') || '';
+  const prNome = prAlias || sessionStorage.getItem('astra_nome') || prId || 'PR';
+
+  if (!role || !prId) { window.location.href = 'index.html'; }
+  // PR puro → accesso diretto
+  // Admin → verifica Firestore sotto
+
+  document.getElementById('hero-sub').textContent = 'Ciao, ' + prNome + ' 👋';
+
+  function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+
+  /* ── Firebase ─────────────────────────────────────────── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  /* ── Carica livello PR + verifica accesso ─────────────── */
+  async function verificaAccesso() {
+    // Prova prima per doc id (username)
+    let snap = await db.collection('utenti').doc(prId).get();
+
+    // Se non trovato, cerca per campo username
+    if (!snap.exists) {
+      const q = await db.collection('utenti').where('username', '==', prId).limit(1).get();
+      snap = q.empty ? null : q.docs[0];
+    }
+
+    if (!snap || !snap.exists) {
+      // PR non trovato in Firestore — lascia comunque accedere se ha role=pr
+      if (role === 'pr') return; // accesso garantito anche senza doc
+      window.location.href = 'index.html';
+      return;
+    }
+
+    const u = snap.data();
+    prLevel = u.level || 1;
+
+    // Se admin puro senza ruolo PR → pannello admin
+    if (role === 'admin') {
+      const hasPR = (u.extraRoles || []).includes('pr') || u.role === 'pr';
+      if (!hasPR) { window.location.href = 'PannelloAdmin.html'; }
+    }
+    // PR puro o admin con PR → accesso garantito
+  }
+  verificaAccesso();
+
+  /* ── State ────────────────────────────────────────────── */
+  let events = [];
+  let statsCache = {}; // evId -> stats
+  let currentTab = 'eventi';
+  let globalComputed = false;
+  let prLevel = 1; // loaded from Firestore
+
+  /* ── Helpers ──────────────────────────────────────────── */
+  function fmtDate(s) {
+    if (!s) return '';
+    return new Date(s + 'T00:00:00').toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  /* ── Compute stats for this PR in one event ───────────── */
+  async function computeStats(evId) {
+    if (statsCache[evId]) return statsCache[evId];
+
+    const [bDoc, sDoc, rDoc] = await Promise.all([
+      db.collection('consegne').doc(evId).collection('biglietti').doc(prId).get(),
+      db.collection('consegne').doc(evId).collection('scarico').doc(prId).get(),
+      db.collection('consegne').doc(evId).collection('reso').doc(prId).get()
+    ]);
+
+    const bEntries = bDoc.exists ? (bDoc.data().entries || []) : [];
+    const sEntries = sDoc.exists ? (sDoc.data().entries || []) : [];
+    const rEntries = rDoc.exists ? (rDoc.data().entries || []) : [];
+
+    let consU=0, consD=0, consTot=0;
+    bEntries.forEach(e => {
+      if (e.genere) { consU += e.quantitaUomo||0; consD += e.quantitaDonna||0; }
+      else { consTot += e.quantita||0; }
+    });
+    const totalCons = consU + consD + consTot;
+    const totalResi = rEntries.reduce((s,e) => s+(e.quantita||0), 0);
+    const nette = totalCons - totalResi;
+
+    let scarU=0, scarD=0, scarTot=0, persone=0, incasso=0;
+    sEntries.forEach(e => {
+      if (e.genere) { scarU += e.prevUomo||0; scarD += e.prevDonna||0; }
+      else { scarTot += e.prevTot||0; }
+      if (e.hasTavolo) persone += e.persone||0;
+      if (e.totaleEuro != null) incasso += e.totaleEuro||0;
+    });
+    const totalScar = scarU + scarD + scarTot;
+    const hasData = bEntries.length > 0 || sEntries.length > 0 || rEntries.length > 0;
+
+    const s = { bEntries, sEntries, rEntries, consU, consD, consTot, totalCons, totalResi, nette, scarU, scarD, scarTot, totalScar, persone, incasso, hasData };
+    statsCache[evId] = s;
+    return s;
+  }
+
+
+  /* ── Calcolo pagamento PR ── */
+  function calcolaPagamento(incasso, livello) {
+    if (!incasso || incasso <= 0) return { importo: 0, pct: 0 };
+    if (livello === 0 || livello === '0') return { importo: 0, pct: 0 };
+    const scalette = {
+      1: [[300, 10], [600, 12.5], [1200, 15], [2400, 17.5], [3800, 20], [Infinity, 22.5]],
+      2: [[300, 12.5], [600, 15], [1200, 17.5], [2400, 20], [3800, 22.5], [Infinity, 25]],
+      3: [[300, 15], [600, 17.5], [1200, 20], [2400, 22.5], [3800, 25], [Infinity, 27.5]]
+    };
+    const lv = scalette[livello] || scalette[1];
+    let pct = lv[lv.length - 1][1];
+    for (const [soglia, p] of lv) {
+      if (incasso <= soglia) { pct = p; break; }
+    }
+    return { importo: +((incasso * pct / 100).toFixed(2)), pct };
+  }
+
+  function calcolaOmaggi(prevScaricate, livello) {
+    if (livello === 0 || livello === '0') return 0;
+    if (!prevScaricate || prevScaricate <= 0) return 0;
+    const raw = prevScaricate / 15;
+    const decimale = raw - Math.floor(raw);
+    return decimale > 0.7 ? Math.ceil(raw) : Math.floor(raw);
+  }
+
+  /* ── Build stats panel HTML ───────────────────────────── */
+  function buildStatsPanel(s) {
+    if (!s.hasData) return '<div class="no-data">Nessun dato per questo evento</div>';
+
+    const consDetails = s.bEntries.map((e,i) => {
+      const qty = e.genere ? (e.quantitaUomo||0) + ' U / ' + (e.quantitaDonna||0) + ' D' : (e.quantita||0) + ' prev';
+      return `<div class="detail-row"><strong>Consegna ${i+1}</strong><span class="val">${qty}${e.matricola ? ' · mat: ' + e.matricola : ''}</span></div>`;
+    }).join('');
+
+    const scarDetails = s.sEntries.map((e,i) => {
+      const qty = e.genere ? (e.prevUomo||0) + ' U / ' + (e.prevDonna||0) + ' D' : (e.prevTot||0) + ' prev';
+      const tavInfo = e.hasTavolo ? ' · 🍾 ' + (e.persone||0) + ' pers' : '';
+      const moneyInfo = e.totaleEuro != null ? ' · 💶 €' + e.totaleEuro : '';
+      return `<div class="detail-row"><strong>Scarico ${i+1}</strong><span class="val">${qty}${tavInfo}${moneyInfo}</span></div>`;
+    }).join('');
+
+    const resiDetails = s.rEntries.map((e,i) => {
+      return `<div class="detail-row"><strong>Reso ${i+1}</strong><span class="val" style="color:var(--red)">-${e.quantita||0} prev${e.note ? ' · ' + e.note : ''}</span></div>`;
+    }).join('');
+
+    return `
+      <div class="mini-kpi-grid">
+        <div class="mini-kpi">
+          <div class="mini-kpi-val c-orange">${s.totalCons}</div>
+          <div class="mini-kpi-name">Consegnati</div>
+          ${s.consU||s.consD ? `<div class="mini-kpi-sub">${s.consU} U / ${s.consD} D</div>` : ''}
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-kpi-val c-red">${s.totalResi}</div>
+          <div class="mini-kpi-name">Resi</div>
+          <div class="mini-kpi-sub">da sottrarre</div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-kpi-val c-green">${s.nette}</div>
+          <div class="mini-kpi-name">Netti</div>
+          <div class="mini-kpi-sub">cons. − resi</div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-kpi-val c-blue">${s.totalScar}</div>
+          <div class="mini-kpi-name">Scaricati</div>
+          ${s.scarU||s.scarD ? `<div class="mini-kpi-sub">${s.scarU} U / ${s.scarD} D</div>` : ''}
+        </div>
+        ${s.persone ? `<div class="mini-kpi"><div class="mini-kpi-val c-purple">${s.persone}</div><div class="mini-kpi-name">Pers. tavoli</div></div>` : ''}
+        ${s.incasso ? `<div class="mini-kpi"><div class="mini-kpi-val c-yellow">€${s.incasso}</div><div class="mini-kpi-name">Incasso</div></div>` : ''}
+        ${s.incasso > 0 ? (() => { const p = calcolaPagamento(s.incasso, prLevel); return `<div class="mini-kpi" style="border:1px solid rgba(104,211,145,.3)"><div class="mini-kpi-val c-green">€${p.importo}</div><div class="mini-kpi-name">💰 Pagamento</div><div class="mini-kpi-sub">${p.pct}%</div></div>`; })() : ''}
+        ${s.totalScar > 0 ? `<div class="mini-kpi" style="border:1px solid rgba(167,139,250,.25)"><div class="mini-kpi-val" style="color:#A78BFA">${calcolaOmaggi(s.totalScar)}</div><div class="mini-kpi-name">🎁 Omaggi</div><div class="mini-kpi-sub">${s.totalScar}÷15</div></div>` : ''}
+      </div>
+      ${consDetails ? `<div class="detail-sec"><div class="detail-title">🎟 Consegne</div>${consDetails}</div>` : ''}
+      ${scarDetails ? `<div class="detail-sec"><div class="detail-title">📊 Scarico</div>${scarDetails}</div>` : ''}
+      ${resiDetails ? `<div class="detail-sec"><div class="detail-title">↩ Resi</div>${resiDetails}</div>` : ''}
+    `;
+  }
+
+  /* ── Render events list ───────────────────────────────── */
+  async function renderEvents() {
+    const list = document.getElementById('events-list');
+    if (!events.length) { list.innerHTML = '<div class="empty-state">Nessun evento trovato</div>'; return; }
+    list.innerHTML = '';
+
+    // Pre-load all stats to show badges
+    await Promise.all(events.map(ev => computeStats(ev.id)));
+
+    // Update global banner
+    updateGlobalBanner();
+
+    events.forEach(ev => {
+      const s = statsCache[ev.id] || {};
+      const hasData = s.hasData;
+      const nette = s.nette || 0;
+
+      const folder = document.createElement('div');
+      folder.className = 'event-folder';
+
+      folder.innerHTML = `
+        <div class="folder-header">
+          <div class="folder-icon">${hasData ? '📁' : '📂'}</div>
+          <div class="folder-info">
+            <div class="folder-name">${ev.name}</div>
+            <div class="folder-date">${fmtDate(ev.date)}</div>
+          </div>
+          ${hasData ? `<div class="folder-badge ${nette === 0 ? 'zero' : ''}">${nette} netti</div>` : '<div class="folder-badge zero">Nessun dato</div>'}
+          <div class="folder-arrow">›</div>
+        </div>
+        <div class="stats-panel">${buildStatsPanel(s)}</div>`;
+
+      folder.querySelector('.folder-header').addEventListener('click', () => {
+        folder.classList.toggle('open');
+      });
+
+      list.appendChild(folder);
+    });
+  }
+
+  /* ── Global banner (summary totals) ──────────────────── */
+  function updateGlobalBanner() {
+    let totCons=0, totResi=0, totNette=0, totScar=0, totPers=0, totInc=0;
+    let totU_c=0, totD_c=0, totU_s=0, totD_s=0;
+
+    Object.values(statsCache).forEach(s => {
+      totCons  += s.totalCons;
+      totResi  += s.totalResi;
+      totNette += s.nette;
+      totScar  += s.totalScar;
+      totPers  += s.persone;
+      totInc   += s.incasso;
+      totU_c   += s.consU;
+      totD_c   += s.consD;
+      totU_s   += s.scarU;
+      totD_s   += s.scarD;
+    });
+
+    document.getElementById('kpi-grid').innerHTML = `
+      <div class="kpi"><div class="kpi-val c-orange">${totCons}</div><div class="kpi-name">Consegnati</div>${totU_c||totD_c?`<div class="kpi-sub">${totU_c}U / ${totD_c}D</div>`:''}</div>
+      <div class="kpi"><div class="kpi-val c-red">${totResi}</div><div class="kpi-name">Resi</div><div class="kpi-sub">da sottrarre</div></div>
+      <div class="kpi"><div class="kpi-val c-green">${totNette}</div><div class="kpi-name">Netti</div><div class="kpi-sub">cons. − resi</div></div>
+      <div class="kpi"><div class="kpi-val c-blue">${totScar}</div><div class="kpi-name">Scaricati</div>${totU_s||totD_s?`<div class="kpi-sub">${totU_s}U / ${totD_s}D</div>`:''}</div>
+      ${totPers ? `<div class="kpi"><div class="kpi-val c-purple">${totPers}</div><div class="kpi-name">Pers. tavoli</div></div>` : ''}
+      ${totInc  ? `<div class="kpi"><div class="kpi-val c-yellow">€${totInc}</div><div class="kpi-name">Incasso tot.</div></div>` : ''}
+      ${totInc > 0 ? (() => { const p = calcolaPagamento(totInc, prLevel); return `<div class="kpi" style="border:1px solid rgba(104,211,145,.3)"><div class="kpi-val c-green">€${p.importo}</div><div class="kpi-name">💰 Pagamento</div><div class="kpi-sub">${p.pct}% · Lv${prLevel}</div></div>`; })() : ''}
+      ${totScar > 0 ? `<div class="kpi" style="border:1px solid rgba(167,139,250,.25)"><div class="kpi-val" style="color:#A78BFA">${calcolaOmaggi(totScar)}</div><div class="kpi-name">🎁 Omaggi</div><div class="kpi-sub">${totScar}÷15</div></div>` : ''}
+    `;
+    document.getElementById('global-banner').style.display = '';
+  }
+
+  /* ── Tab switch ───────────────────────────────────────── */
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tab-eventi').style.display = '';
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', true));
+  }
+
+  /* ── Init ─────────────────────────────────────────────── */
+  db.collection('eventi').onSnapshot(snap => {
+    const now = Date.now();
+    events = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(ev => !ev.publishAt || ev.publishAt <= now)
+      .sort((a,b) => new Date(b.date) - new Date(a.date));
+    statsCache = {};
+    globalComputed = false;
+    renderEvents();
+  });
+</script>
+</body>
+</html>

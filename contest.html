@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Contest — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --surface: #111111; --surface2: #181818; --surface3: #1a1a1a;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.45);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(255,107,0,.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255,107,0,.04) 0%, transparent 50%);
+    }
+
+    /* ── Header ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem clamp(1.5rem, 5vw, 4rem);
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,10,.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: .1em; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    header nav a { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); text-decoration: none; transition: color .3s; }
+    header nav a:hover { color: var(--white); }
+
+    /* ── Hero ── */
+    .hero { position: relative; z-index: 1; text-align: center; padding: clamp(3.5rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3.5rem); }
+    .pill { display: inline-flex; align-items: center; gap: .5rem; font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); border: 1px solid var(--border); padding: .32rem 1rem; border-radius: 99px; margin-bottom: 1.5rem; }
+    .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 6px var(--orange); animation: blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 9vw, 8rem); letter-spacing: .05em; line-height: .92; margin-bottom: 1.2rem; }
+    .hero h1 em { font-style: normal; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: clamp(.83rem, 1.4vw, 1rem); font-weight: 300; color: var(--muted); max-width: 500px; margin: 0 auto; line-height: 1.72; }
+
+    /* ── Section divider ── */
+    .section-head { position: relative; z-index: 1; display: flex; align-items: center; gap: 1.2rem; padding: 0 clamp(1.5rem, 5vw, 4rem); margin-bottom: 2.5rem; }
+    .section-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-head span { font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); white-space: nowrap; }
+
+    /* ── Main content wrapper ── */
+    .content { position: relative; z-index: 1; padding: 0 clamp(1.5rem, 5vw, 4rem) 6rem; display: flex; flex-direction: column; gap: 3rem; }
+
+    /* ── Contest cards ── */
+    .contest-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      animation: rise .5s ease both;
+      transition: border-color .3s ease, box-shadow .3s ease;
+    }
+    .contest-card:hover { border-color: rgba(255,107,0,.4); box-shadow: 0 12px 48px rgba(255,107,0,.1); }
+    @keyframes rise { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Card top band with image or gradient */
+    .card-banner {
+      width: 100%; height: clamp(140px, 20vw, 220px);
+      object-fit: cover; display: block;
+      background: linear-gradient(135deg, #1a0800, #2d1200);
+      position: relative; overflow: hidden;
+    }
+    .card-banner img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .7; }
+    .card-banner-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Floating prize badge */
+    .prize-badge {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      background: var(--orange); color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(.9rem, 1.4vw, 1.1rem); letter-spacing: .1em;
+      padding: .35rem .9rem; border-radius: 99px;
+      box-shadow: 0 4px 18px rgba(255,107,0,.45);
+    }
+    /* Status badge */
+    .status-badge {
+      position: absolute; top: 1.2rem; left: 1.2rem;
+      font-size: .6rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+      padding: .3rem .8rem; border-radius: 99px; border: 1px solid;
+    }
+    .status-open   { color: #68D391; background: rgba(104,211,145,.1); border-color: rgba(104,211,145,.3); }
+    .status-closed { color: #FC8181; background: rgba(252,129,129,.1); border-color: rgba(252,129,129,.3); }
+    .status-soon   { color: var(--orange2); background: rgba(255,154,60,.1); border-color: rgba(255,154,60,.3); }
+
+    /* Card body */
+    .card-body { padding: 2rem clamp(1.4rem, 3vw, 2.4rem) 2.2rem; }
+
+    .card-meta {
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      margin-bottom: .8rem;
+    }
+    .card-tag { font-size: .62rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); }
+    .card-dot-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,107,0,.4); }
+
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: .04em; line-height: 1; color: var(--white); margin-bottom: 1rem; }
+
+    .card-desc { font-size: .85rem; font-weight: 300; color: var(--muted); line-height: 1.75; margin-bottom: 1.8rem; max-width: 680px; }
+
+    /* Rules list */
+    .rules { margin-bottom: 2rem; }
+    .rules-title { font-size: .62rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--orange); margin-bottom: .9rem; }
+    .rules ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+    .rules ul li {
+      display: flex; align-items: flex-start; gap: .7rem;
+      font-size: .82rem; font-weight: 300; color: var(--muted); line-height: 1.6;
+    }
+    .rules ul li::before { content: '✦'; color: var(--orange); font-size: .65rem; margin-top: .22rem; flex-shrink: 0; }
+
+    /* Prizes row */
+    .prizes { display: flex; flex-wrap: wrap; gap: .7rem; margin-bottom: 2rem; }
+    .prize-chip {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: .5rem .9rem;
+      font-size: .75rem; font-weight: 400; color: var(--white);
+    }
+    .prize-chip span.icon { font-size: 1rem; }
+
+    /* ── Countdown ── */
+    .countdown-wrap {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.6rem clamp(1.2rem, 3vw, 2rem);
+    }
+    .countdown-label { font-size: .62rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem; text-align: center; }
+
+    .countdown-grid { display: flex; justify-content: center; gap: clamp(.6rem, 2vw, 1.5rem); flex-wrap: wrap; }
+
+    .cd-unit { display: flex; flex-direction: column; align-items: center; gap: .4rem; min-width: 60px; }
+
+    .cd-box {
+      position: relative; width: clamp(60px, 9vw, 90px); height: clamp(60px, 9vw, 90px);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    /* Shine line */
+    .cd-box::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,107,0,.4), transparent);
+    }
+    /* Flip line */
+    .cd-box::after {
+      content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px;
+      background: rgba(0,0,0,.5);
+    }
+
+    .cd-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      letter-spacing: .05em; line-height: 1;
+      color: var(--white);
+      transition: transform .15s ease, opacity .15s ease;
+      position: relative; z-index: 1;
+    }
+    .cd-number.flip { transform: scaleY(.6); opacity: .4; }
+
+    .cd-label { font-size: .55rem; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,107,0,.7); }
+
+    /* Separator dots */
+    .cd-sep { display: flex; flex-direction: column; gap: 6px; align-self: center; padding-bottom: 1.4rem; }
+    .cd-sep span { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,107,0,.4); }
+
+    /* Ended state */
+    .cd-ended { text-align: center; padding: 1.2rem; }
+    .cd-ended p { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: .08em; color: rgba(255,255,255,.3); }
+
+    /* CTA button */
+    .card-cta {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: var(--orange); color: #000;
+      font-family: 'Poppins', sans-serif; font-size: .75rem; font-weight: 600;
+      letter-spacing: .16em; text-transform: uppercase; text-decoration: none;
+      border-radius: 10px; padding: .78rem 1.6rem; margin-top: 1.6rem;
+      transition: background .22s, transform .15s;
+      border: none; cursor: pointer;
+      margin-right: 1rem;
+    }
+    .card-cta:hover { background: var(--orange2); }
+    .card-cta:active { transform: scale(.98); }
+    .card-cta.disabled { background: rgba(255,255,255,.08); color: rgba(255,255,255,.3); pointer-events: none; }
+
+    /* ── Empty state ── */
+    .empty { text-align: center; padding: 5rem 2rem; }
+    .empty-icon { font-size: 2.8rem; margin-bottom: 1rem; opacity: .18; }
+    .empty h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: .08em; color: rgba(255,255,255,.22); margin-bottom: .5rem; }
+    .empty p { font-size: .75rem; color: rgba(255,255,255,.18); letter-spacing: .18em; text-transform: uppercase; }
+
+    /* ── Footer ── */
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-size: .62rem; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.18); }
+    footer b { color: var(--orange); opacity: .5; font-weight: 400; margin: 0 .5rem; }
+
+    @media (max-width: 580px) {
+      .cd-sep { display: none; }
+      .countdown-grid { gap: .5rem; }
+    }
+
+    /* ── Admin indicator ── */
+    .admin-indicator {
+      display: none; align-items: center; gap: .5rem;
+      font-size: .6rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--orange); background: rgba(255,107,0,.1);
+      border: 1px solid rgba(255,107,0,.3); padding: .28rem .75rem;
+      border-radius: 99px; cursor: pointer; transition: background .22s;
+    }
+    .admin-indicator:hover { background: rgba(255,107,0,.2); }
+    .admin-indicator.visible { display: flex; }
+
+    /* ── Nav buttons (home / pannello) ── */
+    .nav-back {
+      position: fixed; top: 1.2rem; left: 1.2rem; z-index: 200;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .nav-back a {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-family: 'Poppins', sans-serif; font-size: .6rem;
+      font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+      text-decoration: none; color: var(--orange);
+      background: rgba(255,107,0,.1); border: 1px solid rgba(255,107,0,.3);
+      padding: .28rem .85rem; border-radius: 99px;
+      transition: background .22s, border-color .22s;
+      backdrop-filter: blur(8px);
+    }
+    .nav-back a:hover { background: rgba(255,107,0,.22); border-color: var(--orange); }
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">ASTRA</a>
+  <nav><a href="index.html">← Home</a></nav>
+      <span class="admin-indicator" id="admin-indicator" onclick="adminLogout()" title="Clicca per uscire da admin">⚙ Admin ● <span style="font-size:.55rem;opacity:.7;">Esci</span></span>
+</header>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Premi in palio</div>
+  <h1>I NOSTRI<br><em>CONTEST</em></h1>
+  <p>Partecipa, vinci e vivi l'esperienza Astra. Ingressi omaggio, backstage e molto altro.</p>
+</section>
+
+<div class="section-head"><span>✦ Contest attivi</span></div>
+
+<div class="content" id="contest-container"></div>
+
+<footer>
+  © 2025 Astra Events <b>✦</b> Roma, Italia <b>✦</b> All rights reserved
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  /* ============================================================
+   *  ✦ LISTA CONTEST — ora gestita dal pannello admin ✦
+   *
+   *  Campi disponibili per ogni contest:
+   *
+   *  name        → Titolo del contest                (obbligatorio)
+   *  tag         → Etichetta piccola es. "Instagram"  (opzionale)
+   *  description → Testo descrittivo / intro          (opzionale)
+   *  image       → Percorso immagine banner           (opzionale, lascia "" per placeholder)
+   *
+   *  deadline    → Data e ora di scadenza             (obbligatorio per il countdown)
+   *                Formato: "YYYY-MM-DDTHH:MM:SS"
+   *                Es: "2025-08-01T23:59:00"
+   *
+   *  status      → "open"   = Iscrizioni aperte  (verde)
+   *                "closed" = Contest terminato   (rosso)
+   *                "soon"   = Prossimamente       (arancione)
+   *
+   *  prizes      → Array di premi da mostrare come chip
+   *                [ { icon: "🎟", label: "2 Ingressi Omaggio" }, ... ]
+   *
+   *  rules       → Array di stringhe con le regole
+   *                [ "Segui @astraevents su Instagram", ... ]
+   *
+   *  ctaLabel    → Testo del pulsante CTA            (opzionale, default "Partecipa ora")
+   *  ctaLink     → Link del pulsante CTA             (opzionale, default "#")
+   *                Lascia "" per nascondere il pulsante
+   *
+   *  Gli eventi vengono mostrati nell'ordine in cui li scrivi.
+   * ============================================================ */
+
+  /* ── Rendering ── */
+
+  const timers = [];
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function getTimeLeft(deadline) {
+    const diff = new Date(deadline) - new Date();
+    if (diff <= 0) return null;
+    const s = Math.floor(diff / 1000);
+    return {
+      days:    Math.floor(s / 86400),
+      hours:   Math.floor((s % 86400) / 3600),
+      minutes: Math.floor((s % 3600) / 60),
+      seconds: s % 60
+    };
+  }
+
+  function buildCountdown(contest, index) {
+    const id = `cd-${index}`;
+    const html = `
+      <div class="countdown-wrap" id="wrap-${id}">
+        <div class="countdown-label">⏳ Scadenza contest</div>
+        <div class="countdown-grid" id="${id}">
+          <div class="cd-unit">
+            <div class="cd-box"><span class="cd-number" id="${id}-d">00</span></div>
+            <div class="cd-label">Giorni</div>
+          </div>
+          <div class="cd-sep"><span></span><span></span></div>
+          <div class="cd-unit">
+            <div class="cd-box"><span class="cd-number" id="${id}-h">00</span></div>
+            <div class="cd-label">Ore</div>
+          </div>
+          <div class="cd-sep"><span></span><span></span></div>
+          <div class="cd-unit">
+            <div class="cd-box"><span class="cd-number" id="${id}-m">00</span></div>
+            <div class="cd-label">Minuti</div>
+          </div>
+          <div class="cd-sep"><span></span><span></span></div>
+          <div class="cd-unit">
+            <div class="cd-box"><span class="cd-number" id="${id}-s">00</span></div>
+            <div class="cd-label">Secondi</div>
+          </div>
+        </div>
+      </div>`;
+
+    return { html, id };
+  }
+
+  function startTimer(id, deadline) {
+    let prev = {};
+
+    function tick() {
+      const t = getTimeLeft(deadline);
+
+      if (!t) {
+        const wrap = document.getElementById(`wrap-${id}`);
+        if (wrap) wrap.innerHTML = `<div class="cd-ended"><p>Contest terminato</p></div>`;
+        return;
+      }
+
+      const fields = { d: t.days, h: t.hours, m: t.minutes, s: t.seconds };
+
+      for (const [key, val] of Object.entries(fields)) {
+        const el = document.getElementById(`${id}-${key}`);
+        if (!el) continue;
+        const str = key === 'd' ? String(val) : pad(val);
+        if (str !== prev[key]) {
+          el.classList.add('flip');
+          setTimeout(() => {
+            el.textContent = str;
+            el.classList.remove('flip');
+          }, 150);
+          prev[key] = str;
+        }
+      }
+    }
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    timers.push(interval);
+  }
+
+  function buildCard(contest, index) {
+    const statusMap = {
+      open:   { cls: 'status-open',   label: '● Aperto' },
+      closed: { cls: 'status-closed', label: '● Chiuso' },
+      soon:   { cls: 'status-soon',   label: '● Prossimamente' }
+    };
+    const st = statusMap[contest.status] || statusMap.open;
+
+    /* Banner */
+    const bannerInner = contest.image
+      ? `<img src="${contest.image}" alt="${contest.name}">`
+      : `<div class="card-banner-placeholder">
+           <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+             <path d="M30 4l4 14 14 4-14 4-4 14-4-14-14-4 14-4z" fill="#FF6B00" opacity=".25"/>
+           </svg>
+         </div>`;
+
+    /* Prizes */
+    const prizesHTML = contest.prizes?.length
+      ? `<div class="prizes">${contest.prizes.map(p => `<div class="prize-chip"><span class="icon">${p.icon}</span>${p.label}</div>`).join('')}</div>`
+      : '';
+
+    /* Rules */
+    const rulesHTML = contest.rules?.length
+      ? `<div class="rules">
+           <div class="rules-title">Regole del contest</div>
+           <ul>${contest.rules.map(r => `<li>${r}</li>`).join('')}</ul>
+         </div>`
+      : '';
+
+    /* Countdown */
+    const { html: cdHTML, id: cdId } = buildCountdown(contest, index);
+
+    /* CTA */
+    let ctaHTML = '';
+
+if (contest.cta && contest.cta.length) {
+  ctaHTML = contest.cta.map(btn => `
+    <a class="card-cta ${contest.status === 'closed' ? 'disabled' : ''}"
+       href="${btn.link}"
+       target="_blank"
+       rel="noopener">
+       ${btn.label}
+    </a>
+  `).join('');
+} else if (contest.ctaLink !== '') {
+  ctaHTML = `
+    <a class="card-cta ${contest.status === 'closed' ? 'disabled' : ''}"
+       href="${contest.ctaLink || '#'}"
+       target="_blank"
+       rel="noopener">
+       ${contest.ctaLabel || 'Partecipa ora →'}
+    </a>
+  `;
+}
+
+    const card = document.createElement('div');
+    card.className = 'contest-card';
+    card.style.animationDelay = `${index * 0.1}s`;
+
+    card.innerHTML = `
+      <div class="card-banner" style="position:relative;">
+        ${bannerInner}
+        <div class="status-badge ${st.cls}">${st.label}</div>
+        ${contest.prizes?.[0] ? `<div class="prize-badge">${contest.prizes[0].icon} ${contest.prizes[0].label}</div>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          ${contest.tag ? `<span class="card-tag">${contest.tag}</span><div class="card-dot-sep"></div>` : ''}
+          <span class="card-tag">Contest</span>
+        </div>
+        <h2 class="card-title">${contest.name}</h2>
+        ${contest.description ? `<p class="card-desc">${contest.description}</p>` : ''}
+        ${prizesHTML}
+        ${rulesHTML}
+        ${cdHTML}
+        ${ctaHTML}
+      </div>`;
+
+    return { card, cdId };
+  }
+
+  function render() {
+    const container = document.getElementById('contest-container');
+
+    if (!CONTESTS.length) {
+      container.innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">🏆</div>
+          <h3>Nessun contest attivo</h3>
+          <p>Torna presto — nuovi premi in arrivo</p>
+        </div>`;
+      return;
+    }
+
+    CONTESTS.forEach((contest, i) => {
+      const { card, cdId } = buildCard(contest, i);
+      container.appendChild(card);
+      if (contest.deadline) {
+        setTimeout(() => startTimer(cdId, contest.deadline), 50);
+      }
+    });
+  }
+
+  /* Load contests from Firestore */
+  db.collection('contests').orderBy('ts', 'desc').onSnapshot(function(snap) {
+    // Clear timers
+    timers.forEach(function(t) { clearInterval(t); });
+    timers.length = 0;
+
+    const container = document.getElementById('contest-container');
+    container.innerHTML = '';
+
+    if (snap.empty) {
+      container.innerHTML = \`
+        <div class="empty">
+          <div class="empty-icon">🏆</div>
+          <h3>Nessun contest attivo</h3>
+          <p>Torna presto — nuovi premi in arrivo</p>
+        </div>\`;
+      return;
+    }
+
+    snap.docs.forEach(function(doc, i) {
+      const contest = doc.data();
+      // Normalize: if no cta array but ctaLabel/ctaLink present, build it
+      if (!contest.cta && contest.ctaLabel) {
+        contest.cta = [{ label: contest.ctaLabel, link: contest.ctaLink }];
+      }
+      const { card, cdId } = buildCard(contest, i);
+      container.appendChild(card);
+      if (contest.deadline) {
+        setTimeout(function() { startTimer(cdId, contest.deadline); }, 50);
+      }
+    });
+  });
+
+</script>
+  <script>
+    // ── Admin session check ──
+    (function() {
+      if (sessionStorage.getItem('astra_admin') === '1') {
+        const el = document.getElementById('admin-indicator');
+        if (el) el.classList.add('visible');
+      }
+    })();
+    function adminLogout() {
+      if (confirm('Uscire dalla modalità admin?')) {
+        sessionStorage.removeItem('astra_admin');
+        document.getElementById('admin-indicator').classList.remove('visible');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Pannello Admin — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818;
+      --border: rgba(255,107,0,.18); --white: #FFFFFF; --muted: rgba(255,255,255,.45);
+    }
+    html, body { width: 100%; min-height: 100%; background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; }
+
+    .bg { position: fixed; inset: 0; background: url('background.png') center/cover no-repeat; z-index: 0; }
+    .bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,.15) 0%, rgba(0,0,0,.6) 100%); }
+    .grain { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px; }
+
+    .stage { position: relative; z-index: 2; width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; padding: 5rem 1.5rem 3rem; }
+
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 8vw, 5rem); letter-spacing: .08em; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .card { background: var(--s1); border: 1px solid var(--border); border-radius: 20px; padding: 2rem 1.8rem; max-width: 480px; width: 100%; animation: rise .5s ease both; }
+    @keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    .welcome { font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); margin-bottom: .5rem; }
+    .admin-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .06em; margin-bottom: 1.5rem; }
+
+    .menu { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; width: 100%; }
+    .menu-item { display: flex; align-items: center; gap: 1rem; background: var(--s2); border: 1px solid rgba(255,107,0,.15); border-radius: 14px; padding: .9rem 1.1rem; text-decoration: none; transition: border-color .22s, background .22s; min-width: 0; }
+    .menu-item:hover { border-color: rgba(255,107,0,.5); background: rgba(255,107,0,.05); }
+    .menu-icon { font-size: 1.3rem; flex-shrink: 0; width: 36px; text-align: center; }
+    .menu-info { flex: 1; text-align: left; min-width: 0; overflow: hidden; }
+    .menu-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: .06em; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .menu-sub { font-size: .6rem; color: rgba(255,255,255,.35); letter-spacing: .1em; text-transform: uppercase; margin-top: .1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .menu-arrow { color: var(--orange); font-size: 1rem; flex-shrink: 0; }
+
+    /* ── Mobile: colonna singola ── */
+    @media (max-width: 520px) {
+      .stage { padding: 4.5rem 1rem 2.5rem; gap: 1rem; }
+      .card { padding: 1.5rem 1.2rem; border-radius: 16px; }
+      .menu { grid-template-columns: 1fr; gap: .5rem; }
+      .menu-item { gap: .85rem; padding: .85rem 1rem; border-radius: 12px; }
+      .menu-icon { font-size: 1.2rem; width: 30px; }
+      .menu-title { font-size: 1rem; }
+      .menu-sub { font-size: .58rem; }
+      .menu-arrow { font-size: .9rem; }
+      .admin-name { font-size: 1.7rem; margin-bottom: 1.2rem; }
+    }
+
+    .btn-logout { margin-top: 1.2rem; font-family: 'Poppins', sans-serif; font-size: .65rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); background: none; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: .55rem 1.4rem; cursor: pointer; transition: color .22s, border-color .22s; width: 100%; }
+    .btn-logout:hover { color: var(--white); border-color: rgba(255,255,255,.2); }
+
+    .topbar { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:.75rem 1.2rem; background:rgba(10,10,10,.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+    .topbar-back { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.3); padding:.28rem .85rem; border-radius:99px; transition:background .22s; }
+    .topbar-back:hover { background:rgba(255,107,0,.22); }
+    .topbar-badge { display:inline-flex; align-items:center; gap:.45rem; font-size:.6rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.3); padding:.28rem .75rem; border-radius:99px; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; flex-shrink:0; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    footer { position: relative; z-index: 2; text-align: center; padding: 1.5rem; font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.15); }
+    footer b { color: var(--orange); opacity: .4; font-weight: 400; margin: 0 .4rem; }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="grain"></div>
+  <div class="topbar">
+    <a class="topbar-back" href="index.html">← Home</a>
+    <div class="topbar-badge"><span class="pill-dot"></span>Admin</div>
+  </div>
+
+  <div class="stage">
+    <div class="logo">ASTRA</div>
+
+    <div class="card">
+      <div class="welcome">Pannello di controllo</div>
+      <div class="admin-name" id="admin-name">Admin</div>
+
+      <div class="menu">
+
+        <a class="menu-item" href="GeneraEventi.html">
+          <div class="menu-icon">🚀</div>
+          <div class="menu-info">
+            <div class="menu-title">Crea eventi</div>
+            <div class="menu-sub">Pubblica e gestisci eventi</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </a>
+
+        <a class="menu-item" href="GestionePR.html">
+          <div class="menu-icon">🎫</div>
+          <div class="menu-info">
+            <div class="menu-title">Promoter</div>
+            <div class="menu-sub">Crea e gestisci utenti PR</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </a>
+
+        <a class="menu-item" href="ConsegnaPR.html">
+          <div class="menu-icon">📦</div>
+          <div class="menu-info">
+            <div class="menu-title">Gestionale</div>
+            <div class="menu-sub">Biglietti · scarico · resi</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </a>
+
+        <a class="menu-item" href="StatistichePR.html">
+          <div class="menu-icon">📊</div>
+          <div class="menu-info">
+            <div class="menu-title">Statistiche PR</div>
+            <div class="menu-sub">Analisi per evento e globale</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </a>
+
+        <a class="menu-item" href="StatisticheAstra.html">
+          <div class="menu-icon">📈</div>
+          <div class="menu-info">
+            <div class="menu-title">Prenotazioni</div>
+            <div class="menu-sub">Prenotazioni e prevendite</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </a>
+
+        <a class="menu-item" href="ListeOmaggio.html">
+          <div class="menu-icon">🎟</div>
+          <div class="menu-info">
+            <div class="menu-title">Liste Omaggio</div>
+            <div class="menu-sub">Entrate omaggio · per PR · lista totale</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </a>
+
+        <a class="menu-item" href="Bacheca.html">
+          <div class="menu-icon">📢</div>
+          <div class="menu-info">
+            <div class="menu-title">Bacheca</div>
+            <div class="menu-sub">Comunicazioni · dress code</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </a>
+
+        <a class="menu-item" href="classifica.html" style="border-color:rgba(246,224,94,.3);background:rgba(246,224,94,.04);">
+          <div class="menu-icon">🏆</div>
+          <div class="menu-info">
+            <div class="menu-title" style="color:#F6E05E;">Classifica Mensile PR</div>
+            <div class="menu-sub">Incasso scaricato · reset · per evento</div>
+          </div>
+          <div class="menu-arrow" style="color:#F6E05E;">›</div>
+        </a>
+
+      </div>
+
+      <button class="btn-logout" onclick="adminLogout()">Esci dal pannello admin</button>
+    </div>
+  </div>
+
+  <footer>© 2026 Astra Events <b>✦</b> Pannello Admin <b>✦</b> Solo uso interno</footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+  <script>
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+        authDomain: "astra-events-338dd.firebaseapp.com",
+        projectId: "astra-events-338dd",
+        storageBucket: "astra-events-338dd.firebasestorage.app",
+        messagingSenderId: "166914171655",
+        appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+      });
+    }
+    const db = firebase.firestore();
+
+    async function verifyAdminOnFirestore() {
+      const usr = (sessionStorage.getItem('astra_user') || localStorage.getItem('ls_astra_user'));
+      if (!usr) return false;
+      try {
+        const snap = await db.collection('utenti').doc(usr).get();
+        if (!snap.exists) return false;
+        return snap.data().role === 'admin';
+      } catch(e) { return false; }
+    }
+
+    (async () => {
+      const role = (sessionStorage.getItem('astra_role') || localStorage.getItem('ls_astra_role'));
+      const isAdmin = (sessionStorage.getItem('astra_admin') === '1' || localStorage.getItem('ls_astra_admin') === '1') || role === 'admin';
+      if (!isAdmin) { alert('Accesso negato. Effettua il login dalla homepage.'); window.location.href = 'index.html'; return; }
+      const verified = await verifyAdminOnFirestore();
+      if (!verified) { alert('Accesso negato.'); sessionStorage.clear(); window.location.href = 'index.html'; return; }
+
+      const aliasDisp = sessionStorage.getItem('astra_alias') || localStorage.getItem('ls_astra_alias') || '';
+      const adminNome = aliasDisp || sessionStorage.getItem('astra_nome') || (sessionStorage.getItem('astra_user') || localStorage.getItem('ls_astra_user')) || 'Admin';
+      document.getElementById('admin-name').textContent = adminNome;
+    })();
+
+    function adminLogout() {
+      if (confirm('Uscire dal pannello admin?')) {
+        sessionStorage.clear();
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+
+</body>
+</html>

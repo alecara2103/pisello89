@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Classifica Mensile PR — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111; --s2: #181818; --s3: #222;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #fff; --muted: rgba(255,255,255,.4);
+      --green: #68D391; --blue: #63B3ED; --yellow: #F6E05E;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; padding-top: 48px; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background: radial-gradient(ellipse at 20% 10%, rgba(255,107,0,.07) 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 90%, rgba(255,107,0,.04) 0%, transparent 50%); }
+
+    /* ── HEADER ── */
+    header { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1rem clamp(1.2rem,4vw,3rem); border-bottom:1px solid var(--border); background:rgba(10,10,10,.93); backdrop-filter:blur(14px); gap:.8rem; }
+    .logo { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.1em; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+    .hdr-right { display:flex; align-items:center; gap:.6rem; }
+    .hdr-badge { font-size:.58rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.3); border-radius:99px; padding:.28rem .8rem; }
+    .btn-sm { font-family:'Poppins',sans-serif; font-size:.58rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; background:none; border:1px solid rgba(255,107,0,.3); color:var(--orange); border-radius:99px; padding:.28rem .8rem; text-decoration:none; transition:background .2s; white-space:nowrap; }
+    .btn-sm:hover { background:rgba(255,107,0,.1); }
+
+    /* ── PREMIO ── */
+    .premio-wrap { position:relative; z-index:1; padding:clamp(1.2rem,3vw,2rem) clamp(1.2rem,4vw,3rem) 0; }
+    .premio-card { background:linear-gradient(135deg,rgba(246,224,94,.12),rgba(255,107,0,.07)); border:1.5px solid rgba(246,224,94,.5); border-radius:20px; padding:1.5rem 1.8rem; display:flex; align-items:flex-start; gap:1.2rem; flex-wrap:wrap; }
+    .premio-icon { font-size:2.8rem; flex-shrink:0; }
+    .premio-body { flex:1; min-width:220px; }
+    .premio-label { font-size:.5rem; font-weight:700; letter-spacing:.28em; text-transform:uppercase; color:var(--yellow); margin-bottom:.3rem; }
+    .premio-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.4rem,3.5vw,2rem); letter-spacing:.05em; color:var(--yellow); line-height:1; margin-bottom:.5rem; }
+    .premio-desc { font-size:.76rem; color:rgba(255,255,255,.75); line-height:1.7; }
+    .premio-desc strong { color:var(--yellow); }
+    .premio-pills { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.8rem; }
+    .premio-pill { display:inline-flex; align-items:center; gap:.35rem; font-size:.63rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; background:rgba(246,224,94,.12); border:1px solid rgba(246,224,94,.35); color:var(--yellow); border-radius:99px; padding:.3rem .85rem; }
+
+    /* ── HERO ── */
+    .hero { position:relative; z-index:1; text-align:center; padding:clamp(1.5rem,3vw,2.5rem) 1.5rem .5rem; }
+    .pill { display:inline-flex; align-items:center; gap:.5rem; font-size:.56rem; font-weight:500; letter-spacing:.26em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.26rem .9rem; border-radius:99px; margin-bottom:.8rem; }
+    .pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.8rem,7vw,5rem); letter-spacing:.05em; line-height:.92; margin-bottom:.4rem; }
+    .hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-sub { font-size:.7rem; color:var(--muted); letter-spacing:.08em; }
+
+    /* ── ADMIN PANEL ── */
+    .admin-section { position:relative; z-index:1; max-width:700px; margin:1.2rem auto 0; padding:0 clamp(1.2rem,4vw,2rem); }
+    .admin-box { background:rgba(99,179,237,.05); border:1px solid rgba(99,179,237,.22); border-radius:18px; overflow:hidden; }
+    .admin-box-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.3rem; border-bottom:1px solid rgba(99,179,237,.15); cursor:pointer; user-select:none; }
+    .admin-box-title { font-size:.52rem; font-weight:700; letter-spacing:.26em; text-transform:uppercase; color:var(--blue); display:flex; align-items:center; gap:.5rem; }
+    .admin-box-arrow { color:var(--blue); font-size:.9rem; transition:transform .3s; }
+    .admin-box-arrow.open { transform:rotate(90deg); }
+    .admin-body { padding:1.1rem 1.3rem; display:flex; flex-direction:column; gap:1rem; }
+
+    /* Modalità classifica */
+    .admin-row-label { font-size:.5rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+    .mode-group { display:inline-flex; background:var(--s2); border:1px solid var(--border2); border-radius:12px; padding:.25rem; gap:.25rem; }
+    .mode-btn { font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.45rem 1rem; border-radius:9px; cursor:pointer; transition:background .2s,color .2s; white-space:nowrap; }
+    .mode-btn.active { background:var(--orange); color:#000; font-weight:700; }
+
+    /* Selettore evento */
+    .ev-select { font-family:'Poppins',sans-serif; font-size:.68rem; background:var(--s2); color:#fff; border:1px solid var(--border2); border-radius:10px; padding:.45rem .9rem; outline:none; width:100%; max-width:360px; margin-top:.5rem; }
+
+    /* Info stato */
+    .reset-info { background:var(--s2); border:1px solid var(--border2); border-radius:12px; padding:.8rem 1rem; font-size:.72rem; color:var(--muted); line-height:1.6; }
+    .reset-info strong { color:var(--white); }
+    .reset-info .reset-date { color:var(--orange); font-weight:600; }
+
+    /* Bottone reset */
+    .btn-reset { font-family:'Poppins',sans-serif; font-size:.7rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:rgba(252,129,129,.1); color:#FC8181; border:1px solid rgba(252,129,129,.3); border-radius:12px; padding:.65rem 1.4rem; cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; gap:.5rem; }
+    .btn-reset:hover { background:rgba(252,129,129,.22); border-color:rgba(252,129,129,.5); }
+    .btn-reset:disabled { opacity:.4; cursor:not-allowed; }
+
+    /* Storico reset */
+    .storico-list { display:flex; flex-direction:column; gap:.5rem; max-height:200px; overflow-y:auto; }
+    .storico-item { background:var(--s2); border:1px solid var(--border2); border-radius:10px; padding:.65rem .9rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .storico-mese { font-size:.72rem; font-weight:600; color:var(--white); }
+    .storico-date { font-size:.6rem; color:var(--muted); }
+    .storico-winner { font-size:.65rem; color:var(--yellow); }
+
+    /* ── SPIEGAZIONE PR ── */
+    .explain-wrap { position:relative; z-index:1; max-width:700px; margin:.8rem auto 0; padding:0 clamp(1.2rem,4vw,2rem); }
+    .explain-card { background:rgba(255,107,0,.04); border:1px solid rgba(255,107,0,.13); border-radius:14px; padding:1rem 1.3rem; }
+    .explain-title { font-size:.5rem; font-weight:700; letter-spacing:.26em; text-transform:uppercase; color:var(--orange); margin-bottom:.7rem; }
+    .explain-row { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.5rem; font-size:.72rem; color:rgba(255,255,255,.65); line-height:1.65; }
+    .explain-row:last-child { margin-bottom:0; }
+
+    /* ── WRAP CLASSIFICA ── */
+    .wrap { position:relative; z-index:1; max-width:700px; margin:1.2rem auto 0; padding:0 clamp(1.2rem,4vw,2rem) 6rem; }
+
+    /* MY CARD */
+    .my-card { background:var(--s1); border:2px solid var(--orange); border-radius:20px; padding:1.4rem 1.5rem; margin-bottom:1.8rem; position:relative; overflow:hidden; animation:rise .4s ease both; }
+    .my-card::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(255,107,0,.07) 0%,transparent 65%); pointer-events:none; }
+    .my-label { font-size:.5rem; font-weight:700; letter-spacing:.28em; text-transform:uppercase; color:var(--orange); margin-bottom:.85rem; }
+    .my-top { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .my-pos { font-family:'Bebas Neue',sans-serif; font-size:3.2rem; line-height:1; color:var(--orange); min-width:3rem; }
+    .my-name { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.04em; line-height:1; margin-bottom:.25rem; }
+    .my-euro { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--yellow); letter-spacing:.02em; line-height:1; }
+    .my-euro-label { font-size:.52rem; color:var(--muted); letter-spacing:.13em; text-transform:uppercase; }
+
+    /* PROGRESS */
+    .prog-wrap { border-top:1px solid var(--border2); padding-top:.9rem; }
+    .prog-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem; }
+    .prog-desc { font-size:.62rem; color:var(--muted); }
+    .prog-pct { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--orange); }
+    .prog-track { height:9px; background:var(--s3); border-radius:99px; overflow:hidden; margin-bottom:.45rem; }
+    .prog-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--yellow),var(--orange)); transition:width 1.2s cubic-bezier(.22,1,.36,1); width:0%; }
+    .prog-hint { font-size:.6rem; color:rgba(255,255,255,.3); text-align:center; line-height:1.5; }
+    .prog-hint strong { color:var(--orange2); }
+    .first-msg { font-size:.72rem; color:var(--yellow); font-weight:600; text-align:center; padding:.5rem 0 0; line-height:1.7; }
+
+    /* LISTA */
+    .rank-title-row { font-size:.5rem; font-weight:700; letter-spacing:.26em; text-transform:uppercase; color:var(--muted); margin-bottom:.8rem; }
+    .rank-list { display:flex; flex-direction:column; gap:.5rem; }
+    .rank-item { background:var(--s1); border:1px solid var(--border2); border-radius:14px; padding:.85rem 1.1rem; display:grid; grid-template-columns:2.2rem 1fr auto; align-items:center; gap:.8rem; animation:rise .35s ease both; transition:border-color .25s; }
+    .rank-item.is-me    { border-color:var(--orange); background:rgba(255,107,0,.04); }
+    .rank-item.is-first { border-color:rgba(246,224,94,.4); }
+    .rank-item:hover    { border-color:rgba(255,107,0,.22); }
+    @keyframes rise { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+    .rnum { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--muted); text-align:center; line-height:1; }
+    .rnum.gold   { color:var(--yellow); }
+    .rnum.silver { color:#A0AEC0; }
+    .rnum.bronze { color:var(--orange2); }
+    .rnum.me     { color:var(--orange); }
+    .rname { font-weight:600; font-size:.86rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .rname.anon  { color:var(--muted); font-weight:400; font-style:italic; }
+    .rname.mine  { color:var(--orange); }
+    .rtag { display:inline-block; font-size:.48rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; background:rgba(255,107,0,.18); color:var(--orange); border-radius:4px; padding:.08rem .35rem; margin-left:.3rem; vertical-align:middle; }
+    .rval { text-align:right; white-space:nowrap; }
+    .rval-num { font-family:'Bebas Neue',sans-serif; font-size:1.55rem; line-height:1; }
+    .rval-num.me    { color:var(--orange); }
+    .rval-num.first { color:var(--yellow); }
+    .rval-label { font-size:.48rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; }
+
+    #toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); z-index:9999; font-family:'Poppins',sans-serif; font-size:.76rem; font-weight:600; padding:.6rem 1.4rem; border-radius:99px; box-shadow:0 6px 24px rgba(0,0,0,.5); opacity:0; transition:opacity .4s; pointer-events:none; white-space:nowrap; }
+    .state-msg { text-align:center; padding:3rem 1rem; font-size:.8rem; color:var(--muted); }
+    footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.56rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.15); }
+    footer b { color:var(--orange); opacity:.4; margin:0 .4rem; }
+  
+    /* ── Topbar nav ── */
+    .topbar-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,107,0,.18);}
+    .topbar-nav-links{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .topbar-nav-links a{font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;transition:background .2s;white-space:nowrap;}
+    .topbar-nav-links a:hover{background:rgba(255,107,0,.2);}
+    .topbar-nav-pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;white-space:nowrap;}
+    .topbar-nav-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:tnblink 2s ease infinite;flex-shrink:0;}
+    @keyframes tnblink{0%,100%{opacity:1}50%{opacity:.25}}
+  </style>
+</head>
+<body>
+<div class="topbar-nav">
+  <div class="topbar-nav-links" id="topbar-nav-links"><a href="index.html">← Home</a></div>
+  <div class="topbar-nav-pill" id="topbar-nav-pill"><span class="topbar-nav-dot"></span>Area PR</div>
+</div>
+
+
+<header>
+  <span class="logo">ASTRA</span>
+  <div class="hdr-right">
+    <div class="hdr-badge" id="hdr-nome">PR</div>
+</div>
+</header>
+
+<!-- PREMIO -->
+<div class="premio-wrap">
+  <div class="premio-card">
+    <div class="premio-icon">🏆</div>
+    <div class="premio-body">
+      <div class="premio-label">✦ Premio mensile</div>
+      <div class="premio-title">IL PRIMO IN CLASSIFICA VINCE</div>
+      <div class="premio-desc">Il <strong>1° di ogni mese</strong> il PR con il maggior incasso scaricato vince due premi da usare nel mese corrente:</div>
+      <div class="premio-pills">
+        <div class="premio-pill">🎟 Ingresso omaggio</div>
+        <div class="premio-pill">🍹 Drink omaggio</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Aggiornata in tempo reale</div>
+  <h1>CLASSIFICA<br><em>MENSILE</em></h1>
+  <div class="hero-sub" id="hero-sub">Basata sull'incasso scaricato</div>
+</section>
+
+<!-- ADMIN PANEL (solo admin) -->
+<div class="admin-section" id="admin-section" style="display:none;">
+  <div class="admin-box">
+    <div class="admin-box-header" onclick="toggleAdminBox()">
+      <div class="admin-box-title">⚙ Pannello gestione classifica — Solo Admin</div>
+      <div class="admin-box-arrow open" id="admin-arrow">›</div>
+    </div>
+    <div class="admin-body" id="admin-body">
+
+      <!-- MODALITÀ -->
+      <div>
+        <div class="admin-row-label">Modalità classifica</div>
+        <div class="mode-group">
+          <button class="mode-btn active" id="mode-mensile" onclick="setMode('mensile')">📅 Mensile (totale)</button>
+          <button class="mode-btn"        id="mode-evento"  onclick="setMode('evento')">📁 Per evento</button>
+        </div>
+        <div id="ev-wrap" style="display:none;margin-top:.7rem;">
+          <select class="ev-select" id="ev-select" onchange="buildLeaderboard()">
+            <option value="">Seleziona evento…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- STATO RESET -->
+      <div>
+        <div class="admin-row-label">Stato classifica mensile</div>
+        <div class="reset-info" id="reset-info">Caricamento…</div>
+      </div>
+
+      <!-- RESET -->
+      <div>
+        <div class="admin-row-label">Azzera classifica</div>
+        <p style="font-size:.7rem;color:var(--muted);line-height:1.6;margin-bottom:.7rem;">
+          Resettando la classifica, da quel momento si conteranno solo gli scarichi inseriti dopo il reset. Lo storico viene salvato automaticamente su Firestore prima di azzerare.
+        </p>
+        <button class="btn-reset" id="btn-reset" onclick="resetClassifica()">
+          🗑 Azzera classifica e inizia nuovo periodo
+        </button>
+      </div>
+
+      <!-- STORICO RESET -->
+      <div>
+        <div class="admin-row-label">Storico mesi precedenti</div>
+        <div id="storico-list" class="storico-list">
+          <div class="state-msg" style="padding:.8rem;">Caricamento…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SPIEGAZIONE PR -->
+<div class="explain-wrap" id="explain-wrap">
+  <div class="explain-card">
+    <div class="explain-title">📖 Come funziona la classifica</div>
+    <div class="explain-row"><span>💶</span>&nbsp;<span>La classifica si basa sull'<strong>incasso che hai scaricato</strong> agli eventi — più soldi porti, più sali.</span></div>
+    <div class="explain-row"><span>📊</span>&nbsp;<span>La <strong>barra arancione</strong> ti mostra quanto sei vicino al PR davanti. Quando è al 100% ti basta uno scarico in più per scavalcarlo.</span></div>
+    <div class="explain-row"><span>🔒</span>&nbsp;<span>I nomi degli altri PR sono nascosti — solo tu sai dove sei.</span></div>
+    <div class="explain-row"><span>🔄</span>&nbsp;<span>La classifica <strong>si azzera ogni mese</strong>. Ogni mese è una nuova gara!</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="my-card-wrap"></div>
+  <div class="rank-title-row" id="rank-title">CLASSIFICA MENSILE</div>
+  <div id="rank-list" class="rank-list">
+    <div class="state-msg">Caricamento…</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<footer>© 2026 Astra Events <b>✦</b> Classifica Mensile PR <b>✦</b> Solo uso interno</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  /* ── Auth ── */
+  const role   = sessionStorage.getItem('astra_role');
+  const prId   = sessionStorage.getItem('astra_user');
+  const prAlias = sessionStorage.getItem('astra_alias') || localStorage.getItem('ls_astra_alias') || '';
+  const prNome = prAlias || sessionStorage.getItem('astra_nome') || prId || 'PR';
+  const isAdmin = role === 'admin' || sessionStorage.getItem('astra_admin') === '1';
+  if (!role) { window.location.href = 'index.html'; }
+
+  document.getElementById('hdr-nome').textContent = prNome;
+
+  // Add back link in topbar based on role
+  (function(){
+    var links = document.getElementById('topbar-nav-links');
+    if (!links) return;
+    var a = document.createElement('a');
+    if (isAdmin) {
+      a.href = 'PannelloAdmin.html'; a.textContent = '← Pannello';
+      var pill = document.getElementById('topbar-nav-pill');
+      if (pill) { pill.innerHTML = '<span class="topbar-nav-dot"></span>Admin'; }
+    } else {
+      a.href = 'DashboardPR.html'; a.textContent = '← Dashboard PR';
+    }
+    links.appendChild(a);
+  })();
+
+  if (isAdmin) {
+    document.getElementById('admin-section').style.display = 'block';
+    document.getElementById('explain-wrap').style.display  = 'none';
+  }
+
+  /* ── Firebase ── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  const ESCLUSI = ['jacopo pelliccione', 'alessandro caratelli'];
+  let allPRs = [];
+  let events = [];
+  let mode   = 'mensile';
+  let resetAt = 0;
+
+  /* ── Toast ── */
+  function showToast(msg, color) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = color || '#68D391';
+    t.style.color = '#000';
+    t.style.opacity = '1';
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.style.opacity = '0', 3200);
+  }
+
+  /* ── Toggle admin box ── */
+  function toggleAdminBox() {
+    const body  = document.getElementById('admin-body');
+    const arrow = document.getElementById('admin-arrow');
+    const open  = body.style.display !== 'none';
+    body.style.display  = open ? 'none' : 'flex';
+    arrow.classList.toggle('open', !open);
+  }
+
+  /* ── Mode switch ── */
+  function setMode(m) {
+    mode = m;
+    document.getElementById('mode-mensile').classList.toggle('active', m === 'mensile');
+    document.getElementById('mode-evento').classList.toggle('active',  m === 'evento');
+    document.getElementById('ev-wrap').style.display = m === 'evento' ? 'block' : 'none';
+    buildLeaderboard();
+  }
+
+  /* ── Carica reset config ── */
+  async function loadConfig() {
+    const cfg = await db.collection('classificaConfig').doc('config').get();
+    if (cfg.exists && cfg.data().resetAt) {
+      resetAt = cfg.data().resetAt;
+    } else {
+      const now = new Date();
+      resetAt = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+    }
+  
+  // Add back link in topbar based on role
+
+  if (isAdmin) {
+      const d = new Date(resetAt);
+      const fmt = d.toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'}) + ' alle ' + d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('reset-info').innerHTML =
+        `La classifica conta gli scarichi inseriti da: <span class="reset-date"><strong>${fmt}</strong></span><br>
+         Resettando partirai da zero da adesso.`;
+    }
+  }
+
+  /* ── Carica storico ── */
+  async function loadStorico() {
+    const snap = await db.collection('classificaStorico').orderBy('ts','desc').limit(6).get();
+    const list = document.getElementById('storico-list');
+    if (snap.empty) { list.innerHTML = '<div style="font-size:.68rem;color:var(--muted);padding:.3rem 0;">Nessun reset effettuato finora</div>'; return; }
+    list.innerHTML = '';
+    snap.docs.forEach(d => {
+      const s = d.data();
+      const winner = s.classifica && s.classifica[0] ? s.classifica[0].prNome : '—';
+      const item = document.createElement('div');
+      item.className = 'storico-item';
+      item.innerHTML = `
+        <div>
+          <div class="storico-mese">${s.mese}</div>
+          <div class="storico-date">${new Date(s.ts).toLocaleDateString('it-IT',{day:'numeric',month:'short',year:'numeric'})}</div>
+        </div>
+        <div class="storico-winner">🏆 ${winner}</div>`;
+      list.appendChild(item);
+    });
+  }
+
+  /* ── Reset ── */
+  async function resetClassifica() {
+    if (!confirm('Sei sicuro di voler azzerare la classifica?\n\nDa questo momento si conteranno solo gli scarichi inseriti dopo il reset.\nLo storico viene salvato automaticamente.')) return;
+    const btn = document.getElementById('btn-reset');
+    btn.disabled = true; btn.textContent = 'Azzeramento…';
+    try {
+      const scores = await computeScores();
+      await db.collection('classificaStorico').add({
+        mese: new Date().toLocaleDateString('it-IT',{month:'long',year:'numeric'}),
+        ts: Date.now(),
+        classifica: scores.map((s,i) => ({ pos:i+1, prId:s.id, prNome:s.nome, euro:s.euro }))
+      });
+      await db.collection('classificaConfig').doc('config').set({ resetAt: Date.now() }, { merge: true });
+      resetAt = Date.now();
+      showToast('✅ Classifica azzerata! Nuovo periodo partito.');
+      await loadConfig();
+      await loadStorico();
+      await buildLeaderboard();
+    } catch(e) {
+      showToast('❌ Errore: ' + e.message, '#FC8181');
+    }
+    btn.disabled = false; btn.textContent = '🗑 Azzera classifica e inizia nuovo periodo';
+  }
+
+  /* ── Compute scores ── */
+  async function computeScores() {
+    const evSel = document.getElementById('ev-select').value;
+    const targetEvents = (mode === 'evento' && evSel)
+      ? events.filter(e => e.id === evSel)
+      : events;
+
+    const scores = await Promise.all(allPRs.map(async pr => {
+      let totalEuro = 0;
+      await Promise.all(targetEvents.map(async ev => {
+        const sDoc = await db.collection('consegne').doc(ev.id).collection('scarico').doc(pr.id).get();
+        if (!sDoc.exists) return;
+        const entries = sDoc.data().entries || [];
+        entries.forEach(e => {
+          if (mode === 'mensile' && e.ts && e.ts < resetAt) return;
+          if (e.totaleEuro != null) totalEuro += e.totaleEuro || 0;
+        });
+      }));
+      return { id: pr.id, nome: pr.nome, euro: totalEuro };
+    }));
+
+    return scores.sort((a, b) => b.euro - a.euro);
+  }
+
+  /* ── Build leaderboard ── */
+  async function buildLeaderboard() {
+    document.getElementById('rank-list').innerHTML = '<div class="state-msg">Calcolo classifica…</div>';
+    document.getElementById('my-card-wrap').innerHTML = '';
+
+    const evSel  = document.getElementById('ev-select').value;
+    const evName = evSel ? (events.find(e => e.id === evSel)?.name || '') : '';
+    const mese   = new Date().toLocaleDateString('it-IT',{month:'long',year:'numeric'}).toUpperCase();
+
+    if (mode === 'evento' && evName) {
+      document.getElementById('rank-title').textContent = 'CLASSIFICA — ' + evName.toUpperCase();
+      document.getElementById('hero-sub').textContent   = 'Incasso scaricato — ' + evName;
+    } else {
+      document.getElementById('rank-title').textContent = 'CLASSIFICA MENSILE — ' + mese;
+      document.getElementById('hero-sub').textContent   = 'Incasso scaricato da ' + new Date(resetAt).toLocaleDateString('it-IT',{day:'numeric',month:'long'});
+    }
+
+    const ranked = await computeScores();
+    const myIdx  = ranked.findIndex(r => r.id === prId);
+
+    if (!isAdmin) renderMyCard(myIdx, ranked);
+    renderList(ranked, myIdx);
+  }
+
+  /* ── My card ── */
+  function renderMyCard(myIdx, ranked) {
+    const wrap = document.getElementById('my-card-wrap');
+    if (myIdx < 0) { wrap.innerHTML = ''; return; }
+    const me    = ranked[myIdx];
+    const pos   = myIdx + 1;
+    const above = myIdx > 0 ? ranked[myIdx - 1] : null;
+    const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : '';
+
+    let progHtml = '';
+    if (!above) {
+      progHtml = `<div class="first-msg">🏆 Sei al primo posto!<br>Mantieni la vetta fino al 1° del mese e vinci<br>🎟 ingresso omaggio + 🍹 drink omaggio.</div>`;
+    } else {
+      const gap  = above.euro - me.euro;
+      const pct  = above.euro > 0 ? Math.round((me.euro / above.euro) * 100) : 100;
+      const fill = Math.min(pct, 100);
+      progHtml = `
+        <div class="prog-wrap">
+          <div class="prog-header">
+            <div class="prog-desc">Verso il ${myIdx}° posto</div>
+            <div class="prog-pct">${pct}%</div>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" id="pfill" style="width:0%"></div>
+          </div>
+          <div class="prog-hint">Ti mancano <strong>€${gap.toFixed(2)}</strong> di incasso per scavalcare il PR davanti a te</div>
+        </div>`;
+      setTimeout(() => {
+        const el = document.getElementById('pfill');
+        if (el) el.style.width = fill + '%';
+      }, 100);
+    }
+
+    wrap.innerHTML = `
+      <div class="my-card">
+        <div class="my-label">✦ La tua posizione</div>
+        <div class="my-top">
+          <div class="my-pos">${medal || '#'+pos}</div>
+          <div style="flex:1;">
+            <div class="my-name">${prNome}</div>
+            <div style="display:flex;align-items:baseline;gap:.35rem;">
+              <div class="my-euro">€${me.euro.toFixed(2)}</div>
+              <div class="my-euro-label">incasso scaricato</div>
+            </div>
+          </div>
+        </div>
+        ${progHtml}
+      </div>`;
+  }
+
+  /* ── Lista ── */
+  function renderList(ranked, myIdx) {
+    const list = document.getElementById('rank-list');
+    list.innerHTML = '';
+    if (!ranked.some(r => r.euro > 0)) {
+      list.innerHTML = '<div class="state-msg">Nessuno scarico registrato per questo periodo</div>';
+      return;
+    }
+    const nc = ['gold','silver','bronze'];
+    ranked.forEach((r, i) => {
+      const isMe    = i === myIdx;
+      const isFirst = i === 0 && r.euro > 0;
+      const item    = document.createElement('div');
+      item.className = 'rank-item' + (isMe ? ' is-me' : '') + (isFirst ? ' is-first' : '');
+      item.style.animationDelay = (i * 0.03) + 's';
+      const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
+      const numCl = i < 3 ? nc[i] : (isMe ? 'me' : '');
+      let namePart;
+      if (isMe) {
+        namePart = `<div class="rname mine">${r.nome}<span class="rtag">TU</span></div>`;
+      } else if (isAdmin) {
+        namePart = `<div class="rname">${r.nome}${isFirst ? ' &nbsp;🏆' : ''}</div>`;
+      } else {
+        namePart = `<div class="rname anon">PR ${i+1}${isFirst ? ' &nbsp;🏆' : ''}</div>`;
+      }
+      item.innerHTML = `
+        <div class="rnum ${numCl}">${medal || (i+1)}</div>
+        <div>${namePart}</div>
+        <div class="rval">
+          <div class="rval-num ${isMe?'me':''} ${isFirst?'first':''}">€${r.euro.toFixed(2)}</div>
+          <div class="rval-label">incasso</div>
+        </div>`;
+      list.appendChild(item);
+    });
+  }
+
+  /* ── Init ── */
+  async function init() {
+    const prSnap = await db.collection('utenti').get();
+    allPRs = prSnap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(u => {
+        if (u.role !== 'pr') return false;
+        if (ESCLUSI.includes((u.nome||'').toLowerCase().trim())) return false;
+        return true;
+      })
+      .map(u => ({ id: u.id, nome: u.nome || u.username }));
+
+    const evSnap = await db.collection('eventi').orderBy('date','desc').get();
+    events = evSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const sel = document.getElementById('ev-select');
+    events.forEach(ev => {
+      const o = document.createElement('option');
+      o.value = ev.id;
+      o.textContent = ev.name + (ev.date ? ' — ' + new Date(ev.date+'T00:00:00').toLocaleDateString('it-IT',{day:'numeric',month:'short'}) : '');
+      sel.appendChild(o);
+    });
+
+    await loadConfig();
+    if (isAdmin) await loadStorico();
+    await buildLeaderboard();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

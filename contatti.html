@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Contatti — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --surface: #111111; --surface2: #181818; --surface3: #1e1e1e;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.45);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 15% 15%, rgba(255,107,0,.05) 0%, transparent 50%),
+                  radial-gradient(ellipse at 85% 85%, rgba(255,107,0,.04) 0%, transparent 50%);
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem clamp(1.5rem, 5vw, 4rem);
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,10,.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: .1em; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    header nav a { font-size: .7rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); text-decoration: none; transition: color .3s; }
+    header nav a:hover { color: var(--white); }
+    .hero { position: relative; z-index: 1; text-align: center; padding: clamp(3.5rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3.5rem); }
+    .pill { display: inline-flex; align-items: center; gap: .5rem; font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); border: 1px solid var(--border); padding: .32rem 1rem; border-radius: 99px; margin-bottom: 1.5rem; }
+    .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 6px var(--orange); animation: blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 9vw, 8rem); letter-spacing: .05em; line-height: .92; margin-bottom: 1.2rem; }
+    .hero h1 em { font-style: normal; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: clamp(.83rem, 1.4vw, 1rem); font-weight: 300; color: var(--muted); max-width: 460px; margin: 0 auto; line-height: 1.72; }
+    .section-head { position: relative; z-index: 1; display: flex; align-items: center; gap: 1.2rem; padding: 0 clamp(1.5rem, 5vw, 4rem); margin-bottom: 2rem; }
+    .section-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-head span { font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); white-space: nowrap; }
+    .content { position: relative; z-index: 1; padding: 0 clamp(1.5rem, 5vw, 4rem) 6rem; display: flex; flex-direction: column; gap: 4rem; }
+    .section-block { display: flex; flex-direction: column; gap: 1.2rem; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1rem; }
+    .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem 1.6rem; display: flex; align-items: center; gap: 1.2rem; text-decoration: none; transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease; animation: rise .5s ease both; cursor: pointer; }
+    @keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .contact-card:hover { transform: translateY(-5px); border-color: rgba(255,107,0,.5); box-shadow: 0 12px 36px rgba(255,107,0,.12); }
+    .card-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.5rem; background: var(--surface2); border: 1px solid var(--border); transition: background .28s; }
+    .contact-card:hover .card-icon { background: rgba(255,107,0,.1); }
+    .card-info { flex: 1; min-width: 0; }
+    .card-label { font-size: .6rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--orange); margin-bottom: .2rem; }
+    .card-name { font-size: .95rem; font-weight: 500; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-handle { font-size: .75rem; font-weight: 300; color: var(--muted); margin-top: .1rem; }
+    .card-arrow { color: rgba(255,107,0,.4); font-size: 1rem; flex-shrink: 0; transition: color .28s, transform .28s; }
+    .contact-card:hover .card-arrow { color: var(--orange); transform: translateX(3px); }
+    .email-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; animation: rise .5s ease both; }
+    .email-panel-head { padding: 1.4rem 1.8rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: .8rem; }
+    .ep-icon { width: 34px; height: 34px; border-radius: 9px; background: rgba(255,107,0,.1); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .ep-title { font-size: .72rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--white); }
+    .ep-sub { font-size: .6rem; color: var(--muted); }
+    .ep-address { margin-left: auto; font-size: .65rem; color: var(--orange); letter-spacing: .1em; }
+    .email-form { padding: 1.8rem; display: flex; flex-direction: column; gap: 1rem; }
+    .f { display: flex; flex-direction: column; gap: .38rem; }
+    .f label { font-size: .6rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+    .f input, .f textarea, .f select { background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; color: var(--white); font-family: 'Poppins', sans-serif; font-size: .88rem; padding: .72rem 1rem; outline: none; transition: border-color .22s; resize: none; width: 100%; }
+    .f input:focus, .f textarea:focus, .f select:focus { border-color: var(--orange); }
+    .f select option { background: var(--surface2); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .btn-send { background: var(--orange); color: #000; font-family: 'Poppins', sans-serif; font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; border: none; border-radius: 10px; padding: .88rem 2rem; cursor: pointer; align-self: flex-start; display: flex; align-items: center; gap: .5rem; transition: background .22s, transform .12s; }
+    .btn-send:hover { background: var(--orange2); }
+    .btn-send:active { transform: scale(.98); }
+    .send-note { font-size: .65rem; color: var(--muted); line-height: 1.6; margin-top: -.2rem; }
+    .send-note a { color: var(--orange); text-decoration: none; }
+    .send-note a:hover { text-decoration: underline; }
+    .ok-msg { font-size: .75rem; color: #68D391; display: none; margin-top: .5rem; }
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-size: .62rem; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.18); }
+    footer b { color: var(--orange); opacity: .5; font-weight: 400; margin: 0 .5rem; }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">ASTRA</a>
+  <nav><a href="index.html">← Home</a></nav>
+</header>
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Resta in contatto</div>
+  <h1>CONTA<em>TTI</em></h1>
+  <p>Seguici sui social, scrivici direttamente o contattaci per collaborazioni e partnership.</p>
+</section>
+
+<div class="section-head"><span>✦ Esplora</span></div>
+
+<div class="content">
+
+  <!-- SEZIONE 1 — SOCIAL -->
+  <div class="section-block">
+    <div class="section-head" style="padding:0; margin-bottom:1rem;">
+      <span>01 — Social & Community</span>
+      <div style="flex:1;height:1px;background:var(--border);margin-left:1.2rem;"></div>
+    </div>
+    <div class="cards-grid">
+
+      <a class="contact-card" href="https://instagram.com/astra.events_official" target="_blank" rel="noopener" style="animation-delay:.05s">
+        <div class="card-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="6" stroke="#E1306C" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="#E1306C" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="#E1306C"/></svg></div>
+        <div class="card-info">
+          <div class="card-label">Instagram</div>
+          <div class="card-name">AstraEvents</div>
+          <div class="card-handle">PRINCIPALE</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a class="contact-card" href="https://instagram.com/spotted_astra.events" target="_blank" rel="noopener" style="animation-delay:.1s">
+        <div class="card-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="6" stroke="#E1306C" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="#E1306C" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="#E1306C"/></svg></div>
+        <div class="card-info">
+          <div class="card-label">Instagram</div>
+          <div class="card-name">Spotted AstraEvents</div>
+          <div class="card-handle">SPOTTED</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a class="contact-card" href="https://tiktok.com/@astra.events_official" target="_blank" rel="noopener" style="animation-delay:.15s">
+        <div class="card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.35a8.16 8.16 0 0 0 4.77 1.52V7.43a4.85 4.85 0 0 1-1-.74z"/></svg></div>
+        <div class="card-info">
+          <div class="card-label">TikTok</div>
+          <div class="card-name">AstraEvents</div>
+          <div class="card-handle">TIKTOK</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a class="contact-card" href="https://chat.whatsapp.com/HN52tJHDAbv6GZvSjc1S3J" target="_blank" rel="noopener" style="animation-delay:.2s">
+        <div class="card-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" fill="#25D366"/></svg></div>
+        <div class="card-info">
+          <div class="card-label">WhatsApp</div>
+          <div class="card-name">Gruppo Astra</div>
+          <div class="card-handle">Entra nella community</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SEZIONE 2 — CONTATTI DIRETTI -->
+  <div class="section-block">
+    <div class="section-head" style="padding:0; margin-bottom:1rem;">
+      <span>02 — Contatti Diretti</span>
+      <div style="flex:1;height:1px;background:var(--border);margin-left:1.2rem;"></div>
+    </div>
+    <div class="cards-grid">
+
+      <a class="contact-card" href="https://wa.me/393806416964" target="_blank" rel="noopener" style="animation-delay:.05s">
+        <div class="card-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" fill="#25D366"/></svg></div>
+        <div class="card-info">
+          <div class="card-label">WhatsApp</div>
+          <div class="card-name">ADMIN</div>
+          <div class="card-handle">Scrivici direttamente</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a class="contact-card" href="https://wa.me/393276657718" target="_blank" rel="noopener" style="animation-delay:.1s">
+        <div class="card-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" fill="#25D366"/></svg></div>
+        <div class="card-info">
+          <div class="card-label">WhatsApp</div>
+          <div class="card-name">ADMIN</div>
+          <div class="card-handle">Scrivici direttamente</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SEZIONE 3 — COLLABORAZIONI -->
+  <div class="section-block">
+    <div class="section-head" style="padding:0; margin-bottom:1rem;">
+      <span>03 — Collaborazioni</span>
+      <div style="flex:1;height:1px;background:var(--border);margin-left:1.2rem;"></div>
+    </div>
+
+    <div class="email-panel">
+      <div class="email-panel-head">
+        <div class="ep-icon">✉️</div>
+        <div>
+          <div class="ep-title">Scrivici</div>
+          <div class="ep-sub">Per collaborazioni e partnership</div>
+        </div>
+        <!-- Email iniettata via JS per evitare oscuramento Cloudflare -->
+        <div class="ep-address" id="ep-addr"></div>
+      </div>
+
+      <div class="email-form">
+        <div class="form-row">
+          <div class="f">
+            <label>Nome *</label>
+            <input type="text" id="nome" placeholder="Il tuo nome" />
+          </div>
+          <div class="f">
+            <label>Cognome</label>
+            <input type="text" id="cognome" placeholder="Il tuo cognome" />
+          </div>
+        </div>
+
+        <div class="f">
+          <label>Oggetto *</label>
+          <select id="oggetto">
+            <option value="">Seleziona un'opzione</option>
+            <option value="Proposta di collaborazione">Proposta di collaborazione</option>
+            <option value="Partnership commerciale">Partnership commerciale</option>
+            <option value="Sponsorizzazione evento">Sponsorizzazione evento</option>
+            <option value="Richiesta informazioni">Richiesta informazioni</option>
+            <option value="Altro">Altro</option>
+          </select>
+        </div>
+
+        <div class="f">
+          <label>Messaggio *</label>
+          <textarea id="messaggio" rows="5" placeholder="Descrivi la tua proposta o richiesta…"></textarea>
+        </div>
+
+        <div class="f">
+          <label>La tua email (per ricevere risposta)</label>
+          <input type="email" id="email-reply" placeholder="tua@email.com" />
+        </div>
+
+        <button class="btn-send" onclick="sendEmail()">
+          ✦ &nbsp; Invia messaggio
+        </button>
+
+        <p class="send-note">
+          Cliccando "Invia messaggio" si aprirà il tuo client email con il messaggio precompilato.<br>
+          In alternativa scrivi direttamente a <a id="email-link" href="#"></a>
+        </p>
+
+        <div class="ok-msg" id="ok-msg">✓ Client email aperto — completa l'invio dalla tua app!</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Astra Events <b>✦</b> Roma <b>✦</b> All rights reserved
+</footer>
+
+<script>
+  // Email costruita via JS — Cloudflare non la vede nell'HTML e non la oscura
+  const _u = 'astraaevents';
+  const _d = 'gmail.com';
+  const EMAIL = _u + '\u0040' + _d;
+
+  document.getElementById('ep-addr').textContent = EMAIL;
+  const el = document.getElementById('email-link');
+  el.textContent = EMAIL;
+  el.href = 'mailto:' + EMAIL;
+
+  const WORKER_URL  = 'https://telegram-proxy.astraaevents.workers.dev';
+  const TG_CHAT_IDS = ['8677539389', '709651831'];
+
+  async function sendTelegram(nome, cognome, oggetto, msg, reply) {
+    const ora  = new Date().toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const text = [
+      '✉️ NUOVO MESSAGGIO — ASTRA EVENTS',
+      '',
+      'Da: ' + nome + ' ' + cognome,
+      'Oggetto: ' + oggetto,
+      reply ? 'Email: ' + reply : '',
+      'Ora: ' + ora,
+      '',
+      'Messaggio:',
+      msg
+    ].filter(Boolean).join('\n');
+    try {
+      await Promise.all(TG_CHAT_IDS.map(id =>
+        fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chatId: id, message: text })
+        })
+      ));
+    } catch(e) { console.warn('Telegram:', e); }
+  }
+
+  async function sendEmail() {
+    const nome    = document.getElementById('nome').value.trim();
+    const cognome = document.getElementById('cognome').value.trim();
+    const oggetto = document.getElementById('oggetto').value;
+    const msg     = document.getElementById('messaggio').value.trim();
+    const reply   = document.getElementById('email-reply').value.trim();
+
+    if (!nome)    { alert('Inserisci il tuo nome.'); return; }
+    if (!oggetto) { alert('Seleziona un oggetto.'); return; }
+    if (!msg)     { alert('Scrivi un messaggio.'); return; }
+
+    /* Prima manda Telegram, poi apri email */
+    await sendTelegram(nome, cognome, oggetto, msg, reply);
+
+    /* Mostra conferma */
+    const ok = document.getElementById('ok-msg');
+    ok.style.display = 'block';
+    setTimeout(() => ok.style.display = 'none', 5000);
+
+    /* Apri client email con piccolo delay per non bloccare il fetch */
+    const corpo = msg + (reply ? '\n\n---\nRispondi a: ' + reply : '');
+    setTimeout(() => {
+      window.location.href = 'mailto:' + EMAIL
+        + '?subject=' + encodeURIComponent(oggetto)
+        + '&body='    + encodeURIComponent(corpo);
+    }, 500);
+  }
+</script>
+
+</body>
+</html>

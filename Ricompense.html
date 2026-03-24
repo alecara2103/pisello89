@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <title>Ricompense — Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B00; --orange2: #FF9A3C;
+      --black: #0A0A0A; --s1: #111111; --s2: #181818; --s3: #222222;
+      --border: rgba(255,107,0,.18); --border2: rgba(255,255,255,.07);
+      --white: #FFFFFF; --muted: rgba(255,255,255,.4);
+      --green: #68D391; --blue: #63B3ED; --yellow: #F6E05E; --purple: #A78BFA;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; min-height: 100vh; padding-top: 48px; overflow-x: hidden; }
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background: radial-gradient(ellipse at 15% 15%, rgba(255,107,0,.05) 0%, transparent 50%),
+                  radial-gradient(ellipse at 85% 85%, rgba(255,107,0,.04) 0%, transparent 50%); }
+
+
+/* HEADER */
+header { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem clamp(1.5rem,5vw,4rem); border-bottom:1px solid var(--border); background:rgba(10,10,10,.92); backdrop-filter:blur(14px); gap:1rem; }
+.logo { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:.1em; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+.hdr-right { display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; }
+header nav a { font-size:.7rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); text-decoration:none; }
+header nav a:hover { color:var(--white); }
+
+/* Points badge */
+#points-badge { display:none; align-items:center; gap:.4rem; background:rgba(255,107,0,.1); border:1px solid rgba(255,107,0,.3); padding:.32rem .85rem; border-radius:99px; font-size:.65rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); }
+#points-badge.show { display:flex; }
+.pts-star { font-size:.85rem; }
+
+/* Login/register button */
+.btn-accedi { font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:99px; padding:.38rem 1rem; cursor:pointer; transition:background .22s; white-space:nowrap; }
+.btn-accedi:hover { background:var(--orange2); }
+.btn-esci { font-family:'Poppins',sans-serif; font-size:.62rem; font-weight:500; letter-spacing:.13em; text-transform:uppercase; background:none; color:var(--muted); border:1px solid var(--border2); border-radius:99px; padding:.32rem .85rem; cursor:pointer; }
+.btn-esci:hover { color:var(--white); }
+
+/* MODAL */
+.modal-overlay { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:1.5rem; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:var(--s1); border:1px solid var(--border); border-radius:20px; padding:2rem 1.8rem; width:100%; max-width:400px; position:relative; animation:popIn .3s cubic-bezier(.22,1,.36,1) both; }
+@keyframes popIn { from{opacity:0;transform:scale(.94)} to{opacity:1;transform:scale(1)} }
+.modal-close { position:absolute; top:1rem; right:1rem; background:none; border:none; color:var(--muted); font-size:1.1rem; cursor:pointer; }
+.modal-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:.1em; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; margin-bottom:.2rem; }
+.modal-sub { text-align:center; font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--muted); margin-bottom:1.5rem; }
+.modal-tabs { display:flex; background:var(--s2); border-radius:10px; padding:.25rem; gap:.25rem; margin-bottom:1.3rem; }
+.modal-tab { flex:1; font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.45rem; border-radius:7px; cursor:pointer; transition:background .2s; }
+.modal-tab.active { background:var(--orange); color:#000; }
+.mf { margin-bottom:.85rem; }
+.mf label { display:block; font-size:.58rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:.3rem; }
+.mf input { width:100%; background:var(--s2); border:1px solid var(--border2); border-radius:10px; color:var(--white); font-family:'Poppins',sans-serif; font-size:.88rem; padding:.68rem .9rem; outline:none; transition:border-color .2s; }
+.mf input:focus { border-color:var(--orange); }
+.mf input::placeholder { color:rgba(255,255,255,.2); }
+.btn-modal-submit { width:100%; background:var(--orange); color:#000; font-family:'Poppins',sans-serif; font-size:.78rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; border:none; border-radius:10px; padding:.82rem; cursor:pointer; transition:background .22s; margin-top:.3rem; }
+.btn-modal-submit:hover { background:var(--orange2); }
+.btn-modal-submit:disabled { opacity:.5; cursor:not-allowed; }
+.modal-err { font-size:.72rem; color:#FC8181; text-align:center; margin-top:.6rem; display:none; }
+.modal-ok  { font-size:.72rem; color:var(--green); text-align:center; margin-top:.6rem; display:none; }
+
+/* HERO */
+.hero { position:relative; z-index:1; text-align:center; padding:clamp(3rem,7vw,5rem) clamp(1.5rem,5vw,4rem) clamp(1.5rem,3vw,2.5rem); }
+.pill { display:inline-flex; align-items:center; gap:.5rem; font-size:.62rem; font-weight:500; letter-spacing:.32em; text-transform:uppercase; color:var(--orange); border:1px solid var(--border); padding:.32rem 1rem; border-radius:99px; margin-bottom:1.2rem; }
+.pill-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); box-shadow:0 0 6px var(--orange); animation:blink 2s ease infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,8vw,7rem); letter-spacing:.05em; line-height:.92; margin-bottom:1rem; }
+.hero h1 em { font-style:normal; background:linear-gradient(120deg,var(--orange),var(--orange2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* TABS */
+.tabs-wrap { position:relative; z-index:1; padding:0 clamp(1.5rem,5vw,4rem) 1.5rem; }
+.tabs { display:inline-flex; background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:.3rem; gap:.3rem; }
+.tab { font-family:'Poppins',sans-serif; font-size:.7rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; background:none; border:none; color:var(--muted); padding:.55rem 1.4rem; border-radius:10px; cursor:pointer; transition:background .22s, color .22s; }
+.tab.active { background:var(--orange); color:#000; }
+.tab:not(.active):hover { background:rgba(255,107,0,.1); color:var(--orange); }
+
+/* WRAP */
+.wrap { position:relative; z-index:1; padding:0 clamp(1.5rem,5vw,4rem) 6rem; }
+
+/* LOGGED OUT BANNER */
+.login-banner { background:var(--s1); border:1px solid var(--border); border-radius:18px; padding:2rem; text-align:center; margin-bottom:2rem; }
+.login-banner h3 { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:.06em; margin-bottom:.5rem; }
+.login-banner p { font-size:.82rem; color:var(--muted); margin-bottom:1.2rem; line-height:1.65; }
+
+/* POINTS SUMMARY */
+.points-summary { background:var(--s1); border:1px solid var(--border); border-radius:18px; padding:1.5rem 1.8rem; margin-bottom:2rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+.pts-big { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; letter-spacing:.04em; color:var(--orange); line-height:1; }
+.pts-label { font-size:.62rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+.pts-info { flex:1; }
+
+
+/* REWARDS GRID */
+.rewards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr)); gap:1.2rem; margin-bottom:2rem; }
+.reward-card { background:var(--s1); border:1px solid var(--border2); border-radius:18px; padding:1.4rem; transition:border-color .3s, box-shadow .3s; animation:rise .5s ease both; }
+.reward-card:hover { border-color:rgba(255,107,0,.35); box-shadow:0 8px 32px rgba(255,107,0,.1); }
+@keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.reward-card.locked { opacity:.5; filter:grayscale(.4); }
+.reward-icon { font-size:2.2rem; margin-bottom:.8rem; }
+.reward-title { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:.05em; color:var(--white); margin-bottom:.4rem; }
+.reward-desc { font-size:.75rem; color:var(--muted); line-height:1.6; margin-bottom:1rem; }
+.reward-cost { display:flex; align-items:center; justify-content:space-between; }
+.reward-pts { font-size:.88rem; font-weight:700; color:var(--orange); }
+.btn-redeem { font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:600; letter-spacing:.13em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:8px; padding:.42rem .9rem; cursor:pointer; transition:background .22s; }
+.btn-redeem:hover { background:var(--orange2); }
+.btn-redeem:disabled { opacity:.4; cursor:not-allowed; background:var(--orange); }
+
+/* HISTORY */
+.history-list { display:flex; flex-direction:column; gap:.6rem; }
+.history-item { background:var(--s2); border:1px solid var(--border2); border-radius:12px; padding:.75rem 1rem; display:flex; align-items:center; justify-content:space-between; font-size:.8rem; }
+.history-pts { font-weight:700; }
+.history-pts.plus  { color:var(--green); }
+.history-pts.minus { color:#FC8181; }
+.history-time { font-size:.6rem; color:rgba(255,255,255,.25); }
+
+/* HOW IT WORKS */
+.how-section { display:flex; flex-direction:column; gap:1.5rem; }
+.how-card { background:var(--s1); border:1px solid var(--border2); border-radius:18px; padding:1.5rem 1.8rem; }
+.how-card h3 { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.05em; color:var(--orange); margin-bottom:.8rem; }
+.how-card p, .how-card li { font-size:.85rem; color:var(--muted); line-height:1.75; }
+.how-card ul { padding-left:1.2rem; }
+.how-card ul li { margin-bottom:.3rem; }
+.pts-table { width:100%; border-collapse:collapse; margin-top:.8rem; font-size:.82rem; }
+.pts-table th { text-align:left; font-size:.58rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--orange); padding:.5rem .7rem; border-bottom:1px solid var(--border2); }
+.pts-table td { padding:.6rem .7rem; border-bottom:1px solid rgba(255,255,255,.04); color:var(--muted); }
+.pts-table td:last-child { color:var(--white); font-weight:600; text-align:right; }
+.pts-table tr:last-child td { border-bottom:none; }
+
+footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.18); }
+footer b { color:var(--orange); opacity:.5; font-weight:400; margin:0 .5rem; }
+
+
+  
+    /* ── Topbar nav ── */
+    .topbar-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,107,0,.18);}
+    .topbar-nav-links{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .topbar-nav-links a{font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;transition:background .2s;white-space:nowrap;}
+    .topbar-nav-links a:hover{background:rgba(255,107,0,.2);}
+    .topbar-nav-pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;white-space:nowrap;}
+    .topbar-nav-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:tnblink 2s ease infinite;flex-shrink:0;}
+    @keyframes tnblink{0%,100%{opacity:1}50%{opacity:.25}}
+  </style>
+</head>
+<body>
+<div class="topbar-nav">
+  <div class="topbar-nav-links"><a href="index.html">← Home</a></div>
+</div>
+
+
+<!-- HEADER -->
+
+<header>
+  <a class="logo" href="index.html">ASTRA</a>
+  <div class="hdr-right">
+    <nav><a href="index.html">← Home</a></nav>
+    <div id="points-badge" class="pts-badge"><span class="pts-star">⭐</span><span id="hdr-pts">0</span> pts</div>
+    <button class="btn-accedi" id="btn-accedi" onclick="openModal('login')">Accedi</button>
+    <button class="btn-esci" id="btn-esci" style="display:none;" onclick="doLogout()">Esci</button>
+  </div>
+</header>
+
+<!-- MODAL LOGIN / REGISTER -->
+
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-logo">ASTRA</div>
+    <div class="modal-sub" id="modal-sub">Area Ricompense</div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login-btn" onclick="switchModalTab('login')">Accedi</button>
+      <button class="modal-tab" id="tab-reg-btn" onclick="switchModalTab('register')">Registrati</button>
+    </div>
+
+<!-- LOGIN -->
+<div id="form-login">
+  <div class="mf"><label>Username</label><input type="text" id="l-tel" placeholder="Es. mario.rossi" /></div>
+  <div class="mf"><label>Password</label><input type="password" id="l-pwd" placeholder="••••••••" /></div>
+  <button class="btn-modal-submit" id="btn-login" onclick="doLogin()">Accedi →</button>
+  <div style="text-align:center;margin-top:.8rem;">
+    <button onclick="switchModalTab('recover')" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:.65rem;font-family:'Poppins',sans-serif;cursor:pointer;letter-spacing:.08em;text-decoration:underline;">Hai dimenticato la password?</button>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="form-register" style="display:none;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+    <div class="mf"><label>Nome *</label><input type="text" id="r-nome" placeholder="Mario" /></div>
+    <div class="mf"><label>Cognome *</label><input type="text" id="r-cognome" placeholder="Rossi" /></div>
+  </div>
+  <div class="mf"><label>Username *</label><input type="text" id="r-username" placeholder="Es. mario.rossi" oninput="this.value=this.value.toLowerCase().replace(/\s/g,'')" /></div>
+  <div class="mf"><label>Telefono *</label><input type="tel" id="r-tel" placeholder="Es. 333 1234567" /></div>
+  <div style="font-size:.65rem;font-weight:600;color:#7a5c00;background:#F6E05E;border-radius:8px;padding:.5rem .8rem;margin-top:-.3rem;margin-bottom:.7rem;line-height:1.5;">⚠ Usa il numero che inserisci nelle prenotazioni — serve per ricevere i punti ricompensa.</div>
+  <div class="mf"><label>Password *</label><input type="password" id="r-pwd" placeholder="Min. 6 caratteri" /></div>
+  <div class="mf"><label>Conferma password *</label><input type="password" id="r-pwd2" placeholder="Ripeti password" /></div>
+  <button class="btn-modal-submit" id="btn-register" onclick="doRegister()">Crea account →</button>
+</div>
+
+<!-- RECOVER -->
+<div id="form-recover" style="display:none;">
+  <!-- Step 1: inserisci email -->
+  <div id="rec-step-1">
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;">Inserisci la tua email. Ti mandiamo un codice per reimpostare la password.</div>
+    <div class="mf"><label>Email</label><input type="email" id="rec-email" placeholder="La tua email" /></div>
+    <button class="btn-modal-submit" id="rec-btn" onclick="doRecover()">Invia codice →</button>
+  </div>
+  <!-- Step 2: codice + nuova password -->
+  <div id="rec-step-2" style="display:none;">
+    <div id="rec-email-display" style="font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:.8rem;"></div>
+    <div class="mf"><label>Codice ricevuto</label><input type="text" id="rec-codice" placeholder="123456" maxlength="6" style="text-align:center;letter-spacing:.3em;font-size:1rem;" /></div>
+    <div class="mf"><label>Nuova password</label><input type="password" id="rec-pwd-new" placeholder="Min. 6 caratteri" /></div>
+    <div class="mf"><label>Conferma password</label><input type="password" id="rec-pwd-new2" placeholder="Ripeti password" /></div>
+    <button class="btn-modal-submit" id="rec-verifica-btn" onclick="doVerificaRecover()">Reimposta password →</button>
+    <div style="text-align:center;margin-top:.6rem;">
+      <button onclick="resendRecoverCode()" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:.62rem;font-family:'Poppins',sans-serif;cursor:pointer;text-decoration:underline;">Reinvia codice</button>
+    </div>
+  </div>
+  <!-- Step 3: successo -->
+  <div id="rec-step-3" style="display:none;text-align:center;padding:1rem 0;">
+    <div style="font-size:2rem;margin-bottom:.8rem;">✅</div>
+    <div style="font-size:.9rem;font-weight:600;color:var(--white);margin-bottom:.5rem;">Password reimpostata!</div>
+    <div style="font-size:.75rem;color:var(--muted);margin-bottom:1.2rem;">Ora puoi accedere con la nuova password.</div>
+    <button class="btn-modal-submit" onclick="switchModalTab('login')">Vai al login →</button>
+  </div>
+  <div style="text-align:center;margin-top:.8rem;">
+    <button onclick="switchModalTab('login')" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:.65rem;font-family:'Poppins',sans-serif;cursor:pointer;text-decoration:underline;">← Torna al login</button>
+  </div>
+</div>
+
+<div class="modal-err" id="modal-err"></div>
+<div class="modal-ok"  id="modal-ok"></div>
+
+
+  </div>
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span>Fedeltà Astra</div>
+  <h1>LE TUE<br><em>RICOMPENSE</em></h1>
+</section>
+
+<!-- TABS -->
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('premi')">🎁 Premi</button>
+    <button class="tab" onclick="switchTab('come-funziona')">ℹ️ Come funziona</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- TAB PREMI -->
+
+  <div id="tab-premi">
+
+
+<!-- Logged out — banner compatto sopra la griglia -->
+<div class="login-banner" id="login-banner" style="display:none;flex-direction:row;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.1rem 1.4rem;margin-bottom:1.4rem;text-align:left;">
+  <div>
+    <div style="font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:.2rem;">Accedi per riscattare i premi</div>
+    <div style="font-size:.72rem;color:var(--muted);">Accumula punti ad ogni prenotazione e sblocca premi esclusivi.</div>
+  </div>
+  <div style="display:flex;gap:.5rem;flex-shrink:0;">
+    <button class="btn-accedi" onclick="openModal('login')" style="margin:0;">Accedi</button>
+    <button class="btn-accedi" onclick="openModal('register')" style="margin:0;background:transparent;color:var(--orange);border:1px solid rgba(255,107,0,.4);">Registrati</button>
+  </div>
+</div>
+
+<!-- Logged in summary -->
+<div class="points-summary" id="points-summary" style="display:none;">
+  <div>
+    <div class="pts-label">I tuoi punti</div>
+    <div class="pts-big" id="user-pts">0</div>
+  </div>
+  <div class="pts-info">
+    <div style="font-size:.75rem;color:var(--muted);line-height:1.65;" id="user-name-display"></div>
+  </div>
+</div>
+
+<!-- Rewards grid -->
+<div class="rewards-grid" id="rewards-grid"></div>
+
+<!-- History -->
+<div id="history-section" style="display:none;">
+  <div style="font-size:.62rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--orange);margin-bottom:.9rem;">✦ Storico punti</div>
+  <div class="history-list" id="history-list"></div>
+</div>
+
+
+  </div>
+
+  <!-- TAB COME FUNZIONA -->
+
+  <div id="tab-come-funziona" style="display:none;">
+    <div class="how-section">
+
+
+  <div class="how-card">
+    <h3>⭐ Come si guadagnano i punti</h3>
+    <p>Ogni prenotazione confermata da Astra Events ti fa guadagnare punti. I punti vengono assegnati automaticamente dopo che il nostro team ha verificato e confermato la tua prenotazione.</p>
+    <table class="pts-table">
+      <thead><tr><th>Tipo prenotazione</th><th>Punti</th></tr></thead>
+      <tbody>
+        <tr><td>🎟 Prevendita confermata (1-10 biglietti)</td><td>10 pts</td></tr>
+        <tr><td>🎟 Prevendita confermata (più di 10 biglietti)</td><td>20 pts</td></tr>
+        <tr><td>🍾 Tavolo confermato (1-5 persone)</td><td>10 pts</td></tr>
+        <tr><td>🍾 Tavolo confermato (più di 5 persone)</td><td>20 pts</td></tr>
+        <tr><td>⭐ Tavolo VIP confermato (più di 5 persone)</td><td>40 pts</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <div class="how-card">
+    <h3>🎁 Come si riscattano i premi</h3>
+    <table class="pts-table">
+      <thead><tr><th>Premio</th><th>Punti</th></tr></thead>
+      <tbody>
+        <tr><td>🎟 Entrata Omaggio</td><td>200 pts</td></tr>
+        <tr><td>🥤 Drink Gratis</td><td>100 pts</td></tr>
+        <tr><td>💚 Braccialetto Tavoli</td><td>300 pts</td></tr>
+        <tr><td>🎤 Accesso al Palco (10 min.)</td><td>500 pts</td></tr>
+      </tbody>
+    </table>
+    <ul style="margin-top:.8rem;">
+      <li>Vai alla scheda <strong>Premi</strong> e scegli quello che vuoi riscattare.</li>
+      <li>Clicca su <strong>Riscatta</strong> — i punti verranno scalati immediatamente.</li>
+      <li>Riceverai una <strong>conferma via WhatsApp</strong> dal nostro team entro 24h.</li>
+      <li>Il premio sarà disponibile al prossimo evento Astra.</li>
+    </ul>
+  </div>
+
+  <div class="how-card">
+    <h3>📱 Come funziona la registrazione</h3>
+    <p>La registrazione è <strong>gratuita e facoltativa</strong>. Ti basta inserire nome, cognome, numero di telefono e una password. Usa lo stesso numero di telefono quando prenoti per far collegare automaticamente i punti al tuo profilo.</p>
+  </div>
+
+  <div class="how-card">
+    <h3>❓ Domande frequenti</h3>
+    <ul>
+      <li><strong>I punti scadono?</strong> No, i tuoi punti non hanno scadenza.</li>
+      <li><strong>Posso trasferire i punti?</strong> No, i punti sono personali e non trasferibili.</li>
+      <li><strong>Quando ricevo i punti?</strong> Dopo la conferma della prenotazione da parte del nostro team.</li>
+      <li><strong>Ho prenotato senza account, posso recuperare i punti?</strong> Sì, contattaci su WhatsApp con il numero usato nella prenotazione.</li>
+    </ul>
+  </div>
+
+</div>
+
+
+  </div>
+
+</div>
+
+<footer>© 2026 Astra Events <b>✦</b> Roma, Italia <b>✦</b> Ricompense</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+
+<script>
+  /* ── Firebase ── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+      authDomain: "astra-events-338dd.firebaseapp.com",
+      projectId: "astra-events-338dd",
+      storageBucket: "astra-events-338dd.firebasestorage.app",
+      messagingSenderId: "166914171655",
+      appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+    });
+  }
+  const db = firebase.firestore();
+
+  /* ── State ── */
+  const AUTH_WORKER = 'https://astra-auth.astraaevents.workers.dev';
+  async function hashPassword(pwd) {
+    const res = await fetch(AUTH_WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'hash', password: pwd })
+    });
+    const data = await res.json();
+    return data.hash;
+  }
+
+
+
+  /* ── Rewards catalog ── */
+  const REWARDS = [
+    { id:'r1', icon:'🎟', title:'Entrata Omaggio', desc:'Accesso gratuito al prossimo evento Astra di tua scelta. Presentati in cassa con il codice ricevuto.', cost:200 },
+    { id:'r2', icon:'🥤', title:'Drink Gratis', desc:'Un drink offerto da Astra al tuo arrivo. Scegli quello che vuoi al bancone.', cost:100 },
+    { id:'r3', icon:'💚', title:'Braccialetto Tavoli', desc:'Ottieni il braccialetto per accedere all\'area tavoli del prossimo evento.', cost:300 },
+    { id:'r4', icon:'🎤', title:'Accesso al Palco', desc:'10 minuti sul palco durante l\'evento. Un\'esperienza esclusiva riservata a te.', cost:500 },
+  ];
+
+  /* ── Tab switch ── */
+  function switchTab(tab) {
+    document.getElementById('tab-premi').style.display         = tab === 'premi'          ? 'block' : 'none';
+    document.getElementById('tab-come-funziona').style.display = tab === 'come-funziona'  ? 'block' : 'none';
+    document.querySelectorAll('.tab').forEach((t,i) =>
+      t.classList.toggle('active', (tab==='premi'&&i===0)||(tab==='come-funziona'&&i===1))
+    );
+  }
+
+  /* ── Modal ── */
+  function openModal(tab) {
+    document.getElementById('modal-auth').classList.add('open');
+    switchModalTab(tab);
+  }
+  function closeModal() {
+    document.getElementById('modal-auth').classList.remove('open');
+    clearModalMsgs();
+  }
+  function clearModalMsgs() {
+    document.getElementById('modal-err').style.display = 'none';
+    document.getElementById('modal-ok').style.display  = 'none';
+  }
+  function switchModalTab(tab) {
+    document.getElementById('form-login').style.display    = tab === 'login'    ? 'block' : 'none';
+    document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('form-recover').style.display  = tab === 'recover'  ? 'block' : 'none';
+    document.getElementById('tab-login-btn').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-reg-btn').classList.toggle('active',   tab === 'register');
+    if (tab === 'recover') {
+      document.getElementById('rec-step-1').style.display = 'block';
+      document.getElementById('rec-step-2').style.display = 'none';
+      document.getElementById('rec-step-3').style.display = 'none';
+    }
+    clearModalMsgs();
+  }
+  function showErr(msg) { const e = document.getElementById('modal-err'); e.textContent = msg; e.style.display = 'block'; }
+  function showOk(msg)  { const o = document.getElementById('modal-ok');  o.textContent = msg; o.style.display = 'block'; }
+
+  /* ── Recover password ── */
+  let _recoverCode = null, _recoverCodeExpiry = null, _recoverEmail = null, _recoverUsername = null;
+
+  async function doRecover() {
+    const email = document.getElementById('rec-email').value.trim().toLowerCase();
+    const btn   = document.getElementById('rec-btn');
+    clearModalMsgs();
+    if (!email) { showErr('Inserisci la tua email.'); return; }
+    btn.disabled=true; btn.textContent='Invio…';
+    try {
+      let username=null, nome=null;
+      const snapU = await db.collection('utentiAstra').where('email','==',email).limit(1).get();
+      if (!snapU.empty) { username=snapU.docs[0].id; nome=snapU.docs[0].data().nome; }
+      else {
+        const snapS = await db.collection('utenti').where('email','==',email).limit(1).get();
+        if (!snapS.empty) { username=snapS.docs[0].id; nome=snapS.docs[0].data().nome; }
+      }
+      if (!username) { showErr('Nessun account trovato con questa email.'); btn.disabled=false; btn.textContent='Invia codice →'; return; }
+      _recoverUsername=username; _recoverEmail=email;
+      const res = await fetch('https://astra-auth.astraaevents.workers.dev', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'sendVerification', email, nome, type:'recover' })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      _recoverCode=data.code; _recoverCodeExpiry=Date.now()+10*60*1000;
+      document.getElementById('rec-step-1').style.display='none';
+      document.getElementById('rec-step-2').style.display='block';
+      document.getElementById('rec-email-display').textContent='Codice inviato a: '+email;
+    } catch(e) { showErr('Errore: '+e.message); }
+    btn.disabled=false; btn.textContent='Invia codice →';
+  }
+
+  async function resendRecoverCode() {
+    if (!_recoverEmail||!_recoverUsername) return;
+    try {
+      const snap = await db.collection('utentiAstra').doc(_recoverUsername).get();
+      const nome = snap.exists ? snap.data().nome : _recoverUsername;
+      const res  = await fetch('https://astra-auth.astraaevents.workers.dev', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'sendVerification', email:_recoverEmail, nome, type:'recover' })
+      });
+      const data = await res.json();
+      if (data.code) { _recoverCode=data.code; _recoverCodeExpiry=Date.now()+10*60*1000; showOk('Codice reinviato!'); setTimeout(()=>clearModalMsgs(),3000); }
+    } catch(e) {}
+  }
+
+  async function doVerificaRecover() {
+    const codice=document.getElementById('rec-codice').value.trim();
+    const pwd=document.getElementById('rec-pwd-new').value;
+    const pwd2=document.getElementById('rec-pwd-new2').value;
+    const btn=document.getElementById('rec-verifica-btn');
+    clearModalMsgs();
+    if (!codice) { showErr('Inserisci il codice.'); return; }
+    if (Date.now()>_recoverCodeExpiry) { showErr('Codice scaduto. Clicca Reinvia.'); return; }
+    if (codice!==_recoverCode) { showErr('Codice non corretto.'); return; }
+    if (pwd.length<6) { showErr('Password minimo 6 caratteri.'); return; }
+    if (pwd!==pwd2) { showErr('Le password non corrispondono.'); return; }
+    btn.disabled=true; btn.textContent='Aggiornamento…';
+    try {
+      const hashedPwd=await hashPassword(pwd);
+      const snapU=await db.collection('utentiAstra').doc(_recoverUsername).get();
+      if (snapU.exists) await db.collection('utentiAstra').doc(_recoverUsername).update({password:hashedPwd});
+      else await db.collection('utenti').doc(_recoverUsername).update({password:hashedPwd});
+      document.getElementById('rec-step-2').style.display='none';
+      document.getElementById('rec-step-3').style.display='block';
+      _recoverCode=null; _recoverEmail=null; _recoverUsername=null;
+    } catch(e) { showErr('Errore: '+e.message); }
+    btn.disabled=false; btn.textContent='Reimposta password →';
+  }
+
+  /* ── Genera codice amico univoco ── */
+  async function generaCodiceAmico(username) {
+    let codice, exists = true;
+    while (exists) {
+      const n = String(Math.floor(1000 + Math.random() * 9000));
+      codice = username.toUpperCase() + '#' + n;
+      const snap = await db.collection('utentiAstra').where('codiceAmico', '==', codice).limit(1).get();
+      exists = !snap.empty;
+    }
+    return codice;
+  }
+
+  /* ── Register ── */
+  async function doRegister() {
+    const nome     = document.getElementById('r-nome').value.trim();
+    const cognome  = document.getElementById('r-cognome').value.trim();
+    const username = document.getElementById('r-username').value.trim().toLowerCase().replace(/\s/g,'');
+    const tel      = document.getElementById('r-tel').value.trim().replace(/\s/g,'');
+    const pwd     = document.getElementById('r-pwd').value;
+    const pwd2    = document.getElementById('r-pwd2').value;
+    clearModalMsgs();
+    if (!nome || !cognome || !username || !tel) { showErr('Compila tutti i campi obbligatori.'); return; }
+    if (pwd.length < 6) { showErr('La password deve avere almeno 6 caratteri.'); return; }
+    if (pwd !== pwd2)   { showErr('Le password non corrispondono.'); return; }
+
+    const btn = document.getElementById('btn-register');
+    btn.disabled = true; btn.textContent = 'Registrazione…';
+    try {
+      const exUsr = await db.collection('utentiAstra').doc(username).get();
+      if (exUsr.exists) { showErr('Username già in uso. Scegline un altro.'); btn.disabled=false; btn.textContent='Crea account →'; return; }
+      const exTel = await db.collection('utentiAstra').where('tel','==',tel).limit(1).get();
+      if (!exTel.empty) { showErr('Numero già registrato. Accedi.'); btn.disabled=false; btn.textContent='Crea account →'; return; }
+
+      const hashedPwd = await hashPassword(pwd);
+      await db.collection('utentiAstra').doc(username).set({
+        nome, cognome, username, tel, password: hashedPwd,
+        punti: 0, storico: [],
+        codiceAmico: await generaCodiceAmico(username),
+        verificato: false,
+        email: '',
+        registratoAt: Date.now()
+      });
+
+      showOk('✓ Account creato! Benvenuto/a.');
+      setTimeout(() => { closeModal(); loginUser(username, { nome, cognome, username, tel, punti: 0, storico: [] }); }, 1500);
+    } catch(e) { showErr('Errore: ' + e.message); }
+    btn.disabled=false; btn.textContent='Crea account →';
+  }
+
+  /* ── Login ── */
+  async function doLogin() {
+    const tel = document.getElementById('l-tel').value.trim().toLowerCase().replace(/\s/g,'');
+    const pwd = document.getElementById('l-pwd').value;
+    clearModalMsgs();
+    if (!tel || !pwd) { showErr('Inserisci username e password.'); return; }
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true; btn.textContent = 'Accesso…';
+    try {
+      // 1. Admin/PR
+      const snapStaff = await db.collection('utenti').doc(tel).get();
+      if (snapStaff.exists) { return await checkAndLogin(snapStaff, pwd, btn, 'utenti'); }
+      // 2. Utente normale per username
+      const snapU = await db.collection('utentiAstra').doc(tel).get();
+      if (snapU.exists) { return await checkAndLogin(snapU, pwd, btn, 'utentiAstra'); }
+      // 3. Utente normale per telefono
+      const byTel = await db.collection('utentiAstra').where('tel','==',tel).limit(1).get();
+      if (!byTel.empty) { return await checkAndLogin(byTel.docs[0], pwd, btn, 'utentiAstra'); }
+      showErr('Credenziali errate. Riprova.'); btn.disabled=false; btn.textContent='Accedi →';
+    } catch(e) { showErr('Errore: ' + e.message); btn.disabled=false; btn.textContent='Accedi →'; }
+  }
+
+  async function checkAndLogin(snap, pwd, btn, collection) {
+    const u = snap.data();
+    const hashedPwd = await hashPassword(pwd);
+    let ok = false;
+    if (u.password === hashedPwd) { ok = true; }
+    else if (u.password === pwd) {
+      ok = true;
+      try { await db.collection(collection).doc(snap.id).update({ password: hashedPwd }); } catch(e) {}
+    }
+    if (!ok) { showErr('Credenziali errate. Riprova.'); btn.disabled=false; btn.textContent='Accedi →'; return; }
+    closeModal();
+    loginUser(snap.id, u);
+    btn.disabled=false; btn.textContent='Accedi →';
+  }
+
+  function loginUser(tel, u) {
+    currentUser = { id: tel, ...u };
+    localStorage.setItem('astra_rewards_user', tel);
+    // Persisti sessione per sopravvivere al refresh
+    const role = u.role || 'utente';
+    localStorage.setItem('ls_astra_role', role);
+    localStorage.setItem('ls_astra_user', tel);
+    localStorage.setItem('ls_astra_nome', (u.nome||'') + (u.cognome ? ' '+u.cognome : ''));
+    localStorage.setItem('ls_astra_alias', u.alias || '');
+    if (u.role === 'admin') localStorage.setItem('ls_astra_admin', '1');
+    else localStorage.removeItem('ls_astra_admin');
+    // Ripristina anche sessionStorage
+    sessionStorage.setItem('astra_role', role);
+    sessionStorage.setItem('astra_user', tel);
+    sessionStorage.setItem('astra_alias', u.alias || '');
+    updateUI();
+  }
+
+  function doLogout() {
+    currentUser = null;
+    localStorage.removeItem('astra_rewards_user');
+    localStorage.removeItem('ls_astra_role');
+    localStorage.removeItem('ls_astra_user');
+    localStorage.removeItem('ls_astra_nome');
+    localStorage.removeItem('ls_astra_admin');
+    sessionStorage.clear();
+    updateUI();
+  }
+
+  /* ── Update UI ── */
+  function updateUI() {
+    const loggedIn = !!currentUser;
+    document.getElementById('login-banner').style.display    = loggedIn ? 'none'  : 'flex';
+    document.getElementById('points-summary').style.display  = loggedIn ? 'flex'  : 'none';
+    document.getElementById('history-section').style.display = loggedIn ? 'block' : 'none';
+    document.getElementById('btn-accedi').style.display      = loggedIn ? 'none'  : '';
+    document.getElementById('btn-esci').style.display        = loggedIn ? ''      : 'none';
+    document.getElementById('points-badge').classList.toggle('show', loggedIn);
+
+    if (loggedIn) {
+      const pts = currentUser.punti || 0;
+      document.getElementById('user-pts').textContent    = pts;
+      document.getElementById('hdr-pts').textContent     = pts;
+      const displayName = currentUser.alias || `${currentUser.nome} ${currentUser.cognome}`;
+      document.getElementById('user-name-display').innerHTML = `<strong style="color:var(--white)">${displayName}</strong>`;
+      renderHistory();
+    }
+
+    renderRewards();
+  }
+
+  /* ── Render rewards ── */
+  function renderRewards() {
+    const grid = document.getElementById('rewards-grid');
+    const pts  = currentUser ? (currentUser.punti || 0) : 0;
+    grid.innerHTML = '';
+    REWARDS.forEach((r, i) => {
+      const canAfford = currentUser && pts >= r.cost;
+      const card = document.createElement('div');
+      card.className = 'reward-card' + (currentUser && !canAfford ? ' locked' : '');
+      card.style.animationDelay = i * 0.07 + 's';
+      card.innerHTML = `
+        <div class="reward-icon">${r.icon}</div>
+        <div class="reward-title">${r.title}</div>
+        <div class="reward-desc">${r.desc}</div>
+        <div class="reward-cost">
+          <span class="reward-pts">⭐ ${r.cost} punti</span>
+          ${currentUser
+            ? `<button class="btn-redeem" onclick="redeemReward('${r.id}','${r.title}',${r.cost})" ${canAfford ? '' : 'disabled'}>${canAfford ? 'Riscatta' : 'Punti insufficienti'}</button>`
+            : `<button class="btn-redeem" onclick="openModal('login')">Accedi</button>`
+          }
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  /* ── Telegram ── */
+  const WORKER_URL  = 'https://telegram-proxy.astraaevents.workers.dev';
+  const TG_CHAT_IDS = ['8677539389', '709651831'];
+
+  async function sendTelegramReward(user, rewardTitle, cost, newPts) {
+    const ora = new Date().toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const nome = (user.nome||'') + (user.cognome ? ' ' + user.cognome : '');
+    const lines = [
+      '🎁🎁 *[ RISCATTO PREMIO ]* 🎁🎁', '*ASTRA EVENTS*', '',
+      `👤 *Nome:* ${nome}`,
+      `🔗 *Username:* @${user.username || user.id}`,
+      user.tel ? `📱 *Telefono:* ${user.tel}` : '',
+      `🏆 *Premio:* ${rewardTitle}`,
+      `⭐ *Punti usati:* ${cost} pts`,
+      `💰 *Punti rimanenti:* ${newPts} pts`,
+      `🕒 *Ora:* ${ora}`,
+      '', '_Contattare l\'utente su WhatsApp per consegnare il premio._'
+    ].filter(Boolean);
+    try {
+      await Promise.all(TG_CHAT_IDS.map(id =>
+        fetch(WORKER_URL, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chatId: id, message: lines.join('\n') })
+        })
+      ));
+    } catch(e) { console.warn('Telegram:', e); }
+  }
+
+  /* ── Redeem ── */
+  async function redeemReward(id, title, cost) {
+    if (!currentUser) return;
+    if ((currentUser.punti||0) < cost) return;
+    if (!confirm(`Riscattare "${title}" per ${cost} punti?`)) return;
+
+    const entry = { tipo:'riscatto', desc:`Riscattato: ${title}`, punti: -cost, ts: Date.now() };
+    const newPts = (currentUser.punti||0) - cost;
+    const storico = [...(currentUser.storico||[]), entry];
+
+    await db.collection('utentiAstra').doc(currentUser.id).update({ punti: newPts, storico });
+    currentUser.punti   = newPts;
+    currentUser.storico = storico;
+
+    // Notifica Telegram
+    await sendTelegramReward(currentUser, title, cost, newPts);
+
+    updateUI();
+    alert(`✓ Riscattato! Il nostro team ti contatterà su WhatsApp entro 24h.`);
+  }
+
+  /* ── Render history ── */
+  function renderHistory() {
+    const list = document.getElementById('history-list');
+    const storico = (currentUser.storico || []).slice().reverse();
+    if (!storico.length) { list.innerHTML = '<div style="font-size:.75rem;color:rgba(255,255,255,.2);text-align:center;padding:1rem;">Nessuna attività ancora</div>'; return; }
+    list.innerHTML = storico.slice(0, 10).map(e => `
+      <div class="history-item">
+        <div>
+          <div>${e.desc}</div>
+          <div class="history-time">${new Date(e.ts).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'})}</div>
+        </div>
+        <div class="history-pts ${e.punti > 0 ? 'plus' : 'minus'}">${e.punti > 0 ? '+' : ''}${e.punti} pts</div>
+      </div>`).join('');
+  }
+
+  /* ── Auto login: sessionStorage (home) + localStorage ── */
+  async function autoLogin() {
+    const sessRole = sessionStorage.getItem('astra_role');
+    const sessUser = sessionStorage.getItem('astra_user');
+
+    // Ripristina sessionStorage da localStorage se manca (dopo refresh)
+    if (!sessRole) {
+      const lsRole = localStorage.getItem('ls_astra_role');
+      const lsUser = localStorage.getItem('ls_astra_user');
+      const lsNome = localStorage.getItem('ls_astra_nome');
+      const lsAlias = localStorage.getItem('ls_astra_alias');
+      const lsAdmin = localStorage.getItem('ls_astra_admin');
+      if (lsRole && lsUser) {
+        sessionStorage.setItem('astra_role', lsRole);
+        sessionStorage.setItem('astra_user', lsUser);
+        if (lsNome)  sessionStorage.setItem('astra_nome', lsNome);
+        if (lsAlias !== null) sessionStorage.setItem('astra_alias', lsAlias);
+        if (lsAdmin) sessionStorage.setItem('astra_admin', lsAdmin);
+      }
+    }
+
+    const role = sessionStorage.getItem('astra_role');
+    const user = sessionStorage.getItem('astra_user');
+    const isStaff = role === 'admin' || role === 'pr';
+
+    if (role === 'utente' && user) {
+      localStorage.setItem('astra_rewards_user', user);
+    } else if (isStaff && user) {
+      // Admin/PR — carica da 'utenti'
+      try {
+        const snap = await db.collection('utenti').doc(user).get();
+        if (snap.exists) { loginUser(user, snap.data()); return; }
+      } catch(e) {}
+      document.getElementById('login-banner').style.display = 'flex';
+      return;
+    } else if (!role && !user) {
+      localStorage.removeItem('astra_rewards_user');
+    }
+
+    const saved = localStorage.getItem('astra_rewards_user');
+    if (!saved) { document.getElementById('login-banner').style.display = 'flex'; return; }
+    try {
+      const snap = await db.collection('utentiAstra').doc(saved).get();
+      if (snap.exists) { loginUser(saved, snap.data()); }
+      else { localStorage.removeItem('astra_rewards_user'); document.getElementById('login-banner').style.display = 'flex'; }
+    } catch(e) { document.getElementById('login-banner').style.display = 'flex'; }
+  }
+
+  /* ── Keyboard shortcuts ── */
+  document.getElementById('l-pwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('r-pwd2').addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+  document.getElementById('modal-auth').addEventListener('click', e => { if (e.target === document.getElementById('modal-auth')) closeModal(); });
+
+  /* ── Init ── */
+  switchTab('premi');
+  try { renderRewards(); } catch(e) { console.error('renderRewards error:', e); }
+  try { autoLogin(); } catch(e) {
+    console.error('autoLogin error:', e);
+    try { document.getElementById('login-banner').style.display = 'flex'; } catch(e2) {}
+  }
+</script>
+
+</body>
+</html>

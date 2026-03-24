@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link rel="icon" type="image/jpeg" href="logo.jpg"/>
+  <title>Liste Omaggio — Astra Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --orange:#FF6B00;--orange2:#FF9A3C;
+      --black:#0A0A0A;--s1:#111111;--s2:#181818;--s3:#222;
+      --border:rgba(255,107,0,.18);--border2:rgba(255,255,255,.07);
+      --white:#fff;--muted:rgba(255,255,255,.4);--green:#68D391;
+    }
+    body{background:var(--black);color:var(--white);font-family:'Poppins',sans-serif;min-height:100vh;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 15% 15%,rgba(255,107,0,.05) 0%,transparent 50%),radial-gradient(ellipse at 85% 85%,rgba(255,107,0,.04) 0%,transparent 50%);}
+
+    .nav-back{position:fixed;top:1.2rem;left:1.2rem;z-index:100;}
+    .nav-back a{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.6rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);padding:.28rem .85rem;border-radius:99px;transition:background .22s;}
+    .nav-back a:hover{background:rgba(255,107,0,.22);}
+
+    .wrap{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:5rem 1.5rem 4rem;}
+    .page-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.06em;color:var(--white);margin-bottom:.3rem;}
+    .page-sub{font-size:.72rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2rem;}
+
+    /* Event folders */
+    .ev-folder{background:var(--s1);border:1px solid var(--border2);border-radius:18px;overflow:hidden;margin-bottom:1rem;transition:border-color .25s;}
+    .ev-folder.open{border-color:rgba(255,107,0,.35);}
+    .ev-folder-hdr{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;cursor:pointer;user-select:none;transition:background .2s;}
+    .ev-folder-hdr:hover{background:rgba(255,255,255,.02);}
+    .ev-folder-icon{font-size:1.3rem;flex-shrink:0;}
+    .ev-folder-info{flex:1;min-width:0;}
+    .ev-folder-name{font-size:1rem;font-weight:600;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .ev-folder-date{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin-top:.15rem;}
+    .ev-folder-arrow{font-size:.9rem;color:var(--muted);transition:transform .25s;flex-shrink:0;}
+    .ev-folder.open .ev-folder-arrow{transform:rotate(90deg);}
+    .ev-folder-body{display:none;border-top:1px solid var(--border2);padding:1.4rem;}
+    .ev-folder.open .ev-folder-body{display:block;}
+
+    /* PR sub-folders */
+    .pr-folder{background:var(--s2);border:1px solid var(--border2);border-radius:14px;overflow:hidden;margin-bottom:.7rem;}
+    .pr-folder.open{border-color:rgba(255,107,0,.2);}
+    .pr-folder-hdr{display:flex;align-items:center;gap:.8rem;padding:.9rem 1.1rem;cursor:pointer;user-select:none;}
+    .pr-folder-hdr:hover{background:rgba(255,255,255,.02);}
+    .pr-folder-icon{font-size:1.1rem;flex-shrink:0;}
+    .pr-folder-name{flex:1;font-size:.88rem;font-weight:500;color:var(--white);}
+    .pr-folder-count{font-size:.6rem;color:var(--orange);font-weight:600;letter-spacing:.1em;margin-right:.5rem;}
+    .pr-folder-arrow{font-size:.8rem;color:var(--muted);transition:transform .25s;}
+    .pr-folder.open .pr-folder-arrow{transform:rotate(90deg);}
+    .pr-folder-body{display:none;border-top:1px solid var(--border2);padding:.9rem 1.1rem;}
+    .pr-folder.open .pr-folder-body{display:block;}
+
+    /* Entries */
+    .entry-row{display:flex;align-items:center;gap:.6rem;padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+    .entry-row:last-child{border-bottom:none;}
+    .entry-num{font-size:.58rem;font-weight:600;color:rgba(255,107,0,.6);min-width:20px;}
+    .entry-name{font-size:.82rem;color:var(--white);}
+
+    /* Riepilogo totale */
+    .total-section{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border2);}
+    .btn-calcola{font-family:'Poppins',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:var(--orange);color:#000;border:none;border-radius:10px;padding:.65rem 1.3rem;cursor:pointer;transition:background .22s;}
+    .btn-calcola:hover{background:var(--orange2);}
+    .total-result{margin-top:1rem;background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:1.2rem;display:none;}
+    .total-result.visible{display:block;}
+    .total-header{font-size:.6rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:.8rem;}
+    .total-text{font-family:'Poppins',sans-serif;font-size:.78rem;color:var(--muted);line-height:1.8;white-space:pre-wrap;background:var(--s2);border-radius:10px;padding:1rem;margin-bottom:.8rem;}
+    .btn-copia{font-family:'Poppins',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:rgba(104,211,145,.12);color:#68D391;border:1px solid rgba(104,211,145,.3);border-radius:8px;padding:.45rem .9rem;cursor:pointer;transition:background .22s;}
+    .btn-copia:hover{background:rgba(104,211,145,.22);}
+    .btn-copia.copied{background:rgba(104,211,145,.3);}
+
+    .empty-msg{font-size:.72rem;color:rgba(255,255,255,.2);letter-spacing:.16em;text-transform:uppercase;text-align:center;padding:1.5rem 0;}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  
+    /* ── Topbar nav ── */
+    .topbar-nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,107,0,.18);}
+    .topbar-nav-links{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .topbar-nav-links a{font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;transition:background .2s;white-space:nowrap;}
+    .topbar-nav-links a:hover{background:rgba(255,107,0,.2);}
+    .topbar-nav-pill{display:inline-flex;align-items:center;gap:.4rem;font-family:'Poppins',sans-serif;font-size:.55rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.25);padding:.28rem .7rem;border-radius:99px;white-space:nowrap;}
+    .topbar-nav-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:tnblink 2s ease infinite;flex-shrink:0;}
+    @keyframes tnblink{0%,100%{opacity:1}50%{opacity:.25}}
+  </style>
+</head>
+<body>
+<div class="topbar-nav">
+  <div class="topbar-nav-links"><a href="index.html">← Home</a><a href="PannelloAdmin.html">← Pannello</a></div>
+  <div class="topbar-nav-pill"><span class="topbar-nav-dot"></span>Admin</div>
+</div>
+
+<div class="wrap">
+  <div class="page-title">Liste Omaggio</div>
+  <div class="page-sub">Entrate omaggio inserite dai PR per ogni evento</div>
+  <div id="events-list"><div class="empty-msg">Caricamento eventi…</div></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+<script>
+  /* ── Auth ── */
+  const role = sessionStorage.getItem('astra_role') || localStorage.getItem('ls_astra_role');
+  if (role !== 'admin') { window.location.href = 'index.html'; }
+
+  const adminNome    = (sessionStorage.getItem('astra_nome') || localStorage.getItem('ls_astra_nome') || '').trim();
+  const isSuperAdmin = adminNome === '' || adminNome.toLowerCase() === 'admin astra' ||
+                       (sessionStorage.getItem('astra_admin') === '1' &&
+                        adminNome.toLowerCase() !== 'ale' &&
+                        adminNome.toLowerCase() !== 'jajo');
+
+  /* ── Firebase ── */
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey:'AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk',
+      authDomain:'astra-events-338dd.firebaseapp.com',
+      projectId:'astra-events-338dd',
+      storageBucket:'astra-events-338dd.firebasestorage.app',
+      messagingSenderId:'166914171655',
+      appId:'1:166914171655:web:835d061dde01e5aab89ba2'
+    });
+  }
+  const db = firebase.firestore();
+
+  let allPRs = [];
+
+  /* ── Load PRs first, then events ── */
+  db.collection('utenti').onSnapshot(snap => {
+    allPRs = snap.docs
+      .map(d => ({ id:d.id, ...d.data() }))
+      .filter(u => {
+        const hasPR = u.role === 'pr' || (u.extraRoles||[]).includes('pr');
+        if (!hasPR) return false;
+        if (!isSuperAdmin && u.owner !== adminNome) return false;
+        return true;
+      })
+      .sort((a,b) => (a.nome||a.id).localeCompare(b.nome||b.id));
+  });
+
+  db.collection('eventi').orderBy('date','desc').onSnapshot(snap => {
+    const list = document.getElementById('events-list');
+    list.innerHTML = '';
+    const evs = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    if (!evs.length) { list.innerHTML = '<div class="empty-msg">Nessun evento</div>'; return; }
+    evs.forEach(ev => list.appendChild(buildEvFolder(ev)));
+  });
+
+  function fmtDate(s) {
+    if (!s) return '';
+    return new Date(s+'T00:00:00').toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
+  }
+
+  function buildEvFolder(ev) {
+    const folder = document.createElement('div');
+    folder.className = 'ev-folder';
+    folder.innerHTML = `
+      <div class="ev-folder-hdr">
+        <div class="ev-folder-icon">🎟</div>
+        <div class="ev-folder-info">
+          <div class="ev-folder-name">${ev.name}</div>
+          <div class="ev-folder-date">${fmtDate(ev.date)}</div>
+        </div>
+        <div class="ev-folder-arrow">›</div>
+      </div>
+      <div class="ev-folder-body" id="evbody-${ev.id}"></div>`;
+
+    let loaded = false;
+    folder.querySelector('.ev-folder-hdr').addEventListener('click', () => {
+      folder.classList.toggle('open');
+      if (folder.classList.contains('open') && !loaded) {
+        loaded = true;
+        loadEvData(ev, folder.querySelector('.ev-folder-body'));
+      }
+    });
+    return folder;
+  }
+
+  async function loadEvData(ev, body) {
+    body.innerHTML = '<div class="empty-msg">Caricamento…</div>';
+
+    // Carica tutte le entries per questo evento
+    const entriesSnap = await db.collection('omaggio').doc(ev.id).collection('entries').get();
+    const entriesMap = {}; // prId → nomi[]
+    entriesSnap.forEach(d => { entriesMap[d.id] = d.data().nomi || []; });
+
+    body.innerHTML = '';
+
+    // PR sub-folders
+    const prs = allPRs.length ? allPRs : entriesSnap.docs.map(d => ({ id:d.id, nome:d.data().prNome||d.id }));
+
+    if (!prs.length && !entriesSnap.size) {
+      body.innerHTML = '<div class="empty-msg">Nessun PR ha inserito entrate per questo evento</div>';
+      return;
+    }
+
+    // Mostra PR con dati — se non superadmin filtra per owner
+    const myPRIds = new Set(allPRs.map(p => p.id));
+    const prConDati = [...new Set([
+      ...allPRs.map(p => p.id),
+      ...(isSuperAdmin ? Object.keys(entriesMap) : Object.keys(entriesMap).filter(id => myPRIds.has(id)))
+    ])];
+
+    prConDati.forEach(prId => {
+      const pr = prs.find(p => p.id === prId);
+      const nome = pr ? (pr.nome || prId) : (entriesMap[prId]?.prNome || prId);
+      const nomi = entriesMap[prId] || [];
+      body.appendChild(buildPRFolder(prId, nome, nomi));
+    });
+
+    // Sezione calcolo totale
+    const totalSection = document.createElement('div');
+    totalSection.className = 'total-section';
+    totalSection.innerHTML = `
+      <button class="btn-calcola" onclick="calcolaTotale('${ev.id}', '${escHtml(ev.name)}', this)">📋 Calcola lista totale</button>
+      <div class="total-result" id="total-${ev.id}">
+        <div class="total-header">✦ Lista completa entrate omaggio</div>
+        <div class="total-text" id="total-text-${ev.id}"></div>
+        <button class="btn-copia" id="btn-copia-${ev.id}" onclick="copiaLista('${ev.id}')">📋 Copia lista</button>
+      </div>`;
+    body.appendChild(totalSection);
+  }
+
+  function buildPRFolder(prId, prNome, nomi) {
+    const folder = document.createElement('div');
+    folder.className = 'pr-folder';
+    folder.innerHTML = `
+      <div class="pr-folder-hdr">
+        <div class="pr-folder-icon">🎫</div>
+        <div class="pr-folder-name">${escHtml(prNome)}</div>
+        <div class="pr-folder-count">${nomi.length} entr${nomi.length===1?'ata':'ate'}</div>
+        <div class="pr-folder-arrow">›</div>
+      </div>
+      <div class="pr-folder-body">
+        ${nomi.length
+          ? nomi.map((n,i) => `<div class="entry-row"><span class="entry-num">${i+1}.</span><span class="entry-name">${escHtml(n)}</span></div>`).join('')
+          : '<div class="empty-msg" style="padding:.8rem 0;">Nessuna entrata</div>'}
+      </div>`;
+    folder.querySelector('.pr-folder-hdr').addEventListener('click', () => {
+      folder.classList.toggle('open');
+      folder.querySelector('.pr-folder-arrow').style.transform = folder.classList.contains('open') ? 'rotate(90deg)' : '';
+    });
+    return folder;
+  }
+
+  async function calcolaTotale(evId, evName, btn) {
+    btn.disabled = true; btn.textContent = 'Caricamento…';
+    const snap = await db.collection('omaggio').doc(evId).collection('entries').get();
+
+    // Raggruppa per PR e costruisce la lista
+    let lines = [`🎟 ENTRATE OMAGGIO — ${evName.toUpperCase()}`, ''];
+    let totale = 0;
+    const prMap = {};
+    allPRs.forEach(p => prMap[p.id] = p.nome || p.id);
+
+    const myPRIds = new Set(allPRs.map(p => p.id));
+    snap.forEach(d => {
+      if (!isSuperAdmin && !myPRIds.has(d.id)) return; // filtra per owner
+      const nomi = d.data().nomi || [];
+      if (!nomi.length) return;
+      const nome = prMap[d.id] || d.data().prNome || d.id;
+      lines.push(`📌 PR: ${nome} (${nomi.length})`);
+      nomi.forEach((n,i) => lines.push(`  ${totale+i+1}. ${n}`));
+      lines.push('');
+      totale += nomi.length;
+    });
+
+    lines.push(`━━━━━━━━━━━━━━━━━━━━`);
+    lines.push(`TOTALE: ${totale} entr${totale===1?'ata':'ate'} omaggio`);
+
+    const text = lines.join('\n');
+    const el = document.getElementById('total-text-'+evId);
+    const res = document.getElementById('total-'+evId);
+    el.textContent = text;
+    res.classList.add('visible');
+    btn.disabled = false; btn.textContent = '📋 Calcola lista totale';
+  }
+
+  function copiaLista(evId) {
+    const text = document.getElementById('total-text-'+evId).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('btn-copia-'+evId);
+      btn.textContent = '✓ Copiata!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copia lista'; btn.classList.remove('copied'); }, 2500);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+</body>
+</html>

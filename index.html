@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta property="og:title" content="Astra Events" />
+<meta property="og:description" content="I migliori eventi liceali di Roma" />
+<meta property="og:image" content="logo.jpg" />
+<meta property="og:type" content="website" />
+  <meta name="description" content="Astra Events — I migliori eventi liceali di Roma. Prevendite, tavoli e contest." />
+<meta name="keywords" content="eventi liceali roma, feste liceo roma, astra events" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg" />
+  <!-- PWA / Aggiungi a Home -->
+  <link rel="apple-touch-icon" href="logo.jpg" />
+  <meta name="apple-mobile-web-app-title" content="Astra Events" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="application-name" content="Astra Events" />
+  <meta name="theme-color" content="#FF6B00" />
+  <title>Astra Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:    #FF6B00;
+      --orange2:   #FF9A3C;
+      --black:     #0A0A0A;
+      --white:     #FFFFFF;
+      --R:         280;     /* orbit radius in px — also updated by JS */
+      --logo-size: 340px;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Background ── */
+    .bg {
+      position: fixed; inset: 0;
+      background: url('background.png') center/cover no-repeat;
+      z-index: 0;
+    }
+    .bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center,
+        rgba(0,0,0,.10) 0%,
+        rgba(0,0,0,.48) 100%);
+    }
+
+    /* ── Grain ── */
+    .grain {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none; opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── Stage ── */
+    .stage {
+      position: relative; z-index: 2;
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Orbit scene: sized dynamically by JS ── */
+    .orbit-scene {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      animation: fadeIn .9s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    /* ── Orbit ring (decorative) ── */
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,107,0,.22);
+      pointer-events: none;
+      animation: spin 28s linear infinite;
+    }
+    .orbit-ring::before {
+      content: '';
+      position: absolute;
+      top: -4px; left: 50%; transform: translateX(-50%);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 12px var(--orange), 0 0 28px rgba(255,107,0,.45);
+    }
+
+    /* ── Logo center ── */
+    .logo-center {
+      position: relative; z-index: 5;
+      display: flex; flex-direction: column;
+      align-items: center; gap: .5rem;
+    }
+    .logo-center img {
+      width: var(--logo-size);
+      height: var(--logo-size);
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(255,107,0,.35), 0 0 40px rgba(255,107,0,.4);
+      transition: box-shadow .4s ease;
+    }
+    .logo-center img:hover {
+      box-shadow: 0 0 0 2px rgba(255,107,0,.7), 0 0 65px rgba(255,107,0,.75);
+    }
+    .tagline {
+      font-size: .6rem;
+      font-weight: 300;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.38);
+    }
+
+    /* ── Orbit links ── */
+    .orbit-link {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--orange);
+      white-space: nowrap;
+      transition: color .3s ease, text-shadow .3s ease;
+      padding: .25rem .1rem;
+      font-size: clamp(.68rem, 1vw, 1rem);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .orbit-link::after {
+      content: '';
+      display: block;
+      height: 1px;
+      background: var(--white);
+      width: 0;
+      transition: width .3s ease;
+      margin-top: 3px;
+    }
+    .orbit-link:hover {
+      color: var(--white);
+      text-shadow: 0 0 16px rgba(255,255,255,.45);
+    }
+    .orbit-link:hover::after { width: 100%; }
+
+
+    /* ── Side panels ── */
+    .side-panel {
+      position: fixed;
+      top: 2vh; bottom: 2vh;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 1vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .side-panel.left  { left: 3.5vw; }
+    .side-panel.right { right: 3.5vw; }
+
+    .side-img-wrap {
+      position: relative;
+      width: clamp(140px, 14vw, 240px);
+      height: calc((96vh - 4vh) / 3 - 1.5vh);
+      aspect-ratio: unset;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,107,0,.25);
+      box-shadow: 0 4px 24px rgba(0,0,0,.55);
+      transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+      animation: fadeIn .7s ease both;
+      cursor: pointer;
+    }
+    .side-img-wrap:nth-child(1) { animation-delay: .2s; }
+    .side-img-wrap:nth-child(2) { animation-delay: .38s; }
+    .side-img-wrap:nth-child(3) { animation-delay: .56s; }
+    .side-img-wrap:hover {
+      transform: scale(1.07);
+      border-color: rgba(255,107,0,.75);
+      box-shadow: 0 6px 36px rgba(255,107,0,.4);
+    }
+    .side-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(.72) saturate(1.1);
+      transition: filter .35s ease;
+    }
+    .side-img-wrap:hover img { filter: brightness(.96) saturate(1.3); }
+    .side-img-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(255,107,0,.2) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* vertical accent line */
+    .side-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(255,107,0,.35) 30%,
+        rgba(255,107,0,.35) 70%,
+        transparent 100%);
+      pointer-events: none;
+    }
+    .side-panel.left::before  { right: -16px; }
+    .side-panel.right::before { left: -16px; }
+
+
+
+    /* ── Horizontal midline ── */
+    .midline {
+      position: fixed; left: 0; right: 0; top: 50%;
+      height: 1px;
+      background: linear-gradient(to right,
+        transparent 0%, rgba(255,107,0,.12) 15%,
+        rgba(255,107,0,.28) 50%,
+        rgba(255,107,0,.12) 85%, transparent 100%);
+      z-index: 2; pointer-events: none;
+    }
+
+    /* ── Hide panels on small screens ── */
+    @media (max-width: 1024px) {
+      .side-panel { display: none; }
+      .midline { display: none; }
+    }
+
+
+
+    /* ── Footer ── */
+    .footer-strip {
+      position: fixed;
+      bottom: 0; left: 0; right: 0; z-index: 3;
+      display: flex; justify-content: center; gap: 2rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 100%);
+      animation: fadeIn 1s .6s cubic-bezier(.22,1,.36,1) both;
+      opacity: 0;
+    }
+    .footer-strip span {
+      font-size: .6rem; letter-spacing: .28em;
+      text-transform: uppercase; color: rgba(255,255,255,.22);
+    }
+    .footer-strip .dot { color: var(--orange); opacity: .45; }
+
+    /* ── Animations ── */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Auth buttons ── */
+    .auth-btns { position:fixed; top:1.2rem; right:1.2rem; z-index:100; display:flex; align-items:center; gap:.5rem; backdrop-filter:blur(8px); }
+    .btn-registrati { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; background:none; color:var(--orange); border:1px solid rgba(255,107,0,.4); border-radius:99px; padding:.45rem .9rem; cursor:pointer; transition:background .22s; touch-action:manipulation; }
+    .btn-registrati:hover { background:rgba(255,107,0,.1); }
+    .btn-accedi-main { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; background:var(--orange); color:#000; border:none; border-radius:99px; padding:.45rem .9rem; cursor:pointer; transition:background .22s; touch-action:manipulation; }
+    .btn-accedi-main:hover { background:var(--orange2); }
+    .btn-logged-user { font-family:'Poppins',sans-serif; font-size:.6rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; background:rgba(255,107,0,.15); color:var(--orange); border:1px solid rgba(255,107,0,.4); border-radius:99px; padding:.45rem .9rem; cursor:pointer; transition:background .22s; display:none; touch-action:manipulation; }
+    .btn-logged-user.show { display:inline-flex; align-items:center; gap:.35rem; }
+
+    #admin-modal { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); align-items:flex-start; justify-content:center; padding:.75rem; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    #admin-modal.open { display:flex; }
+    .modal-box { background:#111; border:1px solid rgba(255,107,0,.25); border-radius:20px; padding:2rem 1.6rem; width:100%; max-width:380px; animation:popIn .3s cubic-bezier(.22,1,.36,1) both; position:relative; margin:auto; box-sizing:border-box; }
+    @media (max-height:680px) { .modal-box { padding:1.2rem 1.2rem; } .modal-input { padding:.5rem .8rem; margin-bottom:.5rem; font-size:.82rem; } .modal-btn { padding:.6rem; } .modal-logo { font-size:1.5rem; margin-bottom:.05rem; } .modal-sub { margin-bottom:.9rem; } }
+    .modal-tabs-row { display:flex; background:rgba(255,255,255,.05); border-radius:10px; padding:.25rem; gap:.25rem; margin-bottom:1.2rem; }
+    .modal-tab-btn { flex:1; font-family:'Poppins',sans-serif; font-size:.65rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; background:none; border:none; color:rgba(255,255,255,.4); padding:.42rem; border-radius:7px; cursor:pointer; transition:background .2s,color .2s; }
+    .modal-tab-btn.active { background:var(--orange); color:#000; }
+    @keyframes popIn { from{opacity:0;transform:scale(.94)} to{opacity:1;transform:scale(1)} }
+    .modal-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .1em; text-align: center; margin-bottom: .2rem; background: linear-gradient(120deg, var(--orange), var(--orange2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .modal-sub { text-align: center; font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 1.6rem; }
+    .modal-input { width: 100%; background: #181818; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; color: #fff; font-family: 'Poppins', sans-serif; font-size: .9rem; padding: .7rem 1rem; outline: none; margin-bottom: .8rem; transition: border-color .22s; }
+    .modal-input:focus { border-color: var(--orange); }
+    .modal-btn { width: 100%; background: var(--orange); color: #000; font-family: 'Poppins', sans-serif; font-size: .75rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; border: none; border-radius: 10px; padding: .8rem; cursor: pointer; transition: background .22s; }
+    .modal-btn:hover { background: var(--orange2); }
+    .modal-err { text-align: center; font-size: .7rem; color: #E53E3E; margin-top: .6rem; display: none; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: rgba(255,255,255,.3); font-size: 1.2rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="grain"></div>
+
+  <div class="stage">
+    <div class="orbit-scene" id="scene">
+      <div class="orbit-ring" id="ring"></div>
+      <div class="logo-center">
+        <img src="logo.jpg" alt="Astra Events" />
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Horizontal midline -->
+  <div class="midline"></div>
+
+  <!-- Left side images -->
+  <div class="side-panel left">
+    <div class="side-img-wrap">
+      <img src="event1.jpg" alt="Evento 1" onerror="this.parentElement.style.background='linear-gradient(160deg,#1a0a00,#2a1200)'; this.style.display='none';" />
+    </div>
+    <div class="side-img-wrap">
+      <img src="event2.jpeg" alt="Evento 2" onerror="this.parentElement.style.background='linear-gradient(160deg,#1a0a00,#2a1200)'; this.style.display='none';" />
+    </div>
+    <div class="side-img-wrap">
+      <img src="event3.jpeg" alt="Evento 3" onerror="this.parentElement.style.background='linear-gradient(160deg,#1a0a00,#2a1200)'; this.style.display='none';" />
+    </div>
+  </div>
+
+  <!-- Right side images -->
+  <div class="side-panel right">
+    <div class="side-img-wrap">
+      <img src="event4.jpg" alt="Evento 4" onerror="this.parentElement.style.background='linear-gradient(160deg,#1a0a00,#2a1200)'; this.style.display='none';" />
+    </div>
+    <div class="side-img-wrap">
+      <img src="event5.jpeg" alt="Evento 5" onerror="this.parentElement.style.background='linear-gradient(160deg,#1a0a00,#2a1200)'; this.style.display='none';" />
+    </div>
+    <div class="side-img-wrap">
+      <img src="event6.jpeg" alt="Evento 6" onerror="this.parentElement.style.background='linear-gradient(160deg,#1a0a00,#2a1200)'; this.style.display='none';" />
+    </div>
+  </div>
+
+  <div class="footer-strip">
+    <span>© 2026 Astra Events</span>
+    <span class="dot">✦</span>
+    <span>I migliori eventi liceali</span>
+    <span class="dot">✦</span>
+    <span>Roma, Italia</span>
+  </div>
+
+  <script>
+    const LINKS = [
+      { label: 'Eventi',     href: 'eventi.html' },
+      { label: 'Spotted',    href: 'spotted.html' },
+      { label: 'Bacheca',    href: 'BachecaUtenti.html' },
+      { label: 'Foto Eventi', href: 'galleria.html' },
+      { label: 'Ricompense', href: 'Ricompense.html' },
+      { label: 'Contatti',   href: 'contatti.html' },
+      { label: 'Diventa PR', href: 'diventapr.html' },
+    ];
+
+    const scene = document.getElementById('scene');
+    const ring  = document.getElementById('ring');
+
+    function getSizes() {
+      const vw = window.innerWidth;
+      if (vw <= 900) {
+        const radius = Math.floor(vw * 0.38);
+        const logo   = Math.floor(radius * 1.45);
+        return { logo, radius };
+      }
+      if (vw > 2200) return { logo: 340, radius: 420 };
+      if (vw > 1600) return { logo: 340, radius: 340 };
+      return { logo: 340, radius: 280 };
+    }
+
+    function placeLinks() {
+      scene.querySelectorAll('.orbit-link').forEach(el => el.remove());
+
+      const allLinks = LINKS;
+
+      const { logo, radius } = getSizes();
+
+      // Aggiorna dimensione logo
+      document.documentElement.style.setProperty('--logo-size', logo + 'px');
+
+      const R   = radius;
+      const vw  = window.innerWidth;
+      // On mobile cap scene width to viewport so it never overflows
+      const dia = window.innerWidth <= 900
+        ? Math.min(R * 2 + 160, vw)
+        : R * 2 + 220;
+
+      scene.style.width  = dia + 'px';
+      scene.style.height = dia + 'px';
+
+      ring.style.width  = R * 2 + 'px';
+      ring.style.height = R * 2 + 'px';
+
+      const total = allLinks.length;
+      const cx = dia / 2;
+      const cy = dia / 2;
+
+      allLinks.forEach((item, i) => {
+        const angleDeg = (360 / total) * i - 90;
+        const angleRad = angleDeg * Math.PI / 180;
+
+        const x = cx + R * Math.cos(angleRad);
+        const y = cy + R * Math.sin(angleRad);
+
+        const a = document.createElement('a');
+        a.className   = 'orbit-link';
+        a.href        = item.href;
+        a.textContent = item.label;
+        a.style.color = 'var(--orange)';
+        a.style.left  = x + 'px';
+        a.style.top   = y + 'px';
+        a.style.animation = `fadeIn .5s ${.15 + i * .09}s ease both`;
+        a.style.opacity   = '0';
+
+        scene.appendChild(a);
+      });
+    }
+
+    placeLinks();
+    window.addEventListener('resize', placeLinks);
+  </script>
+
+
+  <!-- Auth buttons -->
+  <div class="auth-btns" id="auth-btns">
+    <button class="btn-registrati" id="btn-registrati" onclick="openModal('register')">Registrati</button>
+    <button class="btn-accedi-main" id="btn-accedi-main" onclick="openModal('login')">Accedi</button>
+    <button class="btn-logged-user" id="btn-logged-user" onclick="goToProfilo()"><img id="btn-user-avatar" src="" style="display:none;width:18px;height:18px;border-radius:50%;object-fit:cover;margin-right:.2rem;vertical-align:middle;border:1px solid rgba(255,107,0,.5);" />● <span id="btn-user-nome"></span></button>
+    <button class="btn-accedi-main" id="btn-pannello" style="display:none;" onclick="goToPannello()">⚙ Pannello</button>
+  </div>
+
+  <!-- Modal login / register -->
+  <div id="admin-modal">
+    <div class="modal-box">
+      <button onclick="closeModal()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:rgba(255,255,255,.3);font-size:1.1rem;cursor:pointer;">✕</button>
+      <div class="modal-logo">ASTRA</div>
+      <div class="modal-sub">Benvenuto</div>
+      <div class="modal-tabs-row">
+        <button class="modal-tab-btn active" id="modal-tab-login" onclick="switchIndexModal('login')">Accedi</button>
+        <button class="modal-tab-btn" id="modal-tab-reg" onclick="switchIndexModal('register')">Registrati</button>
+      </div>
+      <!-- LOGIN -->
+      <div id="modal-form-login">
+        <input class="modal-input" type="text" id="admin-usr" placeholder="Username" autocomplete="username" style="margin-bottom:.6rem;" />
+        <input class="modal-input" type="password" id="admin-pwd" placeholder="Password" autocomplete="current-password" style="margin-bottom:.8rem;" />
+        <button class="modal-btn" id="modal-login-btn" onclick="doLogin()">Accedi →</button>
+        <div style="text-align:center;margin-top:.8rem;">
+          <button onclick="switchIndexModal('recover')" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:.65rem;font-family:Poppins,sans-serif;cursor:pointer;letter-spacing:.08em;text-decoration:underline;">Hai dimenticato la password?</button>
+        </div>
+      </div>
+      <!-- RECUPERO PASSWORD -->
+      <div id="modal-form-recover" style="display:none;">
+        <!-- STEP 1: inserisci email -->
+        <div id="rec-step-1">
+          <div style="font-size:.72rem;color:rgba(255,255,255,.5);text-align:center;margin-bottom:1rem;line-height:1.6;">Inserisci la tua email.<br>Ti mandiamo un codice per reimpostare la password.</div>
+          <input class="modal-input" type="email" id="rec-email" placeholder="La tua email" style="margin-bottom:.8rem;" />
+          <button class="modal-btn" id="rec-btn" onclick="doRecover()">Invia codice →</button>
+          <div style="text-align:center;margin-top:.8rem;">
+            <button onclick="switchIndexModal('login')" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:.65rem;font-family:Poppins,sans-serif;cursor:pointer;letter-spacing:.08em;text-decoration:underline;">← Torna al login</button>
+          </div>
+        </div>
+        <!-- STEP 2: codice + nuova password -->
+        <div id="rec-step-2" style="display:none;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">📧</div>
+          <div style="font-size:.8rem;font-weight:600;color:#fff;margin-bottom:.4rem;">Controlla la tua email!</div>
+          <div id="rec-email-display" style="font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:1rem;"></div>
+          <input class="modal-input" type="text" id="rec-codice" placeholder="Codice a 6 cifre" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="text-align:center;font-size:1.2rem;letter-spacing:.3em;margin-bottom:.8rem;" />
+          <input class="modal-input" type="password" id="rec-pwd-new" placeholder="Nuova password (min. 6)" style="margin-bottom:.6rem;" />
+          <input class="modal-input" type="password" id="rec-pwd-new2" placeholder="Conferma nuova password" style="margin-bottom:.8rem;" />
+          <button class="modal-btn" id="rec-verifica-btn" onclick="doVerificaRecover()">Reimposta password →</button>
+          <div style="margin-top:.8rem;">
+            <button onclick="resendRecoverCode()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:.65rem;font-family:Poppins,sans-serif;cursor:pointer;letter-spacing:.08em;text-decoration:underline;">Non hai ricevuto il codice? Reinvia</button>
+          </div>
+        </div>
+        <!-- STEP 3: successo -->
+        <div id="rec-step-3" style="display:none;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">✅</div>
+          <div style="font-size:.85rem;font-weight:600;color:#fff;margin-bottom:.4rem;">Password reimpostata!</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:1.2rem;">Ora puoi accedere con la nuova password.</div>
+          <button class="modal-btn" onclick="switchIndexModal('login')">Vai al login →</button>
+        </div>
+      </div>
+      <!-- REGISTER (utenti normali) -->
+      <div id="modal-form-register" style="display:none;">
+        <!-- STEP 1: Dati -->
+        <div id="reg-step-1">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem;">
+            <input class="modal-input" type="text" id="reg-nome" placeholder="Nome" />
+            <input class="modal-input" type="text" id="reg-cognome" placeholder="Cognome" />
+          </div>
+          <input class="modal-input" type="text" id="reg-username" placeholder="Username" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9._]/g,'')" style="margin-bottom:.3rem;" />
+          <div style="font-size:.58rem;font-weight:600;color:#7a5c00;background:#F6E05E;border-radius:8px;padding:.5rem .8rem;margin-bottom:.6rem;line-height:1.5;">⚠ L'username non può essere modificato in seguito — sceglilo con cura, sarà visibile agli altri utenti.</div>
+          <input class="modal-input" type="tel" id="reg-tel" placeholder="Numero di telefono" style="margin-bottom:.3rem;" />
+          <div style="font-size:.65rem;font-weight:600;color:#7a5c00;background:#F6E05E;border-radius:8px;padding:.5rem .8rem;margin-bottom:.6rem;line-height:1.5;">⚠ Usa il numero che inserisci nelle prenotazioni — serve per ricevere i punti ricompensa.</div>
+          <input class="modal-input" type="email" id="reg-email" placeholder="Email (per verifica account)" style="margin-bottom:.6rem;" />
+          <input class="modal-input" type="password" id="reg-pwd" placeholder="Password (min. 6)" style="margin-bottom:.6rem;" />
+          <input class="modal-input" type="password" id="reg-pwd2" placeholder="Conferma password" style="margin-bottom:.6rem;" />
+          <input class="modal-input" type="text" id="reg-codiceamico" placeholder="Codice amico (opzionale)" oninput="this.value=this.value.toUpperCase()" style="margin-bottom:.3rem;" />
+          <div style="font-size:.58rem;color:rgba(255,255,255,.35);letter-spacing:.08em;margin-bottom:.8rem;padding-left:.2rem;">Se hai ricevuto un codice da un amico inseriscilo qui.</div>
+          <button class="modal-btn" id="modal-reg-btn" onclick="doRegister()">Crea account →</button>
+        </div>
+        <!-- STEP 2: Verifica email -->
+        <div id="reg-step-2" style="display:none;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">📧</div>
+          <div style="font-size:.8rem;font-weight:600;color:#fff;margin-bottom:.4rem;">Controlla la tua email!</div>
+          <div id="reg-email-display" style="font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:1.2rem;"></div>
+          <input class="modal-input" type="text" id="reg-codice-verifica" placeholder="Codice a 6 cifre" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="text-align:center;font-size:1.2rem;letter-spacing:.3em;margin-bottom:.8rem;" />
+          <button class="modal-btn" id="reg-verifica-btn" onclick="doVerificaEmail()">Verifica →</button>
+          <div style="margin-top:.8rem;">
+            <button onclick="resendCode()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:.65rem;font-family:Poppins,sans-serif;cursor:pointer;letter-spacing:.08em;text-decoration:underline;">Non hai ricevuto il codice? Reinvia</button>
+          </div>
+          <div style="margin-top:.5rem;">
+            <button onclick="tornaAStep1()" style="background:none;border:none;color:rgba(255,107,0,.6);font-size:.65rem;font-family:Poppins,sans-serif;cursor:pointer;letter-spacing:.08em;text-decoration:underline;">← Email sbagliata? Torna indietro</button>
+          </div>
+        </div>
+        <!-- STEP 3: Codice amico -->
+        <div id="reg-step-3" style="display:none;text-align:center;">
+          <div style="font-size:2rem;margin-bottom:.8rem;">🎉</div>
+          <div style="font-size:.85rem;font-weight:600;color:#fff;margin-bottom:.4rem;">Account verificato!</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:1.2rem;">Il tuo codice amico è:</div>
+          <div id="reg-codice-amico-display" style="background:#181818;border:1px solid rgba(255,107,0,.3);border-radius:12px;padding:1rem;font-size:1.4rem;font-weight:700;letter-spacing:.3em;color:#ff6b00;margin-bottom:1rem;"></div>
+          <div style="font-size:.65rem;color:rgba(255,255,255,.35);margin-bottom:1.2rem;">Condividilo con i tuoi amici per guadagnare punti!</div>
+          <button class="modal-btn" onclick="switchIndexModal('login')">Accedi ora →</button>
+        </div>
+      </div>
+      <div class="modal-err" id="modal-err" style="display:none;margin-top:.7rem;text-align:center;font-size:.72rem;color:#FC8181;"></div>
+      <div id="modal-ok-msg" style="display:none;margin-top:.7rem;text-align:center;font-size:.72rem;color:#68D391;"></div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+  <script>
+    // ── Firebase ──────────────────────────────────────────
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyDCKDdde5PhjbZOWt2Tu-NR1esbV8LY5Jk",
+        authDomain: "astra-events-338dd.firebaseapp.com",
+        projectId: "astra-events-338dd",
+        storageBucket: "astra-events-338dd.firebasestorage.app",
+        messagingSenderId: "166914171655",
+        appId: "1:166914171655:web:835d061dde01e5aab89ba2"
+      });
+    }
+    const db = firebase.firestore();
+
+    const AUTH_WORKER = "https://astra-auth.astraaevents.workers.dev";
+    async function hashPassword(pwd) {
+      const res = await fetch(AUTH_WORKER, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "hash", password: pwd })
+      });
+      const data = await res.json();
+      return data.hash;
+    }
+
+
+
+
+    // ── Helpers sessione ────────────────────────────────
+    function isLogged() { return !!sessionStorage.getItem('astra_role') || sessionStorage.getItem('astra_admin') === '1'; }
+    function isAdmin()  { return sessionStorage.getItem('astra_role') === 'admin' || sessionStorage.getItem('astra_admin') === '1'; }
+
+    /* ── Ripristina sessione da localStorage al ricaricamento ── */
+    (function restoreSession() {
+      if (!sessionStorage.getItem('astra_role')) {
+        const role = localStorage.getItem('ls_astra_role');
+        const user = localStorage.getItem('ls_astra_user');
+        const nome = localStorage.getItem('ls_astra_nome');
+        const alias = localStorage.getItem('ls_astra_alias');
+        const admin = localStorage.getItem('ls_astra_admin');
+        if (role && user) {
+          sessionStorage.setItem('astra_role', role);
+          sessionStorage.setItem('astra_user', user);
+          if (nome)  sessionStorage.setItem('astra_nome', nome);
+          if (alias !== null) sessionStorage.setItem('astra_alias', alias);
+          if (admin) sessionStorage.setItem('astra_admin', admin);
+        }
+      }
+    })();
+
+    function updateAuthBtns() {
+      const loggedIn = isLogged();
+      const role = sessionStorage.getItem('astra_role');
+      const nome = sessionStorage.getItem('astra_nome') || '';
+      const alias = sessionStorage.getItem('astra_alias') || localStorage.getItem('ls_astra_alias') || '';
+      document.getElementById('btn-registrati').style.display  = loggedIn ? 'none' : '';
+      document.getElementById('btn-accedi-main').style.display = loggedIn ? 'none' : '';
+      const lb = document.getElementById('btn-logged-user');
+      const bp = document.getElementById('btn-pannello');
+      if (loggedIn) {
+        lb.classList.add('show');
+        document.getElementById('btn-user-nome').textContent = alias || nome;
+        // Mostra bottone pannello per admin e PR (non per utenti normali)
+        if (role === 'admin' || role === 'pr') {
+          bp.style.display = '';
+          bp.textContent = role === 'admin' ? '⚙ Pannello' : '📊 Dashboard';
+        } else {
+          bp.style.display = 'none';
+        }
+        // Carica foto profilo
+        const usr = sessionStorage.getItem('astra_user') || localStorage.getItem('astra_rewards_user');
+        if (usr) {
+          const col = (role === 'utente') ? 'utentiAstra' : 'utenti';
+          db.collection(col).doc(usr).get().then(snap => {
+            if (snap.exists && snap.data().fotoUrl) {
+              const imgEl = document.getElementById('btn-user-avatar');
+              imgEl.src = snap.data().fotoUrl;
+              imgEl.style.display = 'inline-block';
+            }
+          }).catch(() => {});
+        }
+      } else {
+        lb.classList.remove('show');
+        bp.style.display = 'none';
+      }
+    }
+
+    function goToProfilo() {
+      if (isLogged()) {
+        window.location.href = 'profilo.html';
+      } else { openModal('login'); }
+    }
+
+    function openModal(tab) {
+      document.getElementById('admin-modal').classList.add('open');
+      switchIndexModal(tab || 'login');
+    }
+    function switchIndexModal(tab) {
+      document.getElementById('modal-form-login').style.display    = tab === 'login'    ? 'block' : 'none';
+      document.getElementById('modal-form-register').style.display = tab === 'register' ? 'block' : 'none';
+      const recEl = document.getElementById('modal-form-recover');
+      if (recEl) recEl.style.display = tab === 'recover' ? 'block' : 'none';
+      document.getElementById('modal-tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('modal-tab-reg').classList.toggle('active',   tab === 'register');
+      document.getElementById('modal-err').style.display    = 'none';
+      document.getElementById('modal-ok-msg').style.display = 'none';
+    }
+
+    function goToPannello() {
+      const role = sessionStorage.getItem('astra_role');
+      if (role === 'admin') window.location.href = 'PannelloAdmin.html';
+      else if (role === 'pr') window.location.href = 'DashboardPR.html';
+    }
+
+    // Genera codice amico univoco: username#XXXX
+    async function generaCodiceAmico(username) {
+      let codice, exists = true;
+      while (exists) {
+        const n = String(Math.floor(1000 + Math.random() * 9000));
+        codice = username.toUpperCase() + '#' + n;
+        const snap = await db.collection('utentiAstra').where('codiceAmico', '==', codice).limit(1).get();
+        exists = !snap.empty;
+      }
+      return codice;
+    }
+
+    // Dati temporanei registrazione
+    let _pendingReg = null;
+    let _pendingCode = null;
+    let _codeExpiry = null;
+
+    async function doRegister() {
+      const nome        = document.getElementById('reg-nome').value.trim();
+      const cognome     = document.getElementById('reg-cognome').value.trim();
+      const username    = document.getElementById('reg-username').value.trim().toLowerCase();
+      const tel         = document.getElementById('reg-tel').value.trim().replace(/\s/g,'');
+      const email       = document.getElementById('reg-email').value.trim().toLowerCase();
+      const pwd         = document.getElementById('reg-pwd').value;
+      const pwd2        = document.getElementById('reg-pwd2').value;
+      const codiceUsato = document.getElementById('reg-codiceamico').value.trim().toUpperCase();
+      const err         = document.getElementById('modal-err');
+      err.style.display = 'none';
+
+      if (!nome || !cognome || !username || !tel || !email) { err.textContent='Compila tutti i campi.'; err.style.display='block'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent='Email non valida.'; err.style.display='block'; return; }
+      if (pwd.length < 6) { err.textContent='Password minimo 6 caratteri.'; err.style.display='block'; return; }
+      if (pwd !== pwd2)   { err.textContent='Le password non corrispondono.'; err.style.display='block'; return; }
+
+      const btn = document.getElementById('modal-reg-btn');
+      btn.disabled=true; btn.textContent='Verifica in corso...';
+
+      try {
+        const ex = await db.collection('utentiAstra').doc(username).get();
+        const exStaff = await db.collection('utenti').doc(username).get();
+        if (ex.exists || exStaff.exists) { err.textContent='Account già esistente. Prova ad accedere.'; err.style.display='block'; btn.disabled=false; btn.textContent='Crea account'; return; }
+
+        const telSnap = await db.collection('utentiAstra').where('tel', '==', tel).limit(1).get();
+        const telStaffSnap = await db.collection('utenti').where('tel', '==', tel).limit(1).get();
+        if (!telSnap.empty || !telStaffSnap.empty) { err.textContent='Account già esistente. Prova ad accedere.'; err.style.display='block'; btn.disabled=false; btn.textContent='Crea account'; return; }
+
+        const emailSnap = await db.collection('utentiAstra').where('email', '==', email).limit(1).get();
+        const emailStaffSnap = await db.collection('utenti').where('email', '==', email).limit(1).get();
+        if (!emailSnap.empty || !emailStaffSnap.empty) { err.textContent='Account già esistente. Prova ad accedere.'; err.style.display='block'; btn.disabled=false; btn.textContent='Crea account'; return; }
+
+        if (codiceUsato) {
+          const refSnap = await db.collection('utentiAstra').where('codiceAmico', '==', codiceUsato).limit(1).get();
+          if (refSnap.empty) { err.textContent='Codice amico non valido.'; err.style.display='block'; btn.disabled=false; btn.textContent='Crea account'; return; }
+        }
+
+        const res = await fetch('https://astra-auth.astraaevents.workers.dev', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'sendVerification', email, nome })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        _pendingReg = { nome, cognome, username, tel, email, pwd, codiceUsato };
+        _pendingCode = data.code;
+        _codeExpiry = Date.now() + 10 * 60 * 1000;
+
+        document.getElementById('reg-step-1').style.display = 'none';
+        document.getElementById('reg-step-2').style.display = 'block';
+        document.getElementById('reg-email-display').textContent = 'Codice inviato a: ' + email;
+
+      } catch(e) { err.textContent='Errore: '+e.message; err.style.display='block'; }
+      btn.disabled=false; btn.textContent='Crea account';
+    }
+
+    async function resendCode() {
+      if (!_pendingReg) return;
+      const res = await fetch('https://astra-auth.astraaevents.workers.dev', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sendVerification', email: _pendingReg.email, nome: _pendingReg.nome })
+      });
+      const data = await res.json();
+      if (data.code) {
+        _pendingCode = data.code;
+        _codeExpiry = Date.now() + 10 * 60 * 1000;
+        const ok = document.getElementById('modal-ok-msg');
+        ok.textContent = 'Codice reinviato!';
+        ok.style.display = 'block';
+        setTimeout(() => ok.style.display = 'none', 3000);
+      }
+    }
+
+    function tornaAStep1() {
+      // Riporta allo step 1 mantenendo tutti i dati già inseriti
+      document.getElementById('reg-step-2').style.display = 'none';
+      document.getElementById('reg-step-1').style.display = 'block';
+      // Ripopola i campi con i dati salvati in _pendingReg
+      if (_pendingReg) {
+        document.getElementById('reg-nome').value = _pendingReg.nome || '';
+        document.getElementById('reg-cognome').value = _pendingReg.cognome || '';
+        document.getElementById('reg-username').value = _pendingReg.username || '';
+        document.getElementById('reg-tel').value = _pendingReg.tel || '';
+        document.getElementById('reg-email').value = _pendingReg.email || '';
+        // Password non viene ripopolata per sicurezza — l'utente la reinserisce
+        document.getElementById('reg-codiceamico').value = _pendingReg.codiceUsato || '';
+      }
+      // Pulisce lo step 2
+      document.getElementById('reg-codice-verifica').value = '';
+      document.getElementById('modal-err').style.display = 'none';
+      document.getElementById('modal-ok-msg').style.display = 'none';
+      _pendingCode = null;
+      _codeExpiry = null;
+    }
+
+    async function doVerificaEmail() {
+      const codiceInserito = document.getElementById('reg-codice-verifica').value.trim();
+      const err = document.getElementById('modal-err');
+      const btn = document.getElementById('reg-verifica-btn');
+      err.style.display = 'none';
+
+      if (!codiceInserito) { err.textContent='Inserisci il codice.'; err.style.display='block'; return; }
+      if (Date.now() > _codeExpiry) { err.textContent='Codice scaduto. Clicca Reinvia.'; err.style.display='block'; return; }
+      if (codiceInserito !== _pendingCode) { err.textContent='Codice non corretto.'; err.style.display='block'; return; }
+
+      btn.disabled=true; btn.textContent='Creazione account...';
+
+      try {
+        const { nome, cognome, username, tel, email, pwd, codiceUsato } = _pendingReg;
+
+        let referrerUsername = null;
+        if (codiceUsato) {
+          const refSnap = await db.collection('utentiAstra').where('codiceAmico', '==', codiceUsato).limit(1).get();
+          if (!refSnap.empty) referrerUsername = refSnap.docs[0].id;
+        }
+
+        const codiceAmico = await generaCodiceAmico(username);
+
+        await db.collection('utentiAstra').doc(username).set({
+          nome, cognome, username, tel, email,
+          password: await hashPassword(pwd),
+          punti: 0, storico: [],
+          codiceAmico,
+          verificato: true,
+          registratoAt: Date.now()
+        });
+
+        if (referrerUsername) {
+          const refDoc = await db.collection('utentiAstra').doc(referrerUsername).get();
+          if (refDoc.exists) {
+            const rd = refDoc.data();
+            const entry = { tipo: 'referral', desc: 'Amico registrato: ' + nome + ' ' + cognome, punti: 5, ts: Date.now() };
+            await db.collection('utentiAstra').doc(referrerUsername).update({
+              punti: (rd.punti || 0) + 5,
+              storico: [...(rd.storico || []), entry]
+            });
+          }
+        }
+
+        document.getElementById('reg-step-2').style.display = 'none';
+        document.getElementById('reg-step-3').style.display = 'block';
+        document.getElementById('reg-codice-amico-display').textContent = codiceAmico;
+        _pendingReg = null; _pendingCode = null;
+
+      } catch(e) { err.textContent='Errore: '+e.message; err.style.display='block'; }
+      btn.disabled=false; btn.textContent='Verifica';
+    }
+
+
+    let _recoverCode = null;
+    let _recoverCodeExpiry = null;
+    let _recoverEmail = null;
+    let _recoverUsername = null;
+
+    async function doRecover() {
+      const email = document.getElementById('rec-email').value.trim().toLowerCase();
+      const btn = document.getElementById('rec-btn');
+      const err = document.getElementById('modal-err');
+      err.style.display = 'none';
+
+      if (!email) { err.textContent = 'Inserisci la tua email.'; err.style.display = 'block'; return; }
+
+      btn.disabled = true; btn.textContent = '...';
+
+      try {
+        // Cerca utente per email
+        const snap = await db.collection('utentiAstra').where('email', '==', email).limit(1).get();
+        if (snap.empty) {
+          err.textContent = 'Nessun account trovato con questa email.'; err.style.display = 'block';
+          btn.disabled = false; btn.textContent = 'Invia codice'; return;
+        }
+
+        const u = snap.docs[0].data();
+        _recoverUsername = snap.docs[0].id;
+        _recoverEmail = email;
+
+        // Invia codice via Brevo
+        const res = await fetch('https://astra-auth.astraaevents.workers.dev', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'sendVerification', email, nome: u.nome, type: 'recover' })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        _recoverCode = data.code;
+        _recoverCodeExpiry = Date.now() + 10 * 60 * 1000;
+
+        document.getElementById('rec-step-1').style.display = 'none';
+        document.getElementById('rec-step-2').style.display = 'block';
+        document.getElementById('rec-email-display').textContent = 'Codice inviato a: ' + email;
+
+      } catch(e) { err.textContent = 'Errore: ' + e.message; err.style.display = 'block'; }
+      btn.disabled = false; btn.textContent = 'Invia codice';
+    }
+
+    async function resendRecoverCode() {
+      if (!_recoverEmail) return;
+      const snap = await db.collection('utentiAstra').where('email', '==', _recoverEmail).limit(1).get();
+      if (snap.empty) return;
+      const u = snap.docs[0].data();
+      const res = await fetch('https://astra-auth.astraaevents.workers.dev', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sendVerification', email: _recoverEmail, nome: u.nome, type: 'recover' })
+      });
+      const data = await res.json();
+      if (data.code) {
+        _recoverCode = data.code;
+        _recoverCodeExpiry = Date.now() + 10 * 60 * 1000;
+        const ok = document.getElementById('modal-ok-msg');
+        ok.textContent = 'Codice reinviato!';
+        ok.style.display = 'block';
+        setTimeout(() => ok.style.display = 'none', 3000);
+      }
+    }
+
+    async function doVerificaRecover() {
+      const codice = document.getElementById('rec-codice').value.trim();
+      const pwd    = document.getElementById('rec-pwd-new').value;
+      const pwd2   = document.getElementById('rec-pwd-new2').value;
+      const err    = document.getElementById('modal-err');
+      const btn    = document.getElementById('rec-verifica-btn');
+      err.style.display = 'none';
+
+      if (!codice) { err.textContent = 'Inserisci il codice.'; err.style.display = 'block'; return; }
+      if (Date.now() > _recoverCodeExpiry) { err.textContent = 'Codice scaduto. Clicca Reinvia.'; err.style.display = 'block'; return; }
+      if (codice !== _recoverCode) { err.textContent = 'Codice non corretto.'; err.style.display = 'block'; return; }
+      if (pwd.length < 6) { err.textContent = 'Password minimo 6 caratteri.'; err.style.display = 'block'; return; }
+      if (pwd !== pwd2) { err.textContent = 'Le password non corrispondono.'; err.style.display = 'block'; return; }
+
+      btn.disabled = true; btn.textContent = 'Aggiornamento...';
+
+      try {
+        await db.collection('utentiAstra').doc(_recoverUsername).update({
+          password: await hashPassword(pwd)
+        });
+
+        document.getElementById('rec-step-2').style.display = 'none';
+        document.getElementById('rec-step-3').style.display = 'block';
+        _recoverCode = null; _recoverEmail = null; _recoverUsername = null;
+
+      } catch(e) { err.textContent = 'Errore: ' + e.message; err.style.display = 'block'; }
+      btn.disabled = false; btn.textContent = 'Reimposta password';
+    }
+
+
+    function closeModal() {
+      document.getElementById('admin-modal').classList.remove('open');
+      document.getElementById('admin-usr').value = '';
+      document.getElementById('admin-pwd').value = '';
+      document.getElementById('modal-err').style.display = 'none';
+      const btn = document.getElementById('modal-login-btn');
+      btn.innerHTML = 'Accedi →';
+      btn.disabled = false;
+    }
+
+    async function doLogin() {
+      const usr = document.getElementById('admin-usr').value.trim().toLowerCase();
+      const pwd = document.getElementById('admin-pwd').value;
+      if (!usr || !pwd) return;
+
+      const btn = document.getElementById('modal-login-btn');
+      btn.innerHTML = '…';
+      btn.disabled = true;
+
+      // Safety timeout: se Firebase non risponde in 8s sblocca il bottone
+      const safetyTimer = setTimeout(() => {
+        btn.innerHTML = 'Accedi →';
+        btn.disabled = false;
+        const err = document.getElementById('modal-err');
+        err.textContent = 'Connessione lenta, riprova.';
+        err.style.display = 'block';
+        setTimeout(() => { err.style.display = 'none'; err.textContent = 'Credenziali errate. Riprova.'; }, 4000);
+      }, 8000);
+
+      try {
+        const snap = await db.collection('utenti').doc(usr).get();
+        clearTimeout(safetyTimer);
+
+        if (snap.exists) {
+          const u = snap.data();
+          const hashedPwd = await hashPassword(pwd);
+          // Supporta sia password in chiaro (account vecchi) che hashate
+          const pwdOk = u.password === hashedPwd || u.password === pwd;
+          if (pwdOk) {
+            // Se era in chiaro, aggiorna con hash
+            if (u.password === pwd && u.password !== hashedPwd) {
+              try { await db.collection('utenti').doc(usr).update({ password: hashedPwd }); } catch(e) {}
+            }
+            sessionStorage.setItem('astra_role', u.role);
+            sessionStorage.setItem('astra_user', u.username);
+            sessionStorage.setItem('astra_nome', u.nome || u.username);
+            sessionStorage.setItem('astra_alias', u.alias || '');
+            if (u.role === 'admin') sessionStorage.setItem('astra_admin', '1');
+            // Persisti su localStorage per sopravvivere al refresh
+            localStorage.setItem('ls_astra_role', u.role);
+            localStorage.setItem('ls_astra_user', u.username);
+            localStorage.setItem('ls_astra_nome', u.nome || u.username);
+            localStorage.setItem('ls_astra_alias', u.alias || '');
+            if (u.role === 'admin') localStorage.setItem('ls_astra_admin', '1');
+            else localStorage.removeItem('ls_astra_admin');
+            clearTimeout(safetyTimer);
+            closeModal();
+            updateAuthBtns();
+            placeLinks();
+            return;
+          }
+        }
+
+        // Prova utentiAstra (utenti normali)
+        const snapU = await db.collection('utentiAstra').doc(usr).get();
+        if (snapU.exists) {
+          const u = snapU.data();
+          const hashedPwd = await hashPassword(pwd);
+          const pwdOk = u.password === hashedPwd || u.password === pwd;
+          if (pwdOk) {
+            if (u.password === pwd && u.password !== hashedPwd) {
+              try { await db.collection('utentiAstra').doc(usr).update({ password: hashedPwd }); } catch(e) {}
+            }
+            sessionStorage.setItem('astra_role', 'utente');
+            sessionStorage.setItem('astra_user', u.username || usr);
+            sessionStorage.setItem('astra_nome', u.nome + ' ' + u.cognome);
+            sessionStorage.setItem('astra_alias', u.alias || '');
+            localStorage.setItem('astra_rewards_user', u.username || usr);
+            localStorage.setItem('ls_astra_role', 'utente');
+            localStorage.setItem('ls_astra_user', u.username || usr);
+            localStorage.setItem('ls_astra_nome', u.nome + ' ' + u.cognome);
+            localStorage.setItem('ls_astra_alias', u.alias || '');
+            localStorage.removeItem('ls_astra_admin');
+            clearTimeout(safetyTimer);
+            closeModal();
+            updateAuthBtns();
+            placeLinks();
+            return;
+          }
+        }
+
+        clearTimeout(safetyTimer);
+        const err = document.getElementById('modal-err');
+        err.textContent = 'Credenziali errate. Riprova.';
+        err.style.display = 'block';
+        document.getElementById('admin-pwd').value = '';
+        setTimeout(() => err.style.display = 'none', 3000);
+        btn.innerHTML = 'Accedi →';
+        btn.disabled = false;
+      } catch(e) {
+        clearTimeout(safetyTimer);
+        console.error('Login error:', e);
+        const err = document.getElementById('modal-err');
+        err.textContent = 'Errore di connessione. Riprova.';
+        err.style.display = 'block';
+        document.getElementById('admin-pwd').value = '';
+        setTimeout(() => { err.style.display = 'none'; err.textContent = 'Credenziali errate. Riprova.'; }, 4000);
+        btn.innerHTML = 'Accedi →';
+        btn.disabled = false;
+      }
+    }
+
+    // Keyboard shortcuts nel modal
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('admin-usr').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('admin-pwd').focus();
+        if (e.key === 'Escape') closeModal();
+      });
+      document.getElementById('admin-pwd').addEventListener('keydown', e => {
+        if (e.key === 'Enter') doLogin();
+        if (e.key === 'Escape') closeModal();
+      });
+      document.getElementById('admin-modal').addEventListener('click', e => {
+        if (e.target === document.getElementById('admin-modal')) closeModal();
+      });
+      updateAuthBtns();
+    });
+  </script>
+
+</body>
+</html>
