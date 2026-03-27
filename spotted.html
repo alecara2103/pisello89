@@ -77,6 +77,9 @@
     .spotted-list { display:flex; flex-direction:column; gap:1rem; }
     .spotted-card { background:var(--s1); border:1px solid var(--border2); border-radius:18px; padding:1.2rem 1.4rem; animation:rise .5s ease both; transition:border-color .25s; }
     .spotted-card:hover { border-color:rgba(255,107,0,.2); }
+    .btn-share-ig { display:flex; align-items:center; gap:.4rem; font-family:'Poppins',sans-serif; font-size:.58rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; background:linear-gradient(135deg,rgba(131,58,180,.15),rgba(253,29,29,.1),rgba(252,176,69,.1)); color:rgba(255,255,255,.6); border:1px solid rgba(255,255,255,.1); border-radius:8px; padding:.3rem .7rem; cursor:pointer; transition:all .22s; flex-shrink:0; }
+    .btn-share-ig:hover { background:linear-gradient(135deg,rgba(131,58,180,.3),rgba(253,29,29,.2),rgba(252,176,69,.2)); color:var(--white); border-color:rgba(255,255,255,.25); }
+    .btn-share-ig svg { width:12px; height:12px; flex-shrink:0; }
     .spotted-card-header { display:flex; align-items:flex-start; gap:.75rem; margin-bottom:.85rem; }
     .spotted-card-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--orange2)); display:flex; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#000; flex-shrink:0; overflow:hidden; }
     .spotted-card-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
@@ -106,7 +109,7 @@
     .empty-state p { font-size:.72rem; color:rgba(255,255,255,.18); letter-spacing:.2em; text-transform:uppercase; }
     footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid var(--border); font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.18); }
     footer b { color:var(--orange); opacity:.5; font-weight:400; margin:0 .5rem; }
-    @media (max-width:580px) { header nav a { font-size:.55rem; letter-spacing:.1em; } }
+    @media (max-width:580px) { header nav { display:none; } }
   </style>
 </head>
 <body>
@@ -300,6 +303,7 @@
   }
 
   function buildCard(id, p, i) {
+    _spottedCache[id] = p; // cache per shareToInstagram
     const card=document.createElement('div');
     card.className='spotted-card';
     card.style.animationDelay=i*0.05+'s';
@@ -323,6 +327,12 @@
       <div class="spotted-card-text">${escHtml(p.testo)}</div>
       <div class="spotted-replies" id="replies-${id}">
         ${risposte.map((r,ri)=>buildReplyHtml(r,id,ri)).join('')}
+      </div>
+      <div style="margin-bottom:.6rem;">
+        <button class="btn-share-ig" onclick="shareToInstagram('${id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          Condividi storia
+        </button>
       </div>
       ${loggedUser?`
         <div class="reply-compose" id="reply-compose-${id}" style="display:none;">
@@ -407,6 +417,163 @@
   }
 
   init();
+  /* ══════════════════════════════════════════════
+     CONDIVIDI SU INSTAGRAM (genera immagine storia)
+  ══════════════════════════════════════════════ */
+  const _spottedCache = {};
+
+  function cacheSpotted(id, data) { _spottedCache[id] = data; }
+
+  async function shareToInstagram(id) {
+    const p = _spottedCache[id];
+    if (!p) { alert('Post non trovato.'); return; }
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = 1080;
+    canvas.height = 1920;
+    const ctx = canvas.getContext('2d');
+
+    // Sfondo
+    const bg = ctx.createLinearGradient(0, 0, 0, 1920);
+    bg.addColorStop(0, '#0A0A0A');
+    bg.addColorStop(1, '#111111');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, 1080, 1920);
+
+    // Griglia decorativa
+    ctx.strokeStyle = 'rgba(255,107,0,0.04)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < 1080; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1920); ctx.stroke(); }
+    for (let y = 0; y < 1920; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1080, y); ctx.stroke(); }
+
+    // Logo ASTRA in alto
+    ctx.font = 'bold 72px Georgia, serif';
+    ctx.fillStyle = '#FF6B00';
+    ctx.letterSpacing = '12px';
+    ctx.textAlign = 'center';
+    ctx.fillText('ASTRA', 540, 180);
+    ctx.font = '500 22px Poppins, Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.letterSpacing = '8px';
+    ctx.fillText('E V E N T S', 540, 220);
+
+    // Linea separatore
+    const grad = ctx.createLinearGradient(140, 0, 940, 0);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(0.5, '#FF6B00');
+    grad.addColorStop(1, 'transparent');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(140, 260); ctx.lineTo(940, 260); ctx.stroke();
+
+    // Card centrale
+    const cardX = 80, cardY = 320, cardW = 920, cardH = 1200;
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    roundRect(ctx, cardX, cardY, cardW, cardH, 32);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,107,0,0.2)';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, cardX, cardY, cardW, cardH, 32);
+    ctx.stroke();
+
+    // Label "SPOTTED" 
+    ctx.font = 'bold 18px Poppins, Arial, sans-serif';
+    ctx.fillStyle = '#FF6B00';
+    ctx.letterSpacing = '6px';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦  S P O T T E D  ✦', 540, 400);
+
+    // Avatar / Nome autore
+    const displayName = p.anonimo ? 'Anonimo 🕵️' : (p.nome + (p.cognome ? ' ' + p.cognome : ''));
+    ctx.font = 'bold 32px Poppins, Arial, sans-serif';
+    ctx.fillStyle = p.anonimo ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.9)';
+    ctx.letterSpacing = '0px';
+    ctx.textAlign = 'center';
+    ctx.fillText(displayName, 540, 480);
+
+    // Linea sotto nome
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(180, 510); ctx.lineTo(900, 510); ctx.stroke();
+
+    // Testo spotted (wrap automatico)
+    ctx.font = '400 44px Georgia, serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '0px';
+    const lines = wrapText(ctx, '"' + p.testo + '"', 860, 44);
+    const lineH = 66;
+    const totalTextH = lines.length * lineH;
+    const textStartY = 580 + (Math.max(0, 900 - totalTextH) / 2);
+    lines.forEach((line, i) => {
+      ctx.fillText(line, 540, textStartY + i * lineH);
+    });
+
+    // Footer
+    ctx.font = '500 22px Poppins, Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255,107,0,0.6)';
+    ctx.letterSpacing = '3px';
+    ctx.textAlign = 'center';
+    ctx.fillText('ASTRA EVENTS • ROMA', 540, 1700);
+    ctx.font = '400 20px Poppins, Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.letterSpacing = '2px';
+    ctx.fillText('astraevents.net', 540, 1740);
+
+    // Scarica immagine
+    const link = document.createElement('a');
+    link.download = 'spotted-astra.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    // Apri Instagram storie (su mobile)
+    setTimeout(() => {
+      const ua = navigator.userAgent.toLowerCase();
+      if (/iphone|ipad|android/.test(ua)) {
+        window.location.href = 'instagram://story-camera';
+      } else {
+        alert('Immagine scaricata! Aprila su Instagram e aggiungila alla tua storia 📸');
+      }
+    }, 800);
+  }
+
+  function wrapText(ctx, text, maxWidth, fontSize) {
+    const words = text.split(' ');
+    const lines = [];
+    let current = '';
+    for (const word of words) {
+      const test = current ? current + ' ' + word : word;
+      if (ctx.measureText(test).width > maxWidth && current) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = test;
+      }
+    }
+    if (current) lines.push(current);
+    // Max 12 righe
+    if (lines.length > 12) {
+      const trimmed = lines.slice(0, 12);
+      trimmed[11] = trimmed[11].replace(/…$/, '') + '…';
+      return trimmed;
+    }
+    return lines;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
 </script>
 </body>
 </html>
