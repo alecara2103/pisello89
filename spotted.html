@@ -433,100 +433,125 @@
     canvas.height = 1920;
     const ctx = canvas.getContext('2d');
 
-    // Sfondo
-    const bg = ctx.createLinearGradient(0, 0, 0, 1920);
-    bg.addColorStop(0, '#0A0A0A');
-    bg.addColorStop(1, '#111111');
-    ctx.fillStyle = bg;
+    // ── Sfondo ────────────────────────────────────────────────
+    ctx.fillStyle = '#0A0A0A';
     ctx.fillRect(0, 0, 1080, 1920);
 
     // Griglia decorativa
     ctx.strokeStyle = 'rgba(255,107,0,0.04)';
     ctx.lineWidth = 1;
-    for (let x = 0; x < 1080; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1920); ctx.stroke(); }
-    for (let y = 0; y < 1920; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1080, y); ctx.stroke(); }
+    for (let x = 0; x < 1080; x += 64) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,1920); ctx.stroke(); }
+    for (let y = 0; y < 1920; y += 64) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(1080,y); ctx.stroke(); }
 
-    // Logo ASTRA in alto
-    ctx.font = 'bold 72px Georgia, serif';
+    // Glow arancione in alto
+    const glowTop = ctx.createRadialGradient(540, 0, 0, 540, 0, 600);
+    glowTop.addColorStop(0, 'rgba(255,107,0,0.18)');
+    glowTop.addColorStop(1, 'transparent');
+    ctx.fillStyle = glowTop;
+    ctx.fillRect(0, 0, 1080, 600);
+
+    // Glow arancione in basso
+    const glowBot = ctx.createRadialGradient(540, 1920, 0, 540, 1920, 500);
+    glowBot.addColorStop(0, 'rgba(255,107,0,0.10)');
+    glowBot.addColorStop(1, 'transparent');
+    ctx.fillStyle = glowBot;
+    ctx.fillRect(0, 1420, 1080, 500);
+
+    // ── Titolo SPOTTED ────────────────────────────────────────
+    ctx.font = 'bold 110px Georgia, serif';
     ctx.fillStyle = '#FF6B00';
-    ctx.letterSpacing = '12px';
     ctx.textAlign = 'center';
-    ctx.fillText('ASTRA', 540, 180);
-    ctx.font = '500 22px Poppins, Arial, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.letterSpacing = '8px';
-    ctx.fillText('E V E N T S', 540, 220);
+    ctx.letterSpacing = '18px';
+    ctx.fillText('SPOTTED', 540, 360);
 
-    // Linea separatore
-    const grad = ctx.createLinearGradient(140, 0, 940, 0);
-    grad.addColorStop(0, 'transparent');
-    grad.addColorStop(0.5, '#FF6B00');
-    grad.addColorStop(1, 'transparent');
-    ctx.strokeStyle = grad;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(140, 260); ctx.lineTo(940, 260); ctx.stroke();
-
-    // Card centrale
-    const cardX = 80, cardY = 320, cardW = 920, cardH = 1200;
-    ctx.fillStyle = 'rgba(255,255,255,0.04)';
-    roundRect(ctx, cardX, cardY, cardW, cardH, 32);
+    // ── Badge anonimo / nome ──────────────────────────────────
+    const displayName = p.anonimo ? 'messaggio anonimo' : ('da ' + p.nome + (p.cognome ? ' ' + p.cognome : ''));
+    const badgeW = 480, badgeH = 72, badgeX = 540 - badgeW/2, badgeY = 420;
+    ctx.fillStyle = 'rgba(255,107,0,0.12)';
+    roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 36);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255,107,0,0.2)';
+    ctx.strokeStyle = 'rgba(255,107,0,0.35)';
+    ctx.lineWidth = 2;
+    roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 36);
+    ctx.stroke();
+    ctx.font = '600 26px Arial, sans-serif';
+    ctx.fillStyle = '#FF6B00';
+    ctx.letterSpacing = '5px';
+    ctx.textAlign = 'center';
+    ctx.fillText(displayName.toUpperCase(), 540, 466);
+
+    // ── Card testo ────────────────────────────────────────────
+    const cX = 80, cY = 560, cW = 920, cH = 900;
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    roundRect(ctx, cX, cY, cW, cH, 48);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.lineWidth = 1.5;
-    roundRect(ctx, cardX, cardY, cardW, cardH, 32);
+    roundRect(ctx, cX, cY, cW, cH, 48);
     ctx.stroke();
 
-    // Label "SPOTTED" 
-    ctx.font = 'bold 18px Poppins, Arial, sans-serif';
-    ctx.fillStyle = '#FF6B00';
-    ctx.letterSpacing = '6px';
-    ctx.textAlign = 'center';
-    ctx.fillText('✦  S P O T T E D  ✦', 540, 400);
-
-    // Avatar / Nome autore
-    const displayName = p.anonimo ? 'Anonimo 🕵️' : (p.nome + (p.cognome ? ' ' + p.cognome : ''));
-    ctx.font = 'bold 32px Poppins, Arial, sans-serif';
-    ctx.fillStyle = p.anonimo ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.9)';
-    ctx.letterSpacing = '0px';
-    ctx.textAlign = 'center';
-    ctx.fillText(displayName, 540, 480);
-
-    // Linea sotto nome
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(180, 510); ctx.lineTo(900, 510); ctx.stroke();
-
     // Testo spotted (wrap automatico)
-    ctx.font = '400 44px Georgia, serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.font = '400 52px Georgia, serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.88)';
     ctx.textAlign = 'center';
     ctx.letterSpacing = '0px';
-    const lines = wrapText(ctx, '"' + p.testo + '"', 860, 44);
-    const lineH = 66;
-    const totalTextH = lines.length * lineH;
-    const textStartY = 580 + (Math.max(0, 900 - totalTextH) / 2);
-    lines.forEach((line, i) => {
-      ctx.fillText(line, 540, textStartY + i * lineH);
-    });
+    const lines = wrapText(ctx, '“' + p.testo + '”', 820, 52);
+    const lineH = 78;
+    const totalH = lines.length * lineH;
+    const startY = cY + (cH - totalH) / 2 + 52;
+    lines.forEach((line, i) => ctx.fillText(line, 540, startY + i * lineH));
 
-    // Footer
-    ctx.font = '500 22px Poppins, Arial, sans-serif';
-    ctx.fillStyle = 'rgba(255,107,0,0.6)';
-    ctx.letterSpacing = '3px';
+    // ── Sezione invito ────────────────────────────────────────
+    ctx.font = '400 34px Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.letterSpacing = '0px';
     ctx.textAlign = 'center';
-    ctx.fillText('ASTRA EVENTS • ROMA', 540, 1700);
-    ctx.font = '400 20px Poppins, Arial, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.letterSpacing = '2px';
-    ctx.fillText('astraevents.net', 540, 1740);
+    ctx.fillText('vuoi inviare uno spotted o rispondere?', 540, 1560);
 
-    // Scarica immagine
+    // Pulsante CTA
+    const btnW = 520, btnH = 90, btnX = 540 - btnW/2, btnY = 1600;
+    ctx.fillStyle = '#FF6B00';
+    roundRect(ctx, btnX, btnY, btnW, btnH, 20);
+    ctx.fill();
+    ctx.font = 'bold 28px Arial, sans-serif';
+    ctx.fillStyle = '#000000';
+    ctx.letterSpacing = '4px';
+    ctx.textAlign = 'center';
+    ctx.fillText('ASTRAEVENTS.NET', 540, 1655);
+
+    // ── Footer ────────────────────────────────────────────────
+    ctx.strokeStyle = 'rgba(255,107,0,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(80, 1740); ctx.lineTo(1000, 1740); ctx.stroke();
+
+    ctx.font = '400 26px Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.letterSpacing = '0px';
+    ctx.textAlign = 'center';
+    ctx.fillText('Gli spotted più interessanti li pubblicheremo nelle storie', 540, 1790);
+
+    // Logo A
+    ctx.beginPath();
+    ctx.arc(540, 1860, 30, 0, Math.PI * 2);
+    ctx.fillStyle = '#FF6B00';
+    ctx.fill();
+    ctx.font = 'bold 28px Georgia, serif';
+    ctx.fillStyle = '#000';
+    ctx.letterSpacing = '0px';
+    ctx.textAlign = 'center';
+    ctx.fillText('A', 540, 1869);
+
+    ctx.font = 'bold 24px Arial, sans-serif';
+    ctx.fillStyle = '#FF6B00';
+    ctx.letterSpacing = '4px';
+    ctx.fillText('ASTRA EVENTS', 540, 1910);
+
+    // ── Scarica e apri Instagram ──────────────────────────────
     const link = document.createElement('a');
     link.download = 'spotted-astra.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
 
-    // Apri Instagram storie (su mobile)
     setTimeout(() => {
       const ua = navigator.userAgent.toLowerCase();
       if (/iphone|ipad|android/.test(ua)) {
