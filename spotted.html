@@ -462,11 +462,11 @@
     ctx.fillStyle = '#FF6B00';
     ctx.textAlign = 'center';
     ctx.letterSpacing = '18px';
-    ctx.fillText('SPOTTED', 540, 360);
+    ctx.fillText('SPOTTED', 540, 240);
 
     // ── Badge anonimo / nome ──────────────────────────────────
     const displayName = p.anonimo ? 'messaggio anonimo' : ('da ' + p.nome + (p.cognome ? ' ' + p.cognome : ''));
-    const badgeW = 480, badgeH = 72, badgeX = 540 - badgeW/2, badgeY = 420;
+    const badgeW = 480, badgeH = 72, badgeX = 540 - badgeW/2, badgeY = 300;
     ctx.fillStyle = 'rgba(255,107,0,0.12)';
     roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 36);
     ctx.fill();
@@ -478,7 +478,7 @@
     ctx.fillStyle = '#FF6B00';
     ctx.letterSpacing = '5px';
     ctx.textAlign = 'center';
-    ctx.fillText(displayName.toUpperCase(), 540, 466);
+    ctx.fillText(displayName.toUpperCase(), 540, 346);
 
     // ── Card testo (altezza dinamica) ────────────────────────
     ctx.font = '400 52px Georgia, serif';
@@ -487,7 +487,7 @@
     const lineH = 78;
     const totalH = lines.length * lineH;
     const cardPadY = 80;
-    const cX = 80, cY = 560, cW = 920, cH = totalH + cardPadY * 2;
+    const cX = 80, cY = 430, cW = 920, cH = totalH + cardPadY * 2;
 
     ctx.fillStyle = 'rgba(255,255,255,0.04)';
     roundRect(ctx, cX, cY, cW, cH, 48);
