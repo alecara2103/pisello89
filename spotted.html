@@ -480,8 +480,15 @@
     ctx.textAlign = 'center';
     ctx.fillText(displayName.toUpperCase(), 540, 466);
 
-    // ── Card testo ────────────────────────────────────────────
-    const cX = 80, cY = 560, cW = 920, cH = 900;
+    // ── Card testo (altezza dinamica) ────────────────────────
+    ctx.font = '400 52px Georgia, serif';
+    ctx.letterSpacing = '0px';
+    const lines = wrapText(ctx, '“' + p.testo + '”', 820, 52);
+    const lineH = 78;
+    const totalH = lines.length * lineH;
+    const cardPadY = 80;
+    const cX = 80, cY = 560, cW = 920, cH = totalH + cardPadY * 2;
+
     ctx.fillStyle = 'rgba(255,255,255,0.04)';
     roundRect(ctx, cX, cY, cW, cH, 48);
     ctx.fill();
@@ -490,26 +497,22 @@
     roundRect(ctx, cX, cY, cW, cH, 48);
     ctx.stroke();
 
-    // Testo spotted (wrap automatico)
-    ctx.font = '400 52px Georgia, serif';
+    // Testo spotted
     ctx.fillStyle = 'rgba(255,255,255,0.88)';
     ctx.textAlign = 'center';
-    ctx.letterSpacing = '0px';
-    const lines = wrapText(ctx, '“' + p.testo + '”', 820, 52);
-    const lineH = 78;
-    const totalH = lines.length * lineH;
-    const startY = cY + (cH - totalH) / 2 + 52;
+    const startY = cY + cardPadY + 52;
     lines.forEach((line, i) => ctx.fillText(line, 540, startY + i * lineH));
 
-    // ── Sezione invito ────────────────────────────────────────
+    // ── Sezione invito (posizionata dopo la card) ─────────────
+    const inviteY = cY + cH + 100;
     ctx.font = '400 34px Arial, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
     ctx.letterSpacing = '0px';
     ctx.textAlign = 'center';
-    ctx.fillText('vuoi inviare uno spotted o rispondere?', 540, 1560);
+    ctx.fillText('vuoi inviare uno spotted o rispondere?', 540, inviteY);
 
     // Pulsante CTA
-    const btnW = 520, btnH = 90, btnX = 540 - btnW/2, btnY = 1600;
+    const btnW = 520, btnH = 90, btnX = 540 - btnW/2, btnY = inviteY + 50;
     ctx.fillStyle = '#FF6B00';
     roundRect(ctx, btnX, btnY, btnW, btnH, 20);
     ctx.fill();
@@ -517,9 +520,9 @@
     ctx.fillStyle = '#000000';
     ctx.letterSpacing = '4px';
     ctx.textAlign = 'center';
-    ctx.fillText('ASTRAEVENTS.NET', 540, 1655);
+    ctx.fillText('ASTRAEVENTS.NET', 540, btnY + 58);
 
-    // ── Footer ────────────────────────────────────────────────
+    // ── Footer (sempre in fondo) ──────────────────────────────
     ctx.strokeStyle = 'rgba(255,107,0,0.12)';
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(80, 1740); ctx.lineTo(1000, 1740); ctx.stroke();
